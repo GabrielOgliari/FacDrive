@@ -1,46 +1,29 @@
-# https://placaaqui.com.br/order3/968563016519319553
-from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait, Select
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoAlertPresentException
-from selenium.webdriver.common.keys import Keys
-
 import json
+import time
+
+import cfscrape
+from bs4 import BeautifulSoup
 
 def validar_placa(placa):
-    url = f'https://www.keplaca.com/placa?placa-fipe={placa.upper()}'
-    # Configurações do navegador
-    options = webdriver.ChromeOptions()
-    # options.add_argument('--headless')  # Executa em modo headless (sem interface gráfica)
-    options.add_argument("--kiosk-printing") #fecha a janela de impressão
-    options.add_argument("--enable-automation")
-    options.add_argument("--disable-infobars")
-    options.add_argument("--disable-web-security")
-    driver = webdriver.Chrome(options=options)
-    driver.get(url)
+    url = f'https://www.ipvabr.com.br/placa/{placa.upper()}'
+    scraper = cfscrape.create_scraper()
+    response = scraper.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
 
-    # Aguardando a página carregar
-    WebDriverWait(driver, 20).until(
-	    EC.visibility_of_element_located((By.XPATH, '//*[@id="layout"]/div[2]/div/div[1]/div/table[1]/tbody/tr[1]/td[1]/b'))
-    )
+    tabela = soup.find('table', class_='tableIPVA')
 
-    # Coletando os dados
-    marca = driver.find_element(By.XPATH, '//*[@id="layout"]/div[2]/div/div[1]/div/table[1]/tbody/tr[1]/td[2]').text
-    modelo = driver.find_element(By.XPATH, '//*[@id="layout"]/div[2]/div/div[1]/div/table[1]/tbody/tr[2]/td[2]').text
-    ano = driver.find_element(By.XPATH, '//*[@id="layout"]/div[2]/div/div[1]/div/table[1]/tbody/tr[4]/td[2]').text
-    ano_modelo = driver.find_element(By.XPATH, '//*[@id="layout"]/div[2]/div/div[1]/div/table[1]/tbody/tr[5]/td[2]').text
-    cor = driver.find_element(By.XPATH, '//*[@id="layout"]/div[2]/div/div[1]/div/table[1]/tbody/tr[6]/td[2]').text
-    municipio = driver.find_element(By.XPATH, '//*[@id="layout"]/div[2]/div/div[1]/div/table[1]/tbody/tr[14]/td[2]').text
-    UF = driver.find_element(By.XPATH, '//*[@id="layout"]/div[2]/div/div[1]/div/table[1]/tbody/tr[13]/td[2]').text
+    # Criar um dicionário para armazenar as informações
+    informacoes = {}
 
-    data= {
-        "marca": marca,
-        "modelo": modelo,
-        "ano": ano,
-        "ano_modelo": ano_modelo,
-        "cor": cor,
-        "municipio": municipio,
-        "UF": UF
-    }
-    return json.dumps(data)
+    # Iterar sobre as linhas da tabela
+    for tr in tabela.find_all('tr'):
+        # Encontrar os dados de cada linha
+        td = tr.find_all('td')
+        chave = td[0].get_text(strip=True)
+        valor = td[1].get_text(strip=True)
+        informacoes[chave] = valor
+
+    return json.dumps(informacoes)
+
+
+# print(validar_placa('MIV0439'))
