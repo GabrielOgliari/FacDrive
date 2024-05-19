@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+
 
 import validacao_aluno
 import validacao_veiculo
 
 app = Flask(__name__)
+CORS(app)  # Isso permite CORS para todas as rotas e origens
 
 @app.route('/imagem', methods=['POST'])
 def verificacao_aluno():
