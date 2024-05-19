@@ -16,9 +16,12 @@ def base64_to_image(base64_string):
 
 
 def ler_qr():
-    decoded_data = decode(Image.open('carteirinha.png'))
-    # print(decoded_data[0].data.decode('utf-8'))
-    return decoded_data[0].data.decode('utf-8')
+    try:
+        decoded_data = decode(Image.open('carteirinha.png'))
+        # print(decoded_data[0].data.decode('utf-8'))
+        return decoded_data[0].data.decode('utf-8')
+    except:
+        return None
 
 
 def validar(url):
@@ -40,6 +43,7 @@ def validar(url):
         cpf = items[2].text.split(':')[1] 
 
         data = {
+            "link": url,
             "email": email,
             "situacao": situacao,
             "matricula": matricula,
