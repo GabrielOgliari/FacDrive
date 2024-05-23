@@ -7,13 +7,19 @@ interface IRegisterService {
 }
 
 class RegisterService implements IRegisterService {
-  async save(data: Register) {
+  async save({ address, user, vehicle }: Register) {
     const apiUrl = import.meta.env.VITE_REGISTER_API
 
     const response = await axios({
       method: 'post',
       url: apiUrl,
-      data,
+      data: {
+        banco: {
+          address,
+          user,
+          vehicle,
+        },
+      },
     })
     return response.data
   }
