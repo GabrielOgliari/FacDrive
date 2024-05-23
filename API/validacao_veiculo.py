@@ -26,4 +26,4 @@ def validar_placa(placa):
     return json.dumps(informacoes)
 
 
-# print(validar_placa('MIV0439'))
+print(validar_placa('MIV0439'))
