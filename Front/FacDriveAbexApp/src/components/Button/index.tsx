@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import * as Styles from './styles';
 
 export type ButtonProps = {
@@ -20,8 +19,6 @@ export const Button = ({
   borderSize,
   borderColor,
 }: ButtonProps) => {
-  useEffect(() => {}, []);
-
   return (
     <Styles.CustomButtonContainer
       bg={backGroundColor}
