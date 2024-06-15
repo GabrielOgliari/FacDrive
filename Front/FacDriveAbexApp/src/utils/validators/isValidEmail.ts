@@ -1,4 +1,4 @@
-export const isValidEmail = (email?: string): boolean => {
+export const isValidEmail = (email: string | undefined): boolean => {
   if (!email) return false;
 
   const emailRegex =

@@ -57,11 +57,11 @@ export const useForm = <T extends Record<string, any>>({
     };
   };
 
-  const watch = (name: keyof T) => {
+  const watch = (name: any) => {
     return formState[name];
   };
 
-  const setState = (fieldName: keyof T, value: T[keyof T]) => {
+  const setValue = (fieldName: keyof T, value: T[keyof T]) => {
     setFormState(prev => ({
       ...prev,
       [fieldName]: value,
@@ -71,5 +71,5 @@ export const useForm = <T extends Record<string, any>>({
     }
   };
 
-  return { register, watch, applyValidations, setState };
+  return { register, watch, applyValidations, setValue };
 };

@@ -1,7 +1,5 @@
-import { useMutation } from '@tanstack/react-query';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
-import authenticationService from '../../core/services/authentication/authentication-service';
 import { useForm } from '../../hooks/useForm';
 import { isEmpty } from '../../utils/validators/isEmpty';
 import { isValidEmail } from '../../utils/validators/isValidEmail';
@@ -13,13 +11,13 @@ type LoginForm = {
 };
 
 export const LoginScreen = () => {
-  const { mutateAsync } = useMutation({
-    mutationFn: () => {
-      const email = watch('email');
-      const password = watch('password');
-      return authenticationService.login({ email, password });
-    },
-  });
+  // const { mutateAsync } = useMutation({
+  //   mutationFn: () => {
+  //     const email = watch('email');
+  //     const password = watch('password');
+  //     return loginService.authentication({ email, password });
+  //   },
+  // });
 
   const { register, watch, applyValidations } = useForm<LoginForm>({
     validations: {
@@ -35,7 +33,7 @@ export const LoginScreen = () => {
 
   const handleClickEntryButton = () => {
     if (applyValidations()) {
-      mutateAsync();
+      // mutateAsync();
     }
   };
 
@@ -46,7 +44,7 @@ export const LoginScreen = () => {
       <Styles.WrapperFields>
         <Input placeholder="Email" {...register('email')} />
 
-        <Input placeholder="Senha" {...register('password')} blocked />
+        <Input placeholder="Senha" {...register('password')} />
 
         <Button
           label="Entrar"

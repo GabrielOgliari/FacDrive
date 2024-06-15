@@ -1,17 +1,13 @@
 import axios from 'axios';
-import { Apis } from '../../constants/apis';
+import { makeApi } from '../../../helpers/make-api';
 import {
   ValidStudentIdInput,
-  ValidStudentIdOutput,
-} from '../../models/valid-student-id/valid-student-id';
+  ValidStudentIdResponse,
+} from './types/valid-student-id';
 
-interface IValidStudentIdService {
-  valid(studentId: any): Promise<ValidStudentIdOutput>;
-}
-
-class ValidStudentIdService implements IValidStudentIdService {
-  async valid(studentId: any): Promise<ValidStudentIdOutput> {
-    const apiUrl = Apis.ValidStudentId;
+class ValidStudentIdService {
+  async validStudentId(studentId: string): Promise<ValidStudentIdResponse> {
+    const apiUrl = makeApi('image');
 
     const response = await axios<ValidStudentIdInput>({
       method: 'post',

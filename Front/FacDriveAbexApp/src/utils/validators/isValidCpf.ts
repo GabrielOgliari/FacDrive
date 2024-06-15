@@ -1,4 +1,4 @@
-export const isValidCpf = (cpf?: string): boolean => {
+export const isValidCpf = (cpf: string | undefined): boolean => {
   if (!cpf) return false;
 
   cpf = cpf.replace(/[^\d]+/g, '');

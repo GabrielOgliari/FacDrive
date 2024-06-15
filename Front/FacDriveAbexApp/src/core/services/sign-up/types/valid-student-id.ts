@@ -6,7 +6,7 @@ export interface ValidStudentIdInput {
   cpf: string;
 }
 
-export interface ValidStudentIdOutput {
+export interface ValidStudentIdResponse {
   email: string;
   status: string;
   registration: string;

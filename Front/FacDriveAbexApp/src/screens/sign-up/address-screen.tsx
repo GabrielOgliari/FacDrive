@@ -1,14 +1,17 @@
 import { useNavigation } from '@react-navigation/native';
+import { useMutation } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { Button } from '../../components/Button/index.tsx';
 import { Input } from '../../components/Input/index.tsx';
 import { LoadingCar } from '../../components/LoadingCar/index.tsx';
+import addressService from '../../core/services/sign-up/address-service.ts';
+import { AddressResponse } from '../../core/services/sign-up/types/address.ts';
 import { useForm } from '../../hooks/useForm.ts';
 import { isEmpty } from '../../utils/validators/isEmpty.ts';
-import * as Styles from './styles';
+import * as Styles from './styles.ts';
 
-type AddressRegistrationForm = {
+type AddressForm = {
   zipCode: string;
   state: string;
   city: string;
@@ -18,58 +21,58 @@ type AddressRegistrationForm = {
   street: string;
 };
 
-export const AddressRegistrationScreen = () => {
+export const AddressScreen = () => {
   const { navigate } = useNavigation();
 
-  const { register, watch, applyValidations, setState } =
-    useForm<AddressRegistrationForm>({
-      validations: {
-        zipCode: value => {
-          if (isEmpty(value)) return 'Por favor, insira o seu CEP.';
-          // Antes de validar o CPF, precisa criar uma mascára para ele, pois ele já valida
-          // com o hífen.
-          // if (!isValidZipCode(value)) return 'Por favor, insira um CEP válido.';
-        },
-        state: value => {
-          if (isEmpty(value)) return 'Por favor, insira o seu Estado.';
-        },
-        city: value => {
-          if (isEmpty(value)) return 'Por favor, insira a sua Cidade.';
-        },
-        neighborhood: value => {
-          if (isEmpty(value)) return 'Por favor, insira o seu Bairro.';
-        },
-        number: value => {
-          if (isEmpty(value)) return 'Por favor, insira o seu Nº Residência.';
-        },
-        street: value => {
-          if (isEmpty(value)) return 'Por favor, insira a sua Rua.';
-        },
+  const { register, watch, applyValidations, setValue } = useForm<AddressForm>({
+    validations: {
+      zipCode: value => {
+        if (isEmpty(value)) return 'Por favor, insira o seu CEP.';
+        // Antes de validar o CEP, precisa criar uma mascára para ele, pois ele já valida
+        // com o hífen.
+        // if (!isValidZipCode(value)) return 'Por favor, insira um CEP válido.';
       },
-    });
+      state: value => {
+        if (isEmpty(value)) return 'Por favor, insira o seu Estado.';
+      },
+      city: value => {
+        if (isEmpty(value)) return 'Por favor, insira a sua Cidade.';
+      },
+      neighborhood: value => {
+        if (isEmpty(value)) return 'Por favor, insira o seu Bairro.';
+      },
+      number: value => {
+        if (isEmpty(value)) return 'Por favor, insira o seu Nº Residência.';
+      },
+      street: value => {
+        if (isEmpty(value)) return 'Por favor, insira a sua Rua.';
+      },
+    },
+  });
+
+  const getAddressByCepMutation = useMutation({
+    mutationFn: () => addressService.getAddressByCep(watch('cep') as string),
+    onSuccess: (data: AddressResponse) => {
+      setValue('street', data.street);
+      setValue('neighborhood', data.neighborhood);
+      setValue('city', data.city);
+      setValue('state', data.state);
+    },
+  });
+
+  useEffect(() => {
+    const isCompleteCep = String(watch('cep')).length === 8;
+
+    if (isCompleteCep) {
+      getAddressByCepMutation.mutateAsync();
+    }
+  }, [watch('cep')]);
 
   const handleClickContinueButton = () => {
     if (applyValidations()) {
-      navigate('PersonalDetailsRegistration');
+      navigate('vehicle');
     }
   };
-
-  useEffect(() => {
-    if (watch('zipCode')?.length === 8) {
-      const getCepInformation = async () => {
-        let response = await fetch(
-          `https://viacep.com.br/ws/${watch('zipCode')}/json/`,
-        );
-        response = await response.json();
-        setState('city', response?.localidade);
-        setState('state', response?.uf);
-        setState('street', response.logradouro);
-        setState('neighborhood', response.bairro);
-      };
-
-      getCepInformation();
-    }
-  }, [watch('zipCode')]);
 
   return (
     <Styles.SignUpContainer>
@@ -131,7 +134,7 @@ export const AddressRegistrationScreen = () => {
           />
         </Styles.InputsView>
 
-        <LoadingCar iniciaLeft={0} finalLeft={100} />
+        <LoadingCar iniciaLeft={170} finalLeft={230} />
 
         <Button
           backGroundColor="#4ccbf8"

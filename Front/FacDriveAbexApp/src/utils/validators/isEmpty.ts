@@ -1,3 +1,3 @@
-export const isEmpty = (value?: any): boolean => {
+export const isEmpty = (value: any): boolean => {
   return !value;
 };

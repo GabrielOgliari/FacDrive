@@ -1,14 +1,10 @@
 import axios from 'axios';
-import { Apis } from '../../constants/apis';
-import { VehicleInput, VehicleOutput } from '../../models/vehicle/vehicle';
+import { makeApi } from '../../../helpers/make-api';
+import { VehicleInput, VehicleResponse } from './types/vehicle';
 
-interface IVehicleService {
-  vehicleByPlate(plate: string): Promise<VehicleOutput>;
-}
-
-class VehicleService implements IVehicleService {
-  async vehicleByPlate(plate: string): Promise<VehicleOutput> {
-    const apiUrl = Apis.Vehicle;
+class VehicleService {
+  async vehicleByPlate(plate: string): Promise<VehicleResponse> {
+    const apiUrl = makeApi('veiculo');
 
     const { data } = await axios<VehicleInput>({
       method: 'post',

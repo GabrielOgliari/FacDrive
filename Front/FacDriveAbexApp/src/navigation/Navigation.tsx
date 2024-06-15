@@ -1,11 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { LoginScreen } from '../screens/Login';
-import { Presentation } from '../screens/Presentation';
-import { AddressRegistrationScreen } from '../screens/SignUp/AddressRegistrationScreen';
-import { EmailAndPasswordRegistrationScreen } from '../screens/SignUp/EmailAndPasswordRegistrationScreen';
-import { PersonalDetailsRegistrationScreen } from '../screens/SignUp/PersonalDetailsRegistrationScreen';
-import { StudentIdValidationScreen } from '../screens/SignUp/StudentIdValidationScreen';
+import { LoginScreen } from '../screens/login';
+import { Presentation } from '../screens/presentation';
+import { AddressScreen } from '../screens/sign-up/address-screen';
+import { EmailAndPasswordScreen } from '../screens/sign-up/email-and-password-screen';
+import { PersonalDetailsScreen } from '../screens/sign-up/personal-details-screen';
+import { StudentIdScreen } from '../screens/sign-up/student-id-screen';
+import { VehicleScreen } from '../screens/sign-up/vehicle-registration-screen';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,38 +14,34 @@ export const Navigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Presentation"
+        initialRouteName="presentation"
         screenOptions={{ headerShown: false }}
       >
         {/* Presentation */}
 
-        <Stack.Screen name="Presentation" component={Presentation} />
+        <Stack.Screen name="presentation" component={Presentation} />
 
         {/* SignUp */}
 
         <Stack.Screen
-          name="EmailAndPasswordRegistration"
-          component={EmailAndPasswordRegistrationScreen}
+          name="email-and-password"
+          component={EmailAndPasswordScreen}
         />
 
-        <Stack.Screen
-          name="AddressRegistration"
-          component={AddressRegistrationScreen}
-        />
+        <Stack.Screen name="student-id" component={StudentIdScreen} />
 
         <Stack.Screen
-          name="PersonalDetailsRegistration"
-          component={PersonalDetailsRegistrationScreen}
+          name="personal-details"
+          component={PersonalDetailsScreen}
         />
 
-        <Stack.Screen
-          name="StudentIdValidation"
-          component={StudentIdValidationScreen}
-        />
+        <Stack.Screen name="address" component={AddressScreen} />
+
+        <Stack.Screen name="vehicle" component={VehicleScreen} />
 
         {/* Login */}
 
-        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="login" component={LoginScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

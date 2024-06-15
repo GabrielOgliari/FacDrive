@@ -1,4 +1,6 @@
-export const isValidInstitutionalEmail = (email?: string): boolean => {
+export const isValidInstitutionalEmail = (
+  email: string | undefined,
+): boolean => {
   if (!email) return false;
 
   const institutionalEmailRegex =
