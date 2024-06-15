@@ -23,13 +23,13 @@ export const Presentation = () => {
           backGroundColor="#002039"
           label="Login"
           labelColor="white"
-          onPress={() => navigate('Login')}
+          onPress={() => navigate('login')}
         />
         <Button
           backGroundColor="#4ccbf8"
           label="Cadastrar"
           labelColor="black"
-          onPress={() => navigate('EmailAndPasswordRegistration')}
+          onPress={() => navigate('email-and-password')}
         />
       </Styles.ButtonsView>
     </Styles.PresentationContainer>

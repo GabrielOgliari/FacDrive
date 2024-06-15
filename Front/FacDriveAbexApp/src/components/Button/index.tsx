@@ -5,7 +5,7 @@ export type ButtonProps = {
   label: string;
   backGroundColor: string;
   labelColor: string;
-  disable?: boolean;
+  disabled?: boolean;
   borderSize?: number;
   borderColor?: string;
 };
@@ -15,7 +15,7 @@ export const Button = ({
   label,
   backGroundColor,
   labelColor,
-  disable,
+  disabled,
   borderSize,
   borderColor,
 }: ButtonProps) => {
@@ -25,7 +25,7 @@ export const Button = ({
       bc={borderColor}
       bs={borderSize}
       onPress={onPress}
-      disabled={disable}
+      disabled={disabled}
     >
       <Styles.ButtonLabel color={labelColor}>{label}</Styles.ButtonLabel>
     </Styles.CustomButtonContainer>

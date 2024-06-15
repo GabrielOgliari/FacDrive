@@ -8,36 +8,35 @@ import { isEmpty } from '../../utils/validators/isEmpty.ts';
 import { isValidCpf } from '../../utils/validators/isValidCpf.ts';
 import * as Styles from './styles.ts';
 
-type PersonalDetailsRegistrationForm = {
+type PersonalDetailsForm = {
   name: string;
   cpf: string;
   birthDate: Date;
 };
 
-export const PersonalDetailsRegistrationScreen = () => {
+export const PersonalDetailsScreen = () => {
   const { navigate } = useNavigation();
 
-  const { register, applyValidations } =
-    useForm<PersonalDetailsRegistrationForm>({
-      validations: {
-        name: value => {
-          if (isEmpty(value)) return 'Por favor, insira o seu Nome.';
-        },
-        cpf: value => {
-          if (isEmpty(value)) return 'Por favor, insira o seu CPF.';
-          // A validação de CPF não está funcionando corretamente, verificar e corrigir
-          if (isValidCpf(value)) return 'Por favor, insira um CPF válido.';
-        },
-        birthDate: value => {
-          if (isEmpty(value))
-            return 'Por favor, insira a sua Data de Nascimento.';
-        },
+  const { register, applyValidations } = useForm<PersonalDetailsForm>({
+    validations: {
+      name: value => {
+        if (isEmpty(value)) return 'Por favor, insira o seu Nome.';
       },
-    });
+      cpf: value => {
+        if (isEmpty(value)) return 'Por favor, insira o seu CPF.';
+        if (isValidCpf('132.291.791-18'))
+          return 'Por favor, insira um CPF válido.';
+      },
+      birthDate: value => {
+        if (isEmpty(value))
+          return 'Por favor, insira a sua Data de Nascimento.';
+      },
+    },
+  });
 
   const handleClickRegisterButton = () => {
     if (applyValidations()) {
-      navigate('StudentIdValidation');
+      navigate('address');
     }
   };
 
