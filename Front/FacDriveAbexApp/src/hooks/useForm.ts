@@ -15,14 +15,13 @@ export const useForm = <T extends Record<string, any>>({
 
   const applyValidations = (): boolean => {
     setHasSubmitted(true);
-
     if (!validations) return true;
 
     const newErrors: { [K in keyof T]?: string } = {};
     let isValid = true;
 
     for (const name in validations) {
-      const value = formState[name] as T[Extract<keyof T, string>] | undefined;
+      const value = formState[name];
       const validator = validations[name];
       const error = validator ? validator(value) : undefined;
 
@@ -39,7 +38,7 @@ export const useForm = <T extends Record<string, any>>({
   };
 
   const register = (name: keyof T) => {
-    const onChange = (value: T[Extract<keyof T, string>]) => {
+    const onChange = (value: T[keyof T]) => {
       setFormState(prevState => ({
         ...prevState,
         [name]: value,
@@ -52,12 +51,12 @@ export const useForm = <T extends Record<string, any>>({
     return {
       onChange,
       value: formState[name],
-      error: errors[name],
+      errorMessage: errors[name],
       hasSubmitted,
     };
   };
 
-  const watch = (name: any) => {
+  const watch = <K extends keyof T>(name: K): T[K] | undefined => {
     return formState[name];
   };
 
@@ -71,5 +70,5 @@ export const useForm = <T extends Record<string, any>>({
     }
   };
 
-  return { register, watch, applyValidations, setValue };
+  return { object: formState, register, watch, applyValidations, setValue };
 };

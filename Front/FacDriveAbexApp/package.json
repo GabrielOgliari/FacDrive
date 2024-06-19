@@ -14,7 +14,6 @@
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
-    "@tanstack/react-query": "^5.40.1",
     "axios": "^1.7.2",
     "json-server": "^1.0.0-beta.1",
     "react": "^18.2.0",
@@ -24,6 +23,7 @@
     "react-native-safe-area-context": "^4.10.1",
     "react-native-screens": "^3.31.1",
     "react-native-vector-icons": "^10.1.0",
+    "react-query": "^3.39.3",
     "styled-components": "^6.1.11"
   },
   "devDependencies": {

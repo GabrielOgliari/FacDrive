@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { width } from '../../utils/functions.ts';
+import { width } from '../../utils/dimensions.ts';
 
 export const PresentationContainer = styled.SafeAreaView`
   flex: 1;
