@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import FacDriveLogoIcon from '../../assets/images/fac-drive-logo.png';
-import { Button } from '../../components/Button/index.tsx';
+import { Button } from '../../components/UI/atoms/Button/index.tsx';
 import * as Styles from './styles.ts';
 
 export const Presentation = () => {
@@ -20,16 +20,17 @@ export const Presentation = () => {
 
       <Styles.ButtonsView>
         <Button
-          backGroundColor="#002039"
+          backgroundColor="#002039"
           label="Login"
           labelColor="white"
-          onPress={() => navigate('login')}
+          onPress={() => navigate('LOGIN')}
         />
+
         <Button
-          backGroundColor="#4ccbf8"
+          backgroundColor="#4ccbf8"
           label="Cadastrar"
           labelColor="black"
-          onPress={() => navigate('email-and-password')}
+          onPress={() => navigate('ACCESS_DATA')}
         />
       </Styles.ButtonsView>
     </Styles.PresentationContainer>

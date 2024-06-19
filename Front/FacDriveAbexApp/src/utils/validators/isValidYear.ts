@@ -1,4 +1,4 @@
-const isValidYear = (
+export const isValidYear = (
   year: string | number | undefined,
   startYear?: number,
   endYear?: number,

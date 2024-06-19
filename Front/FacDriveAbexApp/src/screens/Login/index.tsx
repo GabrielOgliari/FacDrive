@@ -1,16 +1,18 @@
-import { Button } from '../../components/Button';
-import { Input } from '../../components/Input';
+import { View } from 'react-native';
+import { Button } from '../../components/UI/atoms/Button';
+import { Container } from '../../components/UI/atoms/Container';
+import { Fields } from '../../components/UI/organisms/Fields/root';
 import { useForm } from '../../hooks/useForm';
+import { width } from '../../utils/dimensions';
 import { isEmpty } from '../../utils/validators/isEmpty';
 import { isValidEmail } from '../../utils/validators/isValidEmail';
-import * as Styles from './styles';
 
 type LoginForm = {
   email: string;
   password: string;
 };
 
-export const LoginScreen = () => {
+export const Login = () => {
   // const { mutateAsync } = useMutation({
   //   mutationFn: () => {
   //     const email = watch('email');
@@ -31,28 +33,28 @@ export const LoginScreen = () => {
     },
   });
 
-  const handleClickEntryButton = () => {
+  const handlePressEntryButton = () => {
     if (applyValidations()) {
       // mutateAsync();
     }
   };
 
   return (
-    <Styles.Wrapper>
-      <Styles.Title>Login</Styles.Title>
+    <Container title="Login">
+      <View style={{ gap: width * 0.08 }}>
+        <Fields.Input placeholder="Email" {...register('email')} />
 
-      <Styles.WrapperFields>
-        <Input placeholder="Email" {...register('email')} />
+        <Fields.Input placeholder="Senha" {...register('password')} />
+      </View>
 
-        <Input placeholder="Senha" {...register('password')} />
-
+      <View style={{ gap: width * 0.08, marginBottom: width * 0.08 }}>
         <Button
           label="Entrar"
           labelColor="white"
-          backGroundColor="#002039"
-          onPress={handleClickEntryButton}
+          backgroundColor="#002039"
+          onPress={handlePressEntryButton}
         />
-      </Styles.WrapperFields>
-    </Styles.Wrapper>
+      </View>
+    </Container>
   );
 };
