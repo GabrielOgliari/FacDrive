@@ -34,4 +34,8 @@ feat:Front: Adicionado botão de login
 Um novo botão de login foi adicionado na página inicial. Isso foi feito para melhorar a experiência do usuário e permitir que os usuários façam login de forma mais eficiente.
 ```
 
+# Banco
+![image](https://github.com/user-attachments/assets/440b1d84-d74c-4bf3-aa93-cdedd63e6efe)
+
+
 Esperamos que todos sigam este padrão para manter um histórico de commit limpo e compreensível.
