@@ -27,9 +27,6 @@ create table Dias_Aula(
 	Sabado BOOLEAN,
 	FOREIGN KEY (ID_Pessoa) REFERENCES Pessoa(ID_Pessoa)
 );
-create table Dias_Pessoa(
-	
-)
 
 
 -- Tabela Endereco
@@ -116,10 +113,3 @@ create table Pontos_Rota(
 	Latitude varchar(50),
 	FOREIGN KEY (ID_Rota) REFERENCES Rota(ID_Rota)
 );
-
-insert into Pessoa (cpf) values ('000000000')
-delete from pessoa where cpf='0'
-select * from Pessoa
-
-insert into endereco (cep,id_pessoa) values ('89801341',1)
-select * from endereco
