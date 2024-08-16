@@ -1,5 +1,5 @@
 -- Table User
-create table User(
+create table Users(
     ID_User SERIAL primary key,
     CPF varchar(14),
     Registration varchar(9),
@@ -8,10 +8,10 @@ create table User(
     BirthDate date,
     DriverLicense varchar(11),
     Phone varchar(17),
-    UserType BOOLEAN,
+    UserTypeMot BOOLEAN,
     institutionalEmail varchar(50),
     Password varchar(50),
-		registration varchar(50)
+    UserImage text
 );
 
 -- Table ClassDays
@@ -24,7 +24,7 @@ create table ClassDays(
     Thursday BOOLEAN,
     Friday BOOLEAN,
     Saturday BOOLEAN,
-    FOREIGN KEY (ID_User) REFERENCES User(ID_User)
+    FOREIGN KEY (ID_User) REFERENCES Users(ID_User)
 );
 
 -- Table Address
@@ -39,7 +39,7 @@ create table Address(
     AdditionalInfo varchar(50),
     ReferencePoint varchar(50),
     State varchar(50),
-    FOREIGN KEY (ID_User) REFERENCES User(ID_User)
+    FOREIGN KEY (ID_User) REFERENCES Users(ID_User)
 );
 
 -- Table vehicle
@@ -55,7 +55,7 @@ create table vehicle(
     Plate varchar(7),
 		City varchar(45),
 		State varchar(45),
-    FOREIGN KEY (ID_User) REFERENCES User(ID_User)
+    FOREIGN KEY (ID_User) REFERENCES Users(ID_User)
 );
 
 -- Table Route
@@ -63,7 +63,7 @@ create table Route(
     ID_Route SERIAL primary key,
     ID_User SERIAL,
     RouteName varchar(50),
-    FOREIGN KEY (ID_User) REFERENCES User(ID_User)
+    FOREIGN KEY (ID_User) REFERENCES Users(ID_User)
 );
 
 -- Table Relationship (Match)
@@ -72,8 +72,8 @@ create table Relationship(
     Driver_ID SERIAL,
     Rider_ID SERIAL,
     Amount NUMERIC(10, 2),
-    FOREIGN KEY (Driver_ID) REFERENCES User(ID_User),
-    FOREIGN KEY (Rider_ID) REFERENCES User(ID_User)
+    FOREIGN KEY (Driver_ID) REFERENCES Users(ID_User),
+    FOREIGN KEY (Rider_ID) REFERENCES Users(ID_User)
 );
 
 -- Table Ride
