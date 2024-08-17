@@ -23,11 +23,11 @@ app.post ('/insersao', async (req, res) => {
     
 
     try {
-        if (data.users){
+        if (data.user){
             console.log("entrou no if");
             try {
                 // Agora usando a instância 'crudUser'
-                const newUser = await crudUser.create(data.users);
+                const newUser = await crudUser.create(data.user);
                 res.status(201).json(newUser);
             } catch (error) {
                 res.status(500).json({ error: error.message });
