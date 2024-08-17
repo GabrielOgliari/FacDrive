@@ -16,7 +16,7 @@ app.post ('/insersao', async (req, res) => {
 
     // Cria uma instância de CRUDUser
     console.log("inserção");
-    // console.log(data);
+    console.log(data);
     // console.log(data);
     // console.log(data.user);
 
