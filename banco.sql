@@ -47,9 +47,8 @@ create table address(
 create table vehicle(
     idVehicle SERIAL primary key,
     idUser SERIAL,
-    manufacturingDate Date,
-    manufacturingYear Date,
-    modelYear Date,
+    manufacturingYear varchar(4),
+    modelYear varchar(4),
     color varchar(45),
     brand varchar(45),
     model varchar(45),
