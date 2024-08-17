@@ -7,7 +7,7 @@ const port = 3000;
 
 // Endpoint básico que retorna "Hello, World!"
 app.get('/', (req, res) => {
-    res.send('Gaiteiro é um bostaaaaaaaaaaaaaaaaa ');
+    res.send('Gaiteiro é um bosta');
 });
 const crudUser = new CRUDUser(pool);
 
