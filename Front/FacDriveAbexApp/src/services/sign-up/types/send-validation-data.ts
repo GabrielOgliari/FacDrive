@@ -1,6 +1,6 @@
 import { GenderEnum } from '../../../screens/SignUp/enums/gender-enum';
 
-export type SendValidationData = {
+export interface SendValidationData {
   studentId: {
     email: string;
     status: string;
@@ -16,4 +16,4 @@ export type SendValidationData = {
     cpf?: string;
     phone?: string;
   };
-};
+}

@@ -1,36 +1,36 @@
 import { GenderEnum } from '../../../screens/SignUp/enums/gender-enum';
-import { UserTypeEnum } from '../../../screens/SignUp/enums/user-type-enum';
 
 export interface SaveSignUpData {
-  accessData?: {
-    institutionalEmail?: string;
-    password?: string;
-  };
   user?: {
+    cpf?: string;
+    registration?: string; // Matrícula
     name?: string;
     surname?: string;
     birthDate?: Date;
-    gender?: GenderEnum;
-    cpf?: string;
+    driverLicense?: string;
     phone?: string;
-    userType?: UserTypeEnum;
-    isActiveStudent?: boolean;
-    registration?: string;
+    isDriver?: boolean;
+    institutionalEmail?: string;
+    password?: string;
+    gender?: GenderEnum;
   };
   address?: {
     zipCode?: string;
-    state?: string;
-    city?: string;
-    complement?: string;
-    neighborhood?: string;
-    number?: string;
     street?: string;
+    neighborhood?: string;
+    city?: string;
+    number?: string;
+    additionalInfo?: string;
+    referencePoint?: string;
+    state?: string;
   };
   vehicle?: {
-    plate?: string;
+    manufacturingYear?: string;
+    modelYear?: string;
     color?: string;
-    manufacturingYear?: number;
-    modelYear?: number;
+    brand?: string;
+    model?: string;
+    plate?: string;
     city?: string;
     state?: string;
   };

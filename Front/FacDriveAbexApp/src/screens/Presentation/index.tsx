@@ -3,7 +3,7 @@ import FacDriveLogoIcon from '../../assets/images/fac-drive-logo.png';
 import { Button } from '../../components/UI/atoms/Button/index.tsx';
 import * as Styles from './styles.ts';
 
-export const Presentation = () => {
+export const PresentationScreen = () => {
   const { navigate } = useNavigation();
 
   return (
@@ -23,14 +23,14 @@ export const Presentation = () => {
           backgroundColor="#002039"
           label="Login"
           labelColor="white"
-          onPress={() => navigate('LOGIN')}
+          onPress={() => navigate('login')}
         />
 
         <Button
           backgroundColor="#4ccbf8"
           label="Cadastrar"
           labelColor="black"
-          onPress={() => navigate('ACCESS_DATA')}
+          onPress={() => navigate('access-data')}
         />
       </Styles.ButtonsView>
     </Styles.PresentationContainer>

@@ -5,14 +5,14 @@ import { Fields } from '../../components/UI/organisms/Fields/root';
 import { useForm } from '../../hooks/useForm';
 import { width } from '../../utils/dimensions';
 import { isEmpty } from '../../utils/validators/isEmpty';
-import { isValidEmail } from '../../utils/validators/isValidEmail';
+import { isValidInstitutionalEmail } from '../../utils/validators/isValidInstitutionalEmail';
 
 type LoginForm = {
   email: string;
   password: string;
 };
 
-export const Login = () => {
+export const LoginScreen = () => {
   // const { mutateAsync } = useMutation({
   //   mutationFn: () => {
   //     const email = watch('email');
@@ -25,7 +25,8 @@ export const Login = () => {
     validations: {
       email: value => {
         if (isEmpty(value)) return 'Por favor, insira o seu e-mail.';
-        if (!isValidEmail(value)) return 'Por favor, insira um e-mail válido.';
+        if (!isValidInstitutionalEmail(value))
+          return 'Por favor, insira um e-mail válido.';
       },
       password: value => {
         if (isEmpty(value)) return 'Por favor, insira a sua senha.';

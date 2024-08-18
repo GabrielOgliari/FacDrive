@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { makeApi } from '../../helpers/makeApi';
 import { AddressInput, AddressResponse } from './types/address';
 import { SaveSignUpData } from './types/save-sign-up-data';
 import { SendValidationData } from './types/send-validation-data';
@@ -11,22 +10,24 @@ import { ValidateEmailResponse } from './types/validate-email';
 import { VehicleInput, VehicleResponse } from './types/vehicle';
 
 class SignUpService {
+  protected apiUrlBase = process.env.API_BASE_URL;
+  protected apiUrlPersistence = process.env.API_PERSISTENCE_URL;
+
   async verifyEmailAlreadyRegistered(
     email: string,
   ): Promise<ValidateEmailResponse> {
-    const apiUrl = makeApi('validacao_email');
-
-    const { data } = await axios({
+    const endpoint = '/validacao_email';
+    const response = await axios({
       method: 'post',
-      url: apiUrl,
+      url: this.apiUrlBase + endpoint,
       data: {
         email,
       },
     });
 
-    return {
-      emailAlreadyRegistered: data.emailAlreadyRegistered,
-    };
+    const { emailAlreadyRegistered } = response.data;
+
+    return { emailAlreadyRegistered };
   }
 
   async getAddressByZipCode(zipCode: string): Promise<AddressResponse> {
@@ -40,7 +41,7 @@ class SignUpService {
     return {
       zipCode: data.cep,
       street: data.logradouro,
-      complement: data.complemento,
+      additionalInfo: data.complemento,
       neighborhood: data.bairro,
       city: data.localidade,
       state: data.uf,
@@ -52,11 +53,11 @@ class SignUpService {
   }
 
   async validStudentId(studentId: string): Promise<ValidStudentIdResponse> {
-    const apiUrl = makeApi('image');
+    const endpoint = '/image';
 
     const response = await axios<ValidStudentIdInput>({
       method: 'post',
-      url: apiUrl,
+      url: this.apiUrlBase + endpoint,
       data: {
         imagem: studentId,
       },
@@ -74,21 +75,21 @@ class SignUpService {
   }
 
   async sendValidationData(data: SendValidationData) {
-    const apiUrl = makeApi('validacao_estudante');
+    const endpoint = '/validacao_estudante';
 
     await axios<ValidStudentIdInput>({
       method: 'post',
-      url: apiUrl,
+      url: this.apiUrlBase + endpoint,
       data,
     });
   }
 
   async vehicleByPlate(plate?: string): Promise<VehicleResponse> {
-    const apiUrl = makeApi('veiculo');
+    const endpoint = '/veiculo';
 
     const { data } = await axios<VehicleInput>({
       method: 'post',
-      url: apiUrl,
+      url: this.apiUrlBase + endpoint,
       data: {
         plate,
       },
@@ -116,11 +117,11 @@ class SignUpService {
   async verifyVehicleHasAlreadyRegistered(
     plate?: string,
   ): Promise<{ plateAlreadyRegistered: boolean }> {
-    const apiUrl = makeApi('validacao_carro');
+    const endpoint = '/validacao_carro';
 
     const { data } = await axios<{ plateAlreadyRegistered: boolean }>({
       method: 'post',
-      url: apiUrl,
+      url: this.apiUrlBase + endpoint,
       data: {
         plate,
       },
@@ -132,11 +133,11 @@ class SignUpService {
   }
 
   async save(data: SaveSignUpData) {
-    const apiUrl = makeApi('banco');
+    const endpoint = '/insersao';
 
-    await axios({
+    return await axios({
       method: 'post',
-      url: apiUrl,
+      url: this.apiUrlPersistence + endpoint,
       data,
     });
   }

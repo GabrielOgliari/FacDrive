@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { Apis } from '../../constants/apis';
 import { LoginResponse } from './types/login-response';
 
 class LoginService {
@@ -7,7 +6,7 @@ class LoginService {
     email: string,
     password: string,
   ): Promise<LoginResponse> {
-    const apiUrl = Apis.Authentication;
+    const apiUrl = '';
 
     return await axios({
       method: 'post',

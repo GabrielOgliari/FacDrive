@@ -2,26 +2,26 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 import { useMutation } from 'react-query';
-import { Button } from '../../components/UI/atoms/Button';
-import { Container } from '../../components/UI/atoms/Container';
-import { FullScreenLoader } from '../../components/UI/atoms/FullScreenLoader';
-import { Fields } from '../../components/UI/organisms/Fields/root';
-import { useFormStateContext } from '../../context/useFormStateContext';
-import { dispatchToast } from '../../helpers/dispatchToast';
-import { useForm } from '../../hooks/useForm';
-import signUpService from '../../services/sign-up/sign-up-service';
-import { width } from '../../utils/dimensions';
-import { isEmpty } from '../../utils/validators/isEmpty';
-import { isValidInstitutionalEmail } from '../../utils/validators/isValidInstitutionalEmail';
-import { ProgressCar } from './components/ProgressCar';
+import { Button } from '../../../components/UI/atoms/Button';
+import { Container } from '../../../components/UI/atoms/Container';
+import { FullScreenLoader } from '../../../components/UI/atoms/FullScreenLoader';
+import { ProgressCar } from '../../../components/UI/atoms/ProgressCar';
+import { Fields } from '../../../components/UI/organisms/Fields/root';
+import { useFormStateContext } from '../../../context/useFormStateContext';
+import { dispatchToast } from '../../../helpers/dispatchToast';
+import { useForm } from '../../../hooks/useForm';
+import signUpService from '../../../services/sign-up/sign-up-service';
+import { width } from '../../../utils/dimensions';
+import { isEmpty } from '../../../utils/validators/isEmpty';
+import { isValidInstitutionalEmail } from '../../../utils/validators/isValidInstitutionalEmail';
 
 export type AccessDataForm = {
-  email: string;
+  institutionalEmail: string;
   password: string;
   passwordConfirmation: string;
 };
 
-export const AccessData = () => {
+export const AccessDataScreen = () => {
   const { setObject } = useFormStateContext();
 
   const { navigate } = useNavigation();
@@ -29,7 +29,7 @@ export const AccessData = () => {
   const { object, register, applyValidations, watch } = useForm<AccessDataForm>(
     {
       validations: {
-        email: value => {
+        institutionalEmail: value => {
           if (isEmpty(value))
             return 'Por favor, insira o seu e-mail institucional.';
           if (!isValidInstitutionalEmail(value))
@@ -49,16 +49,21 @@ export const AccessData = () => {
   );
 
   const verifyEmailAlreadyRegisteredMutation = useMutation({
-    mutationKey: ['verify-email-already-registered', watch('email')],
+    mutationKey: [
+      'verify-email-already-registered',
+      watch('institutionalEmail'),
+    ],
     mutationFn: () =>
-      signUpService.verifyEmailAlreadyRegistered(watch('email') as string),
+      signUpService.verifyEmailAlreadyRegistered(
+        watch('institutionalEmail') as string,
+      ),
   });
 
   const handlePressContinueButton = async () => {
     const isValidForm = applyValidations();
 
     if (!isValidForm) {
-      dispatchToast('O formulário possui dados incorretos.');
+      dispatchToast('O formulário possui dados incorretos.', { type: 'error' });
       return;
     }
 
@@ -67,14 +72,18 @@ export const AccessData = () => {
         await verifyEmailAlreadyRegisteredMutation.mutateAsync();
 
       if (emailAlreadyRegistered) {
-        dispatchToast('E-mail já cadastrado. Por favor insira outro e-mail.');
+        dispatchToast('E-mail já cadastrado. Por favor insira outro e-mail.', {
+          type: 'error',
+        });
         return;
       }
 
-      setObject('ACCESS_DATA', object);
-      navigate('USER_TYPE');
+      setObject('access-data', object);
+      navigate('user-type');
     } catch (error) {
-      dispatchToast('Erro ao validar o e-mail. Tente novamente.');
+      dispatchToast('Erro ao validar o e-mail. Tente novamente.', {
+        type: 'error',
+      });
     }
   };
 
@@ -87,7 +96,7 @@ export const AccessData = () => {
       <View style={{ gap: width * 0.08 }}>
         <Fields.Input
           placeholder="Email Institucional"
-          {...register('email')}
+          {...register('institutionalEmail')}
         />
 
         <Fields.Input

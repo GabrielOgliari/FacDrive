@@ -1,39 +1,41 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { useMutation, useQuery } from 'react-query';
-import { Button } from '../../components/UI/atoms/Button';
-import { Container } from '../../components/UI/atoms/Container';
-import { FullScreenLoader } from '../../components/UI/atoms/FullScreenLoader';
-import { Fields } from '../../components/UI/organisms/Fields/root';
-import { useFormStateContext } from '../../context/useFormStateContext';
-import { dispatchToast } from '../../helpers/dispatchToast';
-import { useForm } from '../../hooks/useForm';
-import signUpService from '../../services/sign-up/sign-up-service';
-import { SaveSignUpData } from '../../services/sign-up/types/save-sign-up-data';
-import { ValidStudentIdResponse } from '../../services/sign-up/types/valid-student-id';
-import { VehicleResponse } from '../../services/sign-up/types/vehicle';
-import { width } from '../../utils/dimensions';
-import { isEmpty } from '../../utils/validators/isEmpty';
-import { isValidYear } from '../../utils/validators/isValidYear';
-import { AccessDataForm } from './AccessData';
-import { AddressForm } from './Address';
-import { PersonalDetailsForm } from './PersonalDetails';
-import { ProgressCar } from './components/ProgressCar';
-import { UserTypeEnum } from './enums/user-type-enum';
+import { Button } from '../../../components/UI/atoms/Button';
+import { Container } from '../../../components/UI/atoms/Container';
+import { FullScreenLoader } from '../../../components/UI/atoms/FullScreenLoader';
+import { ProgressCar } from '../../../components/UI/atoms/ProgressCar';
+import { Fields } from '../../../components/UI/organisms/Fields/root';
+import { useFormStateContext } from '../../../context/useFormStateContext';
+import { dispatchToast } from '../../../helpers/dispatchToast';
+import { useForm } from '../../../hooks/useForm';
+import signUpService from '../../../services/sign-up/sign-up-service';
+import { SaveSignUpData } from '../../../services/sign-up/types/save-sign-up-data';
+import { ValidStudentIdResponse } from '../../../services/sign-up/types/valid-student-id';
+import { VehicleResponse } from '../../../services/sign-up/types/vehicle';
+import { width } from '../../../utils/dimensions';
+import { isEmpty } from '../../../utils/validators/isEmpty';
+import { isValidYear } from '../../../utils/validators/isValidYear';
+import { AccessDataForm } from '../access-data';
+import { AddressForm } from '../address';
+import { PersonalDetailsForm } from '../personal-details';
 
 export type VehicleForm = {
   plate: string;
   color: string;
-  manufacturingYear: number;
-  modelYear: number;
+  manufacturingYear: string;
+  modelYear: string;
+  brand: string;
+  model: string;
   city: string;
   state: string;
 };
 
-export const Vehicle = () => {
-  const [plateAlreadyRegistered, setPlateAlreadyRegistered] = useState<
-    'ALREADY_REGISTERED' | 'NOT_REGISTERED' | 'NONE'
-  >('NONE');
+export const VehicleScreen = () => {
+  const { navigate } = useNavigation();
+
+  const [plateAlreadyRegistered, setPlateAlreadyRegistered] = useState(false);
 
   const { getObject } = useFormStateContext();
 
@@ -72,12 +74,12 @@ export const Vehicle = () => {
         setValue('color', data.color);
         setValue('manufacturingYear', data.manufacturingYear);
         setValue('modelYear', data.modelYear);
+        setValue('brand', data.brand);
+        setValue('model', data.model);
         setValue('city', data.city);
         setValue('state', data.state);
       },
-      enabled:
-        String(watch('plate')).length === 7 &&
-        plateAlreadyRegistered === 'NOT_REGISTERED',
+      enabled: String(watch('plate')).length === 7 && !plateAlreadyRegistered,
     },
   );
 
@@ -86,12 +88,13 @@ export const Vehicle = () => {
     () => signUpService.verifyVehicleHasAlreadyRegistered(watch('plate')),
     {
       onSuccess: ({ plateAlreadyRegistered }) => {
-        const newState = plateAlreadyRegistered
-          ? 'ALREADY_REGISTERED'
-          : 'NOT_REGISTERED';
-        setPlateAlreadyRegistered(newState);
-        if (newState === 'ALREADY_REGISTERED') {
-          dispatchToast('Placa já registrada.');
+        setPlateAlreadyRegistered(plateAlreadyRegistered);
+
+        if (plateAlreadyRegistered) {
+          dispatchToast(
+            'Placa já registrada. Você deve cadastrar outra placa.',
+            { type: 'error' },
+          );
         }
       },
       enabled: String(watch('plate')).length === 7,
@@ -101,46 +104,41 @@ export const Vehicle = () => {
   const saveMutation = useMutation(
     (data: SaveSignUpData) => signUpService.save(data),
     {
-      onError: error => console.error(error),
+      onError: () => {
+        dispatchToast(
+          'Erro ao salvar os dados! Por favor, tente novamente mais tarde!',
+          { type: 'error' },
+        );
+      },
+      onSuccess: () => {
+        dispatchToast(
+          'Cadastro realizado com sucesso! Faça login para usar o app.',
+        );
+        navigate('login');
+      },
     },
   );
 
   const handlePressRegisterButton = () => {
     applyValidations();
-    const { zipCode, state, city, complement, neighborhood, number, street } =
-      getObject<AddressForm>('ADDRESS');
-    const { email, password } = getObject<AccessDataForm>('ACCESS_DATA');
-    const { name, surname, birthDate, gender, cpf, phone } =
-      getObject<PersonalDetailsForm>('PERSONAL_DETAILS');
-    const { userType } = getObject<{ userType: UserTypeEnum }>('USER_TYPE');
-    const { registration } = getObject<ValidStudentIdResponse>('STUDENT_ID');
 
-    if (plateAlreadyRegistered === 'NOT_REGISTERED') {
+    const userObject = {
+      ...getObject<AccessDataForm>('access-data'),
+      ...getObject<PersonalDetailsForm>('personal-details'),
+      ...getObject<ValidStudentIdResponse>('student-id'),
+      ...getObject<{ isDriver: boolean }>('user-type'),
+    };
+
+    const addressObject = getObject<AddressForm>('address');
+
+    // TODO: Corrigir 'birthDate', o campo deve ser Date e trazer a data correta
+
+    if (!plateAlreadyRegistered) {
       saveMutation.mutateAsync({
-        accessData: { institutionalEmail: email, password },
-        user: {
-          name,
-          surname,
-          birthDate,
-          gender,
-          cpf,
-          phone,
-          userType,
-          registration,
-        },
-        address: {
-          zipCode,
-          state,
-          city,
-          complement,
-          neighborhood,
-          number,
-          street,
-        },
+        user: { ...userObject, birthDate: new Date() },
+        address: addressObject,
         vehicle: object,
       });
-    } else {
-      dispatchToast('Registro não permitido: Placa já registrada.');
     }
   };
 
@@ -152,20 +150,32 @@ export const Vehicle = () => {
           verifyVehicleHasAlreadyRegisteredQuery.isLoading
         }
       />
+
       <View style={{ gap: width * 0.08 }}>
         <Fields.Input placeholder="Placa" {...register('plate')} />
+
         <Fields.Input placeholder="Cor" {...register('color')} />
+
         <Fields.Input
           placeholder="Ano Fabricação"
           {...register('manufacturingYear')}
         />
+
         <Fields.Input placeholder="Ano Modelo" {...register('modelYear')} />
+
+        <Fields.Input placeholder="Marca" {...register('brand')} />
+
+        <Fields.Input placeholder="Modelo" {...register('model')} />
+
         <Fields.Input placeholder="Cidade" {...register('city')} />
+
         <Fields.Input placeholder="Estado" {...register('state')} />
       </View>
       <View style={{ gap: width * 0.08, marginBottom: width * 0.08 }}>
         <ProgressCar currentStep={5} totalSteps={5} />
+
         <Button
+          disabled={saveMutation.isLoading}
           backgroundColor="#4ccbf8"
           label="Cadastrar"
           labelColor="black"

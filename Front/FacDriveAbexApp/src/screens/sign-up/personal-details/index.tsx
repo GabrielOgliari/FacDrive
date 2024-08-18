@@ -2,31 +2,32 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 import { useMutation } from 'react-query';
-import { Button } from '../../components/UI/atoms/Button';
-import { Container } from '../../components/UI/atoms/Container';
-import { Fields } from '../../components/UI/organisms/Fields/root';
-import { useFormStateContext } from '../../context/useFormStateContext';
-import { useForm } from '../../hooks/useForm';
-import signUpService from '../../services/sign-up/sign-up-service';
-import { SendValidationData } from '../../services/sign-up/types/send-validation-data';
-import { ValidStudentIdResponse } from '../../services/sign-up/types/valid-student-id';
-import { width } from '../../utils/dimensions';
-import { isEmpty } from '../../utils/validators/isEmpty';
-import { isValidCpf } from '../../utils/validators/isValidCpf';
-import { ProgressCar } from './components/ProgressCar';
-import { GenderOptions } from './constants/gender-options';
-import { GenderEnum } from './enums/gender-enum';
+import { Button } from '../../../components/UI/atoms/Button';
+import { Container } from '../../../components/UI/atoms/Container';
+import { ProgressCar } from '../../../components/UI/atoms/ProgressCar';
+import { Fields } from '../../../components/UI/organisms/Fields/root';
+import { GenderOptions } from '../../../constants/gender-options';
+import { useFormStateContext } from '../../../context/useFormStateContext';
+import { GenderEnum } from '../../../enums/gender-enum';
+import { useForm } from '../../../hooks/useForm';
+import signUpService from '../../../services/sign-up/sign-up-service';
+import { SendValidationData } from '../../../services/sign-up/types/send-validation-data';
+import { ValidStudentIdResponse } from '../../../services/sign-up/types/valid-student-id';
+import { width } from '../../../utils/dimensions';
+import { isEmpty } from '../../../utils/validators/isEmpty';
+import { isValidCpf } from '../../../utils/validators/isValidCpf';
 
 export type PersonalDetailsForm = {
   name: string;
   surname: string;
   birthDate: Date;
+  driverLicense: string;
   gender: GenderEnum;
   cpf: string;
   phone: string;
 };
 
-export const PersonalDetails = () => {
+export const PersonalDetailsScreen = () => {
   const { setObject, getObject } = useFormStateContext();
 
   const { navigate } = useNavigation();
@@ -58,7 +59,7 @@ export const PersonalDetails = () => {
   const handlePressRegisterButton = () => {
     if (applyValidations()) {
       const { birthDate, cpf, email, registration, status } =
-        getObject<ValidStudentIdResponse>('STUDENT_ID');
+        getObject<ValidStudentIdResponse>('student-id');
 
       sendValidationDataMutation.mutateAsync({
         studentId: {
@@ -78,8 +79,8 @@ export const PersonalDetails = () => {
         },
       });
 
-      setObject('PERSONAL_DETAILS', object);
-      navigate('ADDRESS');
+      setObject('personal-details', object);
+      navigate('address');
     }
   };
 
@@ -100,6 +101,12 @@ export const PersonalDetails = () => {
         <Fields.Input
           {...register('birthDate')}
           placeholder="Data de Nascimento"
+          keyboard="numeric"
+        />
+
+        <Fields.Input
+          {...register('driverLicense')}
+          placeholder="Carteira de Motorista"
           keyboard="numeric"
         />
 
