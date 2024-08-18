@@ -1,4 +1,4 @@
-import { GenderEnum } from '../../../screens/SignUp/enums/gender-enum';
+import { GenderEnum } from '../../../enums/gender-enum';
 
 export interface SaveSignUpData {
   user?: {
