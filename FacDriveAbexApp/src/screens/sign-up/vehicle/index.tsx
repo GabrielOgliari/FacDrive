@@ -57,6 +57,12 @@ export const VehicleScreen = () => {
           if (!isValidYear(value, 1900, new Date().getFullYear()))
             return 'O ano informado não é válido.';
         },
+        brand: value => {
+          if (isEmpty(value)) return 'Por favor, insira o campo Marca.';
+        },
+        model: value => {
+          if (isEmpty(value)) return 'Por favor, insira o campo Modelo.';
+        },
         city: value => {
           if (isEmpty(value)) return 'Por favor, insira o campo Cidade.';
         },
@@ -80,6 +86,9 @@ export const VehicleScreen = () => {
         setValue('state', data.state);
       },
       enabled: String(watch('plate')).length === 7 && !plateAlreadyRegistered,
+      onError: () => {
+        dispatchToast('Erro ao obter dados do veículo.', { type: 'error' });
+      },
     },
   );
 
@@ -120,7 +129,9 @@ export const VehicleScreen = () => {
   );
 
   const handlePressRegisterButton = () => {
-    applyValidations();
+    if (!applyValidations() || plateAlreadyRegistered) {
+      return;
+    }
 
     const userObject = {
       ...getObject<AccessDataForm>('access-data'),
@@ -133,13 +144,11 @@ export const VehicleScreen = () => {
 
     // TODO: Corrigir 'birthDate', o campo deve ser Date e trazer a data correta
 
-    if (!plateAlreadyRegistered) {
-      saveMutation.mutateAsync({
-        user: { ...userObject, birthDate: new Date() },
-        address: addressObject,
-        vehicle: object,
-      });
-    }
+    saveMutation.mutateAsync({
+      user: { ...userObject, birthDate: new Date() },
+      address: addressObject,
+      vehicle: object,
+    });
   };
 
   return (
