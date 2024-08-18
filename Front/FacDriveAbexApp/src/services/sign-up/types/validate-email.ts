@@ -1,3 +1,3 @@
-export type ValidateEmailResponse = {
+export interface ValidateEmailResponse {
   emailAlreadyRegistered: boolean;
-};
+}

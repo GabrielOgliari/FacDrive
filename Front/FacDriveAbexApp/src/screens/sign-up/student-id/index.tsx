@@ -3,18 +3,18 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useMutation } from 'react-query';
-import { Button } from '../../components/UI/atoms/Button';
-import { Container } from '../../components/UI/atoms/Container';
-import { FetchDataButton } from '../../components/UI/atoms/FetchDataButton';
-import { FullScreenLoader } from '../../components/UI/atoms/FullScreenLoader';
-import { useFormStateContext } from '../../context/useFormStateContext';
-import { dispatchToast } from '../../helpers/dispatchToast';
-import signUpService from '../../services/sign-up/sign-up-service';
-import { ValidStudentIdResponse } from '../../services/sign-up/types/valid-student-id';
-import { width } from '../../utils/dimensions';
-import { ProgressCar } from './components/ProgressCar';
+import { Button } from '../../../components/UI/atoms/Button';
+import { Container } from '../../../components/UI/atoms/Container';
+import { FetchDataButton } from '../../../components/UI/atoms/FetchDataButton';
+import { FullScreenLoader } from '../../../components/UI/atoms/FullScreenLoader';
+import { ProgressCar } from '../../../components/UI/atoms/ProgressCar';
+import { useFormStateContext } from '../../../context/useFormStateContext';
+import { dispatchToast } from '../../../helpers/dispatchToast';
+import signUpService from '../../../services/sign-up/sign-up-service';
+import { ValidStudentIdResponse } from '../../../services/sign-up/types/valid-student-id';
+import { width } from '../../../utils/dimensions';
 
-export const StudentId = () => {
+export const StudentIdScreen = () => {
   const { setObject } = useFormStateContext();
 
   const { navigate } = useNavigation();
@@ -30,11 +30,15 @@ export const StudentId = () => {
       },
       ({ didCancel, errorCode, assets }) => {
         if (didCancel) {
-          dispatchToast('Seleção de imagem cancelada.');
+          dispatchToast('Seleção de imagem cancelada.', {
+            type: 'info',
+          });
           return;
         }
         if (errorCode) {
-          dispatchToast(`Erro ao selecionar imagem: ${errorCode}`);
+          dispatchToast(`Erro ao selecionar imagem: ${errorCode}`, {
+            type: 'error',
+          });
           return;
         }
         if (assets && assets[0].base64) {
@@ -49,15 +53,24 @@ export const StudentId = () => {
     mutationFn: () => signUpService.validStudentId(base64),
     onSuccess: (data: ValidStudentIdResponse) => {
       const isVerified = data.status === 'Aluno Regular';
-      dispatchToast(isVerified ? 'Aluno Regular.' : 'Aluno Irregular.');
+
+      if (!isVerified) {
+        dispatchToast('Aluno Irregular.', {
+          type: 'error',
+        });
+
+        return;
+      }
 
       if (isVerified) {
-        setObject('STUDENT_ID', data);
-        navigate('PERSONAL_DETAILS');
+        setObject('student-id', data);
+        navigate('personal-details');
       }
     },
     onError: error => {
-      dispatchToast('Erro ao verificar Aluno. Tente novamente.');
+      dispatchToast('Erro ao verificar Aluno. Tente novamente.', {
+        type: 'error',
+      });
       console.error(error);
     },
   });
@@ -66,6 +79,7 @@ export const StudentId = () => {
     if (!base64) {
       dispatchToast(
         'Por favor, selecione uma imagem da carteirinha de estudante.',
+        { type: 'info' },
       );
       return;
     }

@@ -1,26 +1,30 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
-import { useQuery } from 'react-query';
-import { Button } from '../../components/UI/atoms/Button';
-import { Container } from '../../components/UI/atoms/Container';
-import { FullScreenLoader } from '../../components/UI/atoms/FullScreenLoader';
-import { Fields } from '../../components/UI/organisms/Fields/root';
-import { useFormStateContext } from '../../context/useFormStateContext';
-import { dispatchToast } from '../../helpers/dispatchToast';
-import { useForm } from '../../hooks/useForm';
-import signUpService from '../../services/sign-up/sign-up-service';
-import { AddressResponse } from '../../services/sign-up/types/address';
-import { width } from '../../utils/dimensions';
-import { isEmpty } from '../../utils/validators/isEmpty';
-import { ProgressCar } from './components/ProgressCar';
-import { UserTypeEnum } from './enums/user-type-enum';
+import { useMutation, useQuery } from 'react-query';
+import { Button } from '../../../components/UI/atoms/Button';
+import { Container } from '../../../components/UI/atoms/Container';
+import { FullScreenLoader } from '../../../components/UI/atoms/FullScreenLoader';
+import { ProgressCar } from '../../../components/UI/atoms/ProgressCar';
+import { Fields } from '../../../components/UI/organisms/Fields/root';
+import { useFormStateContext } from '../../../context/useFormStateContext';
+import { dispatchToast } from '../../../helpers/dispatchToast';
+import { useForm } from '../../../hooks/useForm';
+import signUpService from '../../../services/sign-up/sign-up-service';
+import { AddressResponse } from '../../../services/sign-up/types/address';
+import { SaveSignUpData } from '../../../services/sign-up/types/save-sign-up-data';
+import { ValidStudentIdResponse } from '../../../services/sign-up/types/valid-student-id';
+import { width } from '../../../utils/dimensions';
+import { isEmpty } from '../../../utils/validators/isEmpty';
+import { AccessDataForm } from '../access-data';
+import { PersonalDetailsForm } from '../personal-details';
 
 export type AddressForm = {
   zipCode: string;
   state: string;
   city: string;
-  complement: string;
+  additionalInfo: string;
+  referencePoint: string;
   neighborhood: string;
   number: string;
   street: string;
@@ -28,7 +32,7 @@ export type AddressForm = {
 
 const QUANTITY_OF_DIGITS_ZIP_CODE = 8;
 
-export const Address = () => {
+export const AddressScreen = () => {
   const { setObject, getObject } = useFormStateContext();
 
   const { navigate } = useNavigation();
@@ -70,17 +74,48 @@ export const Address = () => {
     enabled: String(watch('zipCode')).length === QUANTITY_OF_DIGITS_ZIP_CODE,
   });
 
+  const saveMutation = useMutation(
+    (data: SaveSignUpData) => signUpService.save(data),
+    {
+      onError: () => {
+        dispatchToast(
+          'Erro ao salvar os dados! Por favor, tente novamente mais tarde!',
+          { type: 'error' },
+        );
+      },
+      onSuccess: () => {
+        dispatchToast(
+          'Cadastro realizado com sucesso! Faça login para usar o app.',
+        );
+        navigate('login');
+      },
+    },
+  );
+
   const handlePressContinueButton = () => {
     if (applyValidations()) {
-      setObject('ADDRESS', object);
+      const { isDriver } = getObject<{ isDriver: boolean }>('user-type');
 
-      const { userType } = getObject<{ userType: UserTypeEnum }>('USER_TYPE');
-
-      if (userType === UserTypeEnum.driver) {
-        navigate('VEHICLE');
-      } else {
-        dispatchToast('Cadastro Finalizado Para Estudante Do Tipo Passageiro');
+      if (isDriver) {
+        setObject('address', object);
+        navigate('vehicle');
+        return;
       }
+
+      const userObject = {
+        ...getObject<AccessDataForm>('access-data'),
+        ...getObject<PersonalDetailsForm>('personal-details'),
+        ...getObject<ValidStudentIdResponse>('student-id'),
+      };
+
+      const addressObject = getObject<AddressForm>('address');
+
+      // TODO: Corrigir 'birthDate', o campo deve ser Date e trazer a data correta
+
+      saveMutation.mutateAsync({
+        user: { ...userObject, isDriver, birthDate: new Date() },
+        address: addressObject,
+      });
     }
   };
 
@@ -122,14 +157,20 @@ export const Address = () => {
         <Fields.Input placeholder="Bairro" {...register('neighborhood')} />
 
         <Fields.Input
+          placeholder="Ponto de Referência (opcional)"
+          {...register('referencePoint')}
+        />
+
+        <Fields.Input
           placeholder="Complemento (opcional)"
-          {...register('complement')}
+          {...register('additionalInfo')}
         />
       </View>
       <View style={{ gap: width * 0.08, marginBottom: width * 0.08 }}>
         <ProgressCar currentStep={4} totalSteps={5} />
 
         <Button
+          disabled={saveMutation.isLoading}
           backgroundColor="#4ccbf8"
           label="Continuar"
           labelColor="black"

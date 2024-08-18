@@ -1,3 +1,3 @@
-export type ValidateCpfResponse = {
+export interface ValidateCpfResponse {
   isValidCpf: boolean;
-};
+}

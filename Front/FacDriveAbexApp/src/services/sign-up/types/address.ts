@@ -1,7 +1,7 @@
 export interface AddressResponse {
   zipCode: string;
   street: string;
-  complement: string;
+  additionalInfo: string; // Complemento
   neighborhood: string;
   city: string;
   state: string;
