@@ -13,11 +13,9 @@ export const UserTypeScreen = () => {
 
   const { navigate } = useNavigation();
 
-  const [userType, setUserType] = useState<'driver' | 'passenger'>('passenger');
+  const [isDriver, setIsDriver] = useState(false);
 
   const handlePressContinueButton = () => {
-    const isDriver = userType === 'driver' ? true : false;
-
     setObject('user-type', { isDriver });
     navigate('student-id');
   };
@@ -26,16 +24,13 @@ export const UserTypeScreen = () => {
     <Container title="Tipo de Usuário">
       <View style={{ gap: width * 0.08 }}>
         <ButtonStylized
-          $selected={userType === 'passenger'}
-          onPress={() => setUserType('passenger')}
+          $selected={!isDriver}
+          onPress={() => setIsDriver(false)}
         >
           <ButtonText>Passageiro</ButtonText>
         </ButtonStylized>
 
-        <ButtonStylized
-          $selected={userType === 'driver'}
-          onPress={() => setUserType('driver')}
-        >
+        <ButtonStylized $selected={isDriver} onPress={() => setIsDriver(true)}>
           <ButtonText>Motorista</ButtonText>
         </ButtonStylized>
       </View>
