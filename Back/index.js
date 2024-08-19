@@ -7,7 +7,7 @@ const port = 3000;
 
 // Endpoint básico que retorna "Hello, World!"
 app.get('/', (req, res) => {
-    res.send('Gaiteiro é um bosta ');
+    res.send('Gaiteiro é um bosta');
 });
 const crudUser = new CRUDUser(pool);
 
@@ -16,18 +16,18 @@ app.post ('/insersao', async (req, res) => {
 
     // Cria uma instância de CRUDUser
     console.log("inserção");
-    // console.log(data);
+    console.log(data);
     // console.log(data);
     // console.log(data.user);
 
     
 
     try {
-        if (data.users){
+        if (data.user){
             console.log("entrou no if");
             try {
                 // Agora usando a instância 'crudUser'
-                const newUser = await crudUser.create(data.users);
+                const newUser = await crudUser.create(data.user);
                 res.status(201).json(newUser);
             } catch (error) {
                 res.status(500).json({ error: error.message });
