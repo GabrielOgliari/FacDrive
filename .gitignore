@@ -9,3 +9,9 @@ API/__pycache__
 # Backend
 Back/.venv
 node_modules
+
+Routing/node_modules
+Routing/vendor
+Routing/src/JS/dist
+
+.idea

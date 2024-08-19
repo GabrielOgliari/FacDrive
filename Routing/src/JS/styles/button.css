@@ -1,0 +1,11 @@
+#create-routing-button {
+    position: absolute;
+    border-radius: 8px;
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    transform: translate(-50%, 0);
+    width: 200px;
+    height: 70px;
+    background-color: #18B9F0;
+}
