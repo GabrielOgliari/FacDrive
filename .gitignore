@@ -13,5 +13,6 @@ node_modules
 Routing/node_modules
 Routing/vendor
 Routing/src/JS/dist
+Routing/package-lock.json
 
 .idea
