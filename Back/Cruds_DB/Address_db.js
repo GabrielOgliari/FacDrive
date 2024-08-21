@@ -1,31 +1,29 @@
-// crudUser.js
-class CRUDUser {
+// crudVehicle.js
+class CRUDAddress {
   constructor(pool) {
     this.pool = pool;
-    this.tableName = 'users';
+    this.tableName = 'address';
   }
 
   // Create - Inserir um novo usuário
-  async create(data) {
+  async create(data, idUser) {
     try {
-      console.log(data);
+      // console.log(data);
       const query = `
         INSERT INTO ${this.tableName} 
-        (cpf, registration, name, surname, birthDate, driverLicense, phone, isDriver, institutionalEmail, password, gender) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) 
+        (idUser, zipCode, street, neighborhood, city, number, additionalInfo, referencePoint, state) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
         RETURNING *`;
       const values = [
-        data.cpf,
-        data.registration, 
-        data.name,
-        data.surname,
-        data.birthDate,
-        data.driverLicense,
-        data.phone,
-        data.isDriver,
-        data.institutionalEmail,
-        data.password,
-        data.gender
+        idUser,
+        data.zipCode,
+        data.street,
+        data.neighborhood,
+        data.city,
+        data.number,
+        data.additionalInfo,
+        data.referencePoint,
+        data.state
       ];
       const res = await this.pool.query(query, values);
       // const user = await this.readIdUser(data.Name, data.Surname);
@@ -34,25 +32,25 @@ class CRUDUser {
       console.log(res.rows[0])
       return res.rows[0]; 
     } catch (error) {
+      console.log("Erro:",error);
       throw error;
     }
   }
 
-  //Read - Id User
-  async readIdUser(name, surname) {
-    console.log("Nome:",name);
-    console.log("Sobrenome:",surname);
+  //Read - Id vehicle
+  async readIdPlate(plate) {
+    console.log("Placa:",plate);
     try {
-      const query = `SELECT idUser FROM ${this.tableName} WHERE name = $1 AND surname = $2`;
-      const res = await this.pool.query(query, [name, surname]);
-      console.log("Resposta:",res.rows[0].id_user);
-      return res.rows[0].id_user;
+      const query = `SELECT idVehicle FROM ${this.tableName} WHERE plate = $1`;
+      const res = await this.pool.query(query, [plate]);
+      // console.log("Resposta:",res.rows[0].idVehicle);
+      return res.rows[0].idVehicle;
     } catch (error) {
       throw error;
     }
   }
 
-  // Read - Obter todos os usuários ou um usuário específico
+  // Read - Obter todos os veiculos ou um usuário específico
   async read(id) {
     try {
       if (id) {
@@ -69,7 +67,7 @@ class CRUDUser {
     }
   } 
 
-  // Update - Atualizar um usuário específico
+  // Update - Atualizar um veiculo por um usuario 
   async update(id, data) {
     try {
       const fields = Object.keys(data).map((key, i) => `${key} = $${i + 1}`).join(', ');
@@ -95,5 +93,5 @@ class CRUDUser {
   }
 }
 
-// module.exports = CRUDUser;
-export default CRUDUser; 
+
+export default CRUDAddress; 

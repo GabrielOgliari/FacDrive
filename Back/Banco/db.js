@@ -1,5 +1,7 @@
 // db.js
-const { Pool } = require('pg');
+
+import pkg from 'pg';
+const { Pool } = pkg;
 
 // Configuração da conexão com o banco de dados
 const pool = new Pool({
@@ -10,12 +12,4 @@ const pool = new Pool({
   port: 6543,               // Substitua com a porta do seu PostgreSQL (geralmente 5432)
 });
 
-// pool.on('connect', () => {
-//   console.log("Conectado ao banco de dados PostgreSQL");
-// });
-
-// pool.on('error', (err) => {
-//   console.error('Erro inesperado no pool de conexão PostgreSQL', err);
-// });
-
-module.exports = pool;
+export default pool; 
