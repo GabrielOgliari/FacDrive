@@ -20,10 +20,12 @@ app.post ('/insersao', async (req, res) => {
 
     console.log("inserção");
     // console.log(data);
-    // console.log(data.user);
+    console.log(data.address);
 
     try{
         const newUser = await cruds.crudUser.create(data.user);
+        console.log(newUser);
+        const newAddress = await cruds.crudAddress.create(data.address,newUser.iduser);
 
 
         if (data.vehicle){
@@ -31,7 +33,7 @@ app.post ('/insersao', async (req, res) => {
         }
         
 
-        res.status(201).json({ newVehicle, newUser });
+        res.status(201).json({ newVehicle, newUser, newAddress });
         }
     catch (error) {
         res.status(500).json({ error: error.message });
