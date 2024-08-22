@@ -91,6 +91,19 @@ class CRUDVehicle {
       throw error;
     }
   }
+  async validatePlate(plate) {
+    try {
+      const query = `SELECT * FROM ${this.tableName} WHERE plate = $1`;
+      const res = await this.pool.query(query, [plate]);
+      // console.log(res.rows[0]);
+      if (res.rows[0] == undefined) {
+        return {"plateAlreadyRegistered": false};
+      }
+      return {"plateAlreadyRegistered": true};
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 // module.exports = CRUDVehicle;
