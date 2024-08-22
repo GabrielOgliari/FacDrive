@@ -14,11 +14,11 @@ app.get('/', (req, res) => {
 });
 
 
-app.post ('/insersao', async (req, res) => {
+app.post ('/cadastre', async (req, res) => {
     let data = req.body;
     let newVehicle;
 
-    console.log("inserção");
+    // console.log("cadastro");
     // console.log(data);
     console.log(data.address);
 
@@ -39,24 +39,39 @@ app.post ('/insersao', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 
+});
 
-    
+// Definindo a rota /validacoes/email/:email
+app.get('/validations/email/:email', async (req, res) => {
+    try {
+        const email = req.params.email;
+        const user = await cruds.crudUser.validateEmail(email); 
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
-    // try {
-    //     if (data.user){
-    //         console.log("entrou no if");
-    //         try {
-    //             // Agora usando a instância 'crudUser'
-    //             const newUser = await crudUser.create(data.user);
-    //             res.status(201).json(newUser);
-    //         } catch (error) {
-    //             res.status(500).json({ error: error.message });
-    //         }
-    //     }
-    // }
-    // catch (error) {
-    //     res.status(500).json({ error: error.message });
-    // }
+// Definindo a rota /validacoes/cpf/:cpf
+app.get('/validations/cpf/:cpf', async (req, res) => {
+    try {
+        const cpf = req.params.cpf;
+        const user = await cruds.crudUser.validateCpf(cpf); 
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Definindo a rota /validacoes/placa/:placa
+app.get('/validations/plate/:plate', async (req, res) => {
+    try {
+        const plate = req.params.plate;
+        const vehicle = await cruds.crudVehicle.validatePlate(plate); 
+        res.status(200).json(vehicle);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 
