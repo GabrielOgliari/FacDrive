@@ -1,15 +1,19 @@
 import Toast from 'react-native-toast-message';
-import { width } from '../utils/dimensions';
 
-export const dispatchToast = (
-  message: string,
-  config?: { type: 'success' | 'error' | 'info' },
-) => {
+type Props = {
+  type?: 'success' | 'error' | 'info';
+  title: string;
+  description?: string;
+};
+
+export const dispatchToast = ({
+  type = 'success',
+  title,
+  description,
+}: Props) => {
   Toast.show({
-    type: config?.type ?? 'success',
-    text1: message,
-    text1Style: {
-      fontSize: width * 0.04,
-    },
+    type,
+    text1: title,
+    text2: description,
   });
 };

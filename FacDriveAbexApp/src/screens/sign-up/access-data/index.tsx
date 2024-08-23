@@ -63,7 +63,10 @@ export const AccessDataScreen = () => {
     const isValidForm = applyValidations();
 
     if (!isValidForm) {
-      dispatchToast('O formulário possui dados incorretos.', { type: 'error' });
+      dispatchToast({
+        title: 'O formulário possui dados incorretos.',
+        type: 'error',
+      });
       return;
     }
 
@@ -72,7 +75,9 @@ export const AccessDataScreen = () => {
         await verifyEmailAlreadyRegisteredMutation.mutateAsync();
 
       if (emailAlreadyRegistered) {
-        dispatchToast('E-mail já cadastrado. Por favor insira outro e-mail.', {
+        dispatchToast({
+          title: 'E-mail já cadastrado.',
+          description: 'Por favor insira outro e-mail.',
           type: 'error',
         });
         return;
@@ -81,7 +86,8 @@ export const AccessDataScreen = () => {
       setObject('access-data', object);
       navigate('user-type');
     } catch (error) {
-      dispatchToast('Erro ao validar o e-mail. Tente novamente.', {
+      dispatchToast({
+        title: 'Erro ao validar o e-mail.',
         type: 'error',
       });
     }

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { AddressInput, AddressResponse } from './types/address';
 import { SaveSignUpData } from './types/save-sign-up-data';
-import { SendValidationData } from './types/send-validation-data';
 import {
   ValidStudentIdInput,
   ValidStudentIdResponse,
@@ -10,19 +9,17 @@ import { ValidateEmailResponse } from './types/validate-email';
 import { VehicleInput, VehicleResponse } from './types/vehicle';
 
 class SignUpService {
-  protected apiUrlBase = process.env.API_BASE_URL;
-  protected apiUrlPersistence = process.env.API_PERSISTENCE_URL;
+  protected apiPythonUrl = process.env.API_PYTHON_URL;
+  protected apiNodeUrl = process.env.API_NODE_URL;
 
   async verifyEmailAlreadyRegistered(
     email: string,
   ): Promise<ValidateEmailResponse> {
-    const endpoint = '/validacao_email';
+    const endpoint = '/validations/email/';
+
     const response = await axios({
-      method: 'post',
-      url: this.apiUrlBase + endpoint,
-      data: {
-        email,
-      },
+      method: 'get',
+      url: this.apiNodeUrl + endpoint + email,
     });
 
     const { emailAlreadyRegistered } = response.data;
@@ -56,8 +53,8 @@ class SignUpService {
     const endpoint = '/image';
 
     const response = await axios<ValidStudentIdInput>({
-      method: 'post',
-      url: this.apiUrlBase + endpoint,
+      method: 'POST', // Não faço ideia por que precisa ser maiúsculo
+      url: this.apiPythonUrl + endpoint,
       data: {
         imagem: studentId,
       },
@@ -74,14 +71,15 @@ class SignUpService {
     };
   }
 
-  async sendValidationData(data: SendValidationData) {
-    const endpoint = '/validacao_estudante';
+  async verifyCpfAlreadyRegistered(cpf: string): Promise<boolean> {
+    const endpoint = '/validations/cpf/';
 
-    await axios<ValidStudentIdInput>({
-      method: 'post',
-      url: this.apiUrlBase + endpoint,
-      data,
+    const { data } = await axios<{ cpfAlreadyRegistered: boolean }>({
+      method: 'get',
+      url: this.apiNodeUrl + endpoint + cpf,
     });
+
+    return data.cpfAlreadyRegistered;
   }
 
   async vehicleByPlate(plate?: string): Promise<VehicleResponse> {
@@ -89,7 +87,7 @@ class SignUpService {
 
     const { data } = await axios<VehicleInput>({
       method: 'post',
-      url: this.apiUrlBase + endpoint,
+      url: this.apiPythonUrl + endpoint,
       data: {
         plate,
       },
@@ -115,16 +113,13 @@ class SignUpService {
   }
 
   async verifyVehicleHasAlreadyRegistered(
-    plate?: string,
+    plate: string,
   ): Promise<{ plateAlreadyRegistered: boolean }> {
-    const endpoint = '/validacao_carro';
+    const endpoint = '/validations/plate/';
 
     const { data } = await axios<{ plateAlreadyRegistered: boolean }>({
-      method: 'post',
-      url: this.apiUrlBase + endpoint,
-      data: {
-        plate,
-      },
+      method: 'get',
+      url: this.apiNodeUrl + endpoint + plate,
     });
 
     return {
@@ -133,11 +128,11 @@ class SignUpService {
   }
 
   async save(data: SaveSignUpData) {
-    const endpoint = '/insersao';
+    const endpoint = '/register';
 
     return await axios({
       method: 'post',
-      url: this.apiUrlPersistence + endpoint,
+      url: this.apiNodeUrl + endpoint,
       data,
     });
   }

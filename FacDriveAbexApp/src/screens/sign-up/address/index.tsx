@@ -62,7 +62,7 @@ export const AddressScreen = () => {
       },
     });
 
-  const getAddressByCepQuery = useQuery({
+  const getAddressByZipCodeQuery = useQuery({
     queryKey: ['get-address-by-zipCode', watch('zipCode')],
     queryFn: () => signUpService.getAddressByZipCode(String(watch('zipCode'))),
     onSuccess: (data: AddressResponse) => {
@@ -78,15 +78,17 @@ export const AddressScreen = () => {
     (data: SaveSignUpData) => signUpService.save(data),
     {
       onError: () => {
-        dispatchToast(
-          'Erro ao salvar os dados! Por favor, tente novamente mais tarde!',
-          { type: 'error' },
-        );
+        dispatchToast({
+          title: 'Erro ao salvar os dados!',
+          description: 'Por favor, tente novamente mais tarde!',
+          type: 'error',
+        });
       },
       onSuccess: () => {
-        dispatchToast(
-          'Cadastro realizado com sucesso! Faça login para usar o app.',
-        );
+        dispatchToast({
+          title: 'Cadastro realizado com sucesso!',
+          description: 'Faça login para usar o app.',
+        });
         navigate('login');
       },
     },
@@ -121,7 +123,7 @@ export const AddressScreen = () => {
 
   return (
     <Container title="Dados de Endereço">
-      <FullScreenLoader loading={getAddressByCepQuery.isLoading} />
+      <FullScreenLoader loading={getAddressByZipCodeQuery.isLoading} />
 
       <View style={{ gap: width * 0.08 }}>
         <Fields.Input

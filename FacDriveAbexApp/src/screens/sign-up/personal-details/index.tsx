@@ -50,34 +50,21 @@ export const PersonalDetailsScreen = () => {
       },
     });
 
-  const sendValidationDataMutation = useMutation({
+  const verifyCpfAlreadyRegisteredMutation = useMutation({
     mutationFn: (data: SendValidationData) =>
-      signUpService.sendValidationData(data),
+      signUpService.verifyCpfAlreadyRegistered(data),
     onError: error => console.error(error),
   });
 
   const handlePressRegisterButton = () => {
     if (applyValidations()) {
-      const { birthDate, cpf, email, registration, status } =
-        getObject<ValidStudentIdResponse>('student-id');
+      const { cpf } = getObject<ValidStudentIdResponse>('student-id');
 
-      sendValidationDataMutation.mutateAsync({
-        studentId: {
-          birthDate,
-          cpf,
-          email,
-          registration,
-          status,
-        },
-        personalDetails: {
-          name: watch('name'),
-          surname: watch('surname'),
-          birthDate: watch('birthDate'),
-          gender: watch('gender'),
-          cpf: watch('cpf'),
-          phone: watch('phone'),
-        },
-      });
+      verifyCpfAlreadyRegisteredMutation.mutateAsync(cpf);
+
+      // TODO: Ao receber CPF, se for falso é por que ele já está
+      // cadastrado, dessa forma, deve exibir uma mensagem de erro,
+      // e o usuário não poderá usar esse CPF
 
       setObject('personal-details', object);
       navigate('address');
