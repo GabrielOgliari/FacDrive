@@ -9,9 +9,9 @@ import { Fields } from '../../../components/UI/organisms/Fields/root';
 import { GenderOptions } from '../../../constants/gender-options';
 import { useFormStateContext } from '../../../context/useFormStateContext';
 import { GenderEnum } from '../../../enums/gender-enum';
+import { dispatchToast } from '../../../helpers/dispatchToast';
 import { useForm } from '../../../hooks/useForm';
 import signUpService from '../../../services/sign-up/sign-up-service';
-import { SendValidationData } from '../../../services/sign-up/types/send-validation-data';
 import { ValidStudentIdResponse } from '../../../services/sign-up/types/valid-student-id';
 import { width } from '../../../utils/dimensions';
 import { isEmpty } from '../../../utils/validators/isEmpty';
@@ -51,23 +51,43 @@ export const PersonalDetailsScreen = () => {
     });
 
   const verifyCpfAlreadyRegisteredMutation = useMutation({
-    mutationFn: (data: SendValidationData) =>
-      signUpService.verifyCpfAlreadyRegistered(data),
-    onError: error => console.error(error),
+    mutationFn: (cpf: string) => signUpService.verifyCpfAlreadyRegistered(cpf),
+
+    onError: () => {
+      dispatchToast({
+        title: 'Erro ao verificar CPF já cadastrado.',
+        type: 'error',
+      });
+    },
   });
 
   const handlePressRegisterButton = () => {
     if (applyValidations()) {
       const { cpf } = getObject<ValidStudentIdResponse>('student-id');
 
-      verifyCpfAlreadyRegisteredMutation.mutateAsync(cpf);
+      if (watch('cpf') !== cpf) {
+        dispatchToast({
+          title: 'O CPF não corresponde ao da Universidade.',
+          type: 'error',
+        });
+        return;
+      }
 
-      // TODO: Ao receber CPF, se for falso é por que ele já está
-      // cadastrado, dessa forma, deve exibir uma mensagem de erro,
-      // e o usuário não poderá usar esse CPF
+      verifyCpfAlreadyRegisteredMutation
+        .mutateAsync(watch('cpf') as string)
+        .then(cpfAlreadyRegistered => {
+          if (cpfAlreadyRegistered) {
+            dispatchToast({
+              title: 'CPF já cadastrado.',
+              description: 'Você não pode utilizar esse CPF.',
+              type: 'error',
+            });
+            return;
+          }
 
-      setObject('personal-details', object);
-      navigate('address');
+          setObject('personal-details', object);
+          navigate('address');
+        });
     }
   };
 
