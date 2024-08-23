@@ -13,8 +13,8 @@ app.get('/', (req, res) => {
     res.send('Gaiteiro é um bosta');
 });
 
-
-app.post ('/cadastre', async (req, res) => {
+//gaiteiro pedio para ajustarcpara / register e não /cadastro
+app.post ('/register', async (req, res) => {
     let data = req.body;
     let newVehicle;
 

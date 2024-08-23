@@ -113,7 +113,7 @@ class CRUDUser {
       throw error;
     }
   }
-  
+
   async validateCpf(cpf) {
     try {
       const query = `SELECT * FROM ${this.tableName} WHERE cpf = $1`;
