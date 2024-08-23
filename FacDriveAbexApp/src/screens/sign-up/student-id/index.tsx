@@ -30,13 +30,15 @@ export const StudentIdScreen = () => {
       },
       ({ didCancel, errorCode, assets }) => {
         if (didCancel) {
-          dispatchToast('Seleção de imagem cancelada.', {
+          dispatchToast({
+            title: 'Seleção de imagem cancelada.',
             type: 'info',
           });
           return;
         }
         if (errorCode) {
-          dispatchToast(`Erro ao selecionar imagem: ${errorCode}`, {
+          dispatchToast({
+            title: `Erro ao selecionar imagem: ${errorCode}`,
             type: 'error',
           });
           return;
@@ -55,7 +57,8 @@ export const StudentIdScreen = () => {
       const isVerified = data.status === 'Aluno Regular';
 
       if (!isVerified) {
-        dispatchToast('Aluno Irregular.', {
+        dispatchToast({
+          title: 'Aluno Irregular.',
           type: 'error',
         });
 
@@ -67,20 +70,20 @@ export const StudentIdScreen = () => {
         navigate('personal-details');
       }
     },
-    onError: error => {
-      dispatchToast('Erro ao verificar Aluno. Tente novamente.', {
+    onError: () => {
+      dispatchToast({
+        title: 'Erro ao verificar Aluno.',
         type: 'error',
       });
-      console.error(error);
     },
   });
 
   const handlePressContinueButton = async () => {
     if (!base64) {
-      dispatchToast(
-        'Por favor, selecione uma imagem da carteirinha de estudante.',
-        { type: 'info' },
-      );
+      dispatchToast({
+        title: 'Por favor, selecione uma imagem da carteirinha de estudante.',
+        type: 'info',
+      });
       return;
     }
 
