@@ -2,6 +2,8 @@ import express from 'express';
 import pool from './Banco/db.js';
 import Cruds from './Cruds_DB/Cruds.js';
 
+// novo
+
 const app = express();
 app.use(express.json())
 const port = 3000;
@@ -39,6 +41,23 @@ app.post ('/register', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 
+});
+
+// Rota de login
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const result = await cruds.crudUser.login(email, password);
+
+        if (result.success) {
+            res.status(200).json({ success: true, userId: result.userId });
+        } else {
+            res.status(401).json({ success: false, message: result.message });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // Definindo a rota /validacoes/email/:email

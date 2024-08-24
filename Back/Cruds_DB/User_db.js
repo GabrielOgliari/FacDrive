@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+
 // crudUser.js
 class CRUDUser {
   constructor(pool) {
@@ -8,6 +10,8 @@ class CRUDUser {
   // Create - Inserir um novo usuário
   async create(data) {
     try {
+      // Criptografar a senha antes de armazenar
+      const hashedPassword = await bcrypt.hash(data.password, 10);
       console.log(data);
       const query = `
         INSERT INTO ${this.tableName} 
@@ -25,6 +29,7 @@ class CRUDUser {
         data.isDriver,
         data.institutionalEmail,
         data.password,
+        hashedPassword, // Armazenar a senha criptografada
         data.gender,
       ];
       const res = await this.pool.query(query, values);
@@ -33,6 +38,31 @@ class CRUDUser {
       // return user, res.rows[0];
       console.log(res.rows[0]);
       return res.rows[0];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  
+  // Função de login
+  async login(email, password) {
+    try {
+      const query = `SELECT * FROM ${this.tableName} WHERE institutionalEmail = $1`;
+      const res = await this.pool.query(query, [email]);
+      const user = res.rows[0];
+
+      if (!user) {
+        return { success: false, message: 'Email não encontrado' };
+      }
+
+      // Comparar a senha fornecida com a senha criptografada armazenada
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (!isMatch) {
+        return { success: false, message: 'Senha incorreta' };
+      }
+
+      return { success: true, userId: user.iduser };
     } catch (error) {
       throw error;
     }
