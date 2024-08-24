@@ -87,23 +87,28 @@ export const VehicleScreen = () => {
       },
       enabled: String(watch('plate')).length === 7 && !plateAlreadyRegistered,
       onError: () => {
-        dispatchToast('Erro ao obter dados do veículo.', { type: 'error' });
+        dispatchToast({
+          title: 'Erro ao obter dados do veículo.',
+          type: 'error',
+        });
       },
     },
   );
 
   const verifyVehicleHasAlreadyRegisteredQuery = useQuery(
     ['verify-plate', watch('plate')],
-    () => signUpService.verifyVehicleHasAlreadyRegistered(watch('plate')),
+    () =>
+      signUpService.verifyVehicleHasAlreadyRegistered(watch('plate') as string),
     {
       onSuccess: ({ plateAlreadyRegistered }) => {
         setPlateAlreadyRegistered(plateAlreadyRegistered);
 
         if (plateAlreadyRegistered) {
-          dispatchToast(
-            'Placa já registrada. Você deve cadastrar outra placa.',
-            { type: 'error' },
-          );
+          dispatchToast({
+            title: 'Placa já registrada.',
+            description: 'Você deve cadastrar outra placa.',
+            type: 'error',
+          });
         }
       },
       enabled: String(watch('plate')).length === 7,
@@ -113,17 +118,19 @@ export const VehicleScreen = () => {
   const saveMutation = useMutation(
     (data: SaveSignUpData) => signUpService.save(data),
     {
-      onError: () => {
-        dispatchToast(
-          'Erro ao salvar os dados! Por favor, tente novamente mais tarde!',
-          { type: 'error' },
-        );
-      },
       onSuccess: () => {
-        dispatchToast(
-          'Cadastro realizado com sucesso! Faça login para usar o app.',
-        );
+        dispatchToast({
+          title: 'Cadastro realizado com sucesso!',
+          description: ' Faça login para usar o app.',
+        });
         navigate('login');
+      },
+      onError: () => {
+        dispatchToast({
+          title: 'Erro ao salvar os dados!',
+          description: 'Por favor, tente novamente mais tarde!',
+          type: 'error',
+        });
       },
     },
   );
@@ -184,7 +191,7 @@ export const VehicleScreen = () => {
         <ProgressCar currentStep={5} totalSteps={5} />
 
         <Button
-          disabled={saveMutation.isLoading}
+          disabled={saveMutation.isLoading || plateAlreadyRegistered}
           backgroundColor="#4ccbf8"
           label="Cadastrar"
           labelColor="black"

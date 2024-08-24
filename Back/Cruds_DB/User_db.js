@@ -1,9 +1,10 @@
 import bcrypt from 'bcrypt';
+
 // crudUser.js
 class CRUDUser {
   constructor(pool) {
     this.pool = pool;
-    this.tableName = 'users';
+    this.tableName = "users";
   }
 
   // Create - Inserir um novo usuário
@@ -19,7 +20,7 @@ class CRUDUser {
         RETURNING *`;
       const values = [
         data.cpf,
-        data.registration, 
+        data.registration,
         data.name,
         data.surname,
         data.birthDate,
@@ -27,20 +28,16 @@ class CRUDUser {
         data.phone,
         data.isDriver,
         data.institutionalEmail,
-<<<<<<< Updated upstream
         data.password,
-        data.gender
-=======
         hashedPassword, // Armazenar a senha criptografada
         data.gender,
->>>>>>> Stashed changes
       ];
       const res = await this.pool.query(query, values);
       // const user = await this.readIdUser(data.Name, data.Surname);
       // console.log("O ID do user:",user);
       // return user, res.rows[0];
-      console.log(res.rows[0])
-      return res.rows[0]; 
+      console.log(res.rows[0]);
+      return res.rows[0];
     } catch (error) {
       throw error;
     }
@@ -73,12 +70,12 @@ class CRUDUser {
 
   //Read - Id User
   async readIdUser(name, surname) {
-    console.log("Nome:",name);
-    console.log("Sobrenome:",surname);
+    console.log("Nome:", name);
+    console.log("Sobrenome:", surname);
     try {
       const query = `SELECT idUser FROM ${this.tableName} WHERE name = $1 AND surname = $2`;
       const res = await this.pool.query(query, [name, surname]);
-      console.log("Resposta:",res.rows[0].id_user);
+      console.log("Resposta:", res.rows[0].id_user);
       return res.rows[0].id_user;
     } catch (error) {
       throw error;
@@ -100,15 +97,19 @@ class CRUDUser {
     } catch (error) {
       throw error;
     }
-  } 
+  }
 
   // Update - Atualizar um usuário específico
   async update(id, data) {
     try {
-      const fields = Object.keys(data).map((key, i) => `${key} = $${i + 1}`).join(', ');
+      const fields = Object.keys(data)
+        .map((key, i) => `${key} = $${i + 1}`)
+        .join(", ");
       const values = Object.values(data);
 
-      const query = `UPDATE ${this.tableName} SET ${fields} WHERE idUser = $${values.length + 1} RETURNING *`;
+      const query = `UPDATE ${this.tableName} SET ${fields} WHERE idUser = $${
+        values.length + 1
+      } RETURNING *`;
       const res = await this.pool.query(query, [...values, id]);
       return res.rows[0];
     } catch (error) {
@@ -126,6 +127,37 @@ class CRUDUser {
       throw error;
     }
   }
+  async validateEmail(email) {
+    try {
+      const query = `SELECT * FROM ${this.tableName} WHERE institutionalEmail = $1`;
+      const res = await this.pool.query(query, [email]);
+      // console.log(res.rows[0]);
+      if (res.rows[0] == undefined) {
+        return {"emailAlreadyRegistered": false};
+      }
+      else{
+        return {"emailAlreadyRegistered": true};
+      }
+      return res.rows[0];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async validateCpf(cpf) {
+    try {
+      const query = `SELECT * FROM ${this.tableName} WHERE cpf = $1`;
+      const res = await this.pool.query(query, [cpf]);
+      // console.log(res.rows[0]);
+      if (res.rows[0] == undefined) {
+        return {"cpfAlreadyRegistered": false};
+      }
+      return {"cpfAlreadyRegistered": true};
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
-module.exports = CRUDUser;
+// module.exports = CRUDUser;
+export default CRUDUser;

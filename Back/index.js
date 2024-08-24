@@ -1,52 +1,43 @@
-<<<<<<< Updated upstream
-const express = require('express');
-const pool = require('./Banco/db');
-const CRUDUser = require('./Cruds_DB/User_db');
-=======
 import express from 'express';
 import pool from './Banco/db.js';
 import Cruds from './Cruds_DB/Cruds.js';
 
-
 // novo
->>>>>>> Stashed changes
+
 const app = express();
 app.use(express.json())
 const port = 3000;
+
+const cruds = new Cruds(pool); // Instância de CRUDUser
 
 // Endpoint básico que retorna "Hello, World!"
 app.get('/', (req, res) => {
     res.send('Gaiteiro é um bosta');
 });
-const crudUser = new CRUDUser(pool);
 
-app.post ('/insersao', async (req, res) => {
+//gaiteiro pedio para ajustarcpara / register e não /cadastro
+app.post ('/register', async (req, res) => {
     let data = req.body;
+    let newVehicle;
 
-    // Cria uma instância de CRUDUser
-    console.log("inserção");
-    console.log(data);
+    // console.log("cadastro");
     // console.log(data);
-    // console.log(data.user);
+    console.log(data.address);
 
-    
+    try{
+        const newUser = await cruds.crudUser.create(data.user);
+        console.log(newUser);
+        const newAddress = await cruds.crudAddress.create(data.address,newUser.iduser);
 
-    try {
-        if (data.user){
-            console.log("entrou no if");
-            try {
-                // Agora usando a instância 'crudUser'
-                const newUser = await crudUser.create(data.user);
-                res.status(201).json(newUser);
-            } catch (error) {
-                res.status(500).json({ error: error.message });
-            }
+
+        if (data.vehicle){
+            newVehicle = await cruds.crudVehicle.create(data.vehicle,newUser.iduser);
         }
-    }
+        
+
+        res.status(201).json({ newVehicle, newUser, newAddress });
+        }
     catch (error) {
-<<<<<<< Updated upstream
-        console.error(error);
-=======
         res.status(500).json({ error: error.message });
     }
 
@@ -77,24 +68,30 @@ app.get('/validations/email/:email', async (req, res) => {
         res.status(200).json(user);
     } catch (error) {
         res.status(500).json({ error: error.message });
->>>>>>> Stashed changes
     }
 });
 
+// Definindo a rota /validacoes/cpf/:cpf
+app.get('/validations/cpf/:cpf', async (req, res) => {
+    try {
+        const cpf = req.params.cpf;
+        const user = await cruds.crudUser.validateCpf(cpf); 
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
-
-// // Função para fazer uma consulta ao banco de dados
-// async function getUsers() {
-//   try {
-//     const res = await pool.query('SELECT * FROM pessoa'); // Supondo que você tenha uma tabela 'users'
-//     console.log(res.rows); // Imprime os resultados
-//   } catch (err) {
-//     console.error(err.message); // Captura e exibe erros
-//   }
-// }
-
-// // Chamar a função
-// getUsers();
+// Definindo a rota /validacoes/placa/:placa
+app.get('/validations/plate/:plate', async (req, res) => {
+    try {
+        const plate = req.params.plate;
+        const vehicle = await cruds.crudVehicle.validatePlate(plate); 
+        res.status(200).json(vehicle);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 
 

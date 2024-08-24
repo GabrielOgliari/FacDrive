@@ -1,3 +1,4 @@
+import { DashboardScreen } from '../screens/dashboard';
 import { LoginScreen } from '../screens/login';
 import { PresentationScreen } from '../screens/presentation';
 import { AccessDataScreen } from '../screens/sign-up/access-data';
@@ -18,5 +19,6 @@ export const router = {
     { path: 'address', component: AddressScreen },
     { path: 'vehicle', component: VehicleScreen },
     { path: 'login', component: LoginScreen },
+    { path: 'dashboard', component: DashboardScreen },
   ],
 };
