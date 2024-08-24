@@ -1,6 +1,15 @@
+<<<<<<< Updated upstream
 const express = require('express');
 const pool = require('./Banco/db');
 const CRUDUser = require('./Cruds_DB/User_db');
+=======
+import express from 'express';
+import pool from './Banco/db.js';
+import Cruds from './Cruds_DB/Cruds.js';
+
+
+// novo
+>>>>>>> Stashed changes
 const app = express();
 app.use(express.json())
 const port = 3000;
@@ -35,7 +44,40 @@ app.post ('/insersao', async (req, res) => {
         }
     }
     catch (error) {
+<<<<<<< Updated upstream
         console.error(error);
+=======
+        res.status(500).json({ error: error.message });
+    }
+
+});
+
+// Rota de login
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const result = await cruds.crudUser.login(email, password);
+
+        if (result.success) {
+            res.status(200).json({ success: true, userId: result.userId });
+        } else {
+            res.status(401).json({ success: false, message: result.message });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Definindo a rota /validacoes/email/:email
+app.get('/validations/email/:email', async (req, res) => {
+    try {
+        const email = req.params.email;
+        const user = await cruds.crudUser.validateEmail(email); 
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+>>>>>>> Stashed changes
     }
 });
 
