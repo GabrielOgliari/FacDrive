@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Modal } from 'react-native';
-import { NavType } from '../../../../../../types/nav';
 import { LogoutButton } from './components/LogoutButton';
 import * as S from './styles';
 
@@ -11,10 +10,10 @@ type ProfileModalProps = {
 };
 
 export const ProfileModal = ({ open, close }: ProfileModalProps) => {
-  const { navigate } = useNavigation<NavType>();
+  const { navigate } = useNavigation();
 
   const handleLogout = () => {
-    navigate('Presentation');
+    navigate('presentation');
   };
 
   return (
