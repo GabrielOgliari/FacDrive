@@ -6,7 +6,7 @@ create table users(
     name varchar(50) not null,
     surname varchar(50)  not null,
     birthDate date not null,
-    driverLicense varchar(11) not null,
+    driverLicense varchar(11) ,
     phone varchar(17) not null,
     isDriver BOOLEAN not null,
     institutionalEmail varchar(50) not null,
