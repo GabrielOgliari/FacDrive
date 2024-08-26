@@ -6,7 +6,7 @@ export const AlertContainer = styled.View<{ success: boolean }>`
   top: 20px;
   width: ${width * 0.9}px;
   height: ${height * 0.09}px;
-  background-color: ${props => (props.success ? 'green' : 'red')};
+  background-color: ${props => (props.success ? 'green' : '#C7253E')};
   border-radius: 20px;
   align-items: center;
   justify-content: center;
