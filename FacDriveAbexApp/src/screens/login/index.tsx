@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import { AxiosError } from 'axios';
 import { View } from 'react-native';
 import { useMutation } from 'react-query';
 import { Button } from '../../components/UI/atoms/Button';
@@ -24,18 +25,21 @@ export const LoginScreen = () => {
     mutationFn: () => {
       const email = watch('email') as string;
       const password = watch('password') as string;
-      return authenticationService.login({ email, password });
+      return authenticationService.login({
+        email,
+        password,
+      });
     },
-    onSuccess: ({ success, userId }) => {
-      if (success) {
-        navigate('dashboard');
-        console.log(userId); // Setar globalmente
-      }
+    onSuccess: ({ userId }) => {
+      console.log(userId); // Setar globalmente
+      navigate('dashboard');
     },
-    onError: () => {
+    onError: (error: AxiosError<{ message: string }>) => {
+      const errorMessage =
+        error.response?.data?.message || 'Ocorreu um erro inesperado';
+
       dispatchToast({
-        title: 'Não foi possível realizar o login!',
-        description: 'Tente novamente mais tarde',
+        title: `${errorMessage}.`,
         type: 'error',
       });
     },
@@ -75,7 +79,11 @@ export const LoginScreen = () => {
         <View style={{ gap: width * 0.08 }}>
           <Fields.Input placeholder="Email" {...register('email')} />
 
-          <Fields.Input placeholder="Senha" {...register('password')} />
+          <Fields.Input
+            placeholder="Senha"
+            mode="password"
+            {...register('password')}
+          />
         </View>
 
         <View style={{ gap: width * 0.08, marginBottom: width * 0.08 }}>

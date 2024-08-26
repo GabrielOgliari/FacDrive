@@ -32,6 +32,8 @@ export const PersonalDetailsScreen = () => {
 
   const { navigate } = useNavigation();
 
+  const { isDriver } = getObject<{ isDriver: boolean }>('user-type');
+
   const { object, register, applyValidations, watch } =
     useForm<PersonalDetailsForm>({
       validations: {
@@ -115,6 +117,7 @@ export const PersonalDetailsScreen = () => {
           {...register('driverLicense')}
           placeholder="Carteira de Motorista"
           keyboard="numeric"
+          hidden={!isDriver}
         />
 
         <Fields.Dropdown

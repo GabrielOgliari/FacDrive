@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { useMutation, useQuery } from 'react-query';
 import { Button } from '../../../components/UI/atoms/Button';
@@ -34,8 +34,6 @@ export type VehicleForm = {
 
 export const VehicleScreen = () => {
   const { navigate } = useNavigation();
-
-  const [plateAlreadyRegistered, setPlateAlreadyRegistered] = useState(false);
 
   const { getObject } = useFormStateContext();
 
@@ -85,7 +83,7 @@ export const VehicleScreen = () => {
         setValue('city', data.city);
         setValue('state', data.state);
       },
-      enabled: String(watch('plate')).length === 7 && !plateAlreadyRegistered,
+      enabled: String(watch('plate')).length === 7,
       onError: () => {
         dispatchToast({
           title: 'Erro ao obter dados do veículo.',
@@ -101,8 +99,6 @@ export const VehicleScreen = () => {
       signUpService.verifyVehicleHasAlreadyRegistered(watch('plate') as string),
     {
       onSuccess: ({ plateAlreadyRegistered }) => {
-        setPlateAlreadyRegistered(plateAlreadyRegistered);
-
         if (plateAlreadyRegistered) {
           dispatchToast({
             title: 'Placa já registrada.',
@@ -136,7 +132,7 @@ export const VehicleScreen = () => {
   );
 
   const handlePressRegisterButton = () => {
-    if (!applyValidations() || plateAlreadyRegistered) {
+    if (!applyValidations()) {
       return;
     }
 
@@ -152,7 +148,7 @@ export const VehicleScreen = () => {
     // TODO: Corrigir 'birthDate', o campo deve ser Date e trazer a data correta
 
     saveMutation.mutateAsync({
-      user: { ...userObject, birthDate: new Date() },
+      user: { ...userObject, birthDate: '2004-04-12T03:00:00.000Z' },
       address: addressObject,
       vehicle: object,
     });
@@ -191,7 +187,10 @@ export const VehicleScreen = () => {
         <ProgressCar currentStep={5} totalSteps={5} />
 
         <Button
-          disabled={saveMutation.isLoading || plateAlreadyRegistered}
+          disabled={
+            saveMutation.isLoading ||
+            verifyVehicleHasAlreadyRegisteredQuery.data?.plateAlreadyRegistered
+          }
           backgroundColor="#4ccbf8"
           label="Cadastrar"
           labelColor="black"

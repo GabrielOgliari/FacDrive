@@ -1,4 +1,5 @@
 export type LoginResponse = {
   success: boolean;
-  userId: number;
+  userId?: number;
+  message?: string;
 };

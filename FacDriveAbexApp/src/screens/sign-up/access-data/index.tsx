@@ -83,7 +83,10 @@ export const AccessDataScreen = () => {
         return;
       }
 
-      setObject('access-data', object);
+      setObject('access-data', {
+        institutionalEmail: object.institutionalEmail,
+        password: object.password,
+      });
       navigate('user-type');
     } catch (error) {
       dispatchToast({

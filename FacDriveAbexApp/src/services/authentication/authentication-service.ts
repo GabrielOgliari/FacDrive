@@ -8,7 +8,7 @@ class AuthenticationService {
   async login({ email, password }: LoginParams): Promise<LoginResponse> {
     const endpoint = '/login';
 
-    const response = await axios<LoginResponse>({
+    const { data } = await axios<LoginResponse>({
       method: 'post',
       url: this.apiNodeUrl + endpoint,
       data: {
@@ -17,9 +17,9 @@ class AuthenticationService {
       },
     });
 
-    const { success, userId } = response.data;
+    const { success, userId, message } = data;
 
-    return { success, userId };
+    return { success, userId, message };
   }
 }
 

@@ -7,6 +7,7 @@ export const InputField = ({
   errorMessage,
   hasSubmitted,
   size,
+  hidden,
   ...props
 }: Props) => {
   return (
@@ -14,6 +15,7 @@ export const InputField = ({
       errorMessage={errorMessage}
       hasSubmitted={hasSubmitted}
       size={size}
+      hidden={hidden}
     >
       <Input size={size} {...props} />
     </WrapperField>
