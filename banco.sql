@@ -1,16 +1,16 @@
 -- Table User
 create table users(
     idUser SERIAL primary key,
-    cpf varchar(14),
-    registration varchar(9),
-    name varchar(50),
-    surname varchar(50),
-    birthDate date,
-    driverLicense varchar(11),
-    phone varchar(17),
-    isDriver BOOLEAN,
-    institutionalEmail varchar(50),
-    password varchar(200),
+    cpf varchar(14) not null,
+    registration varchar(9) not null,
+    name varchar(50) not null,
+    surname varchar(50)  not null,
+    birthDate date not null,
+    driverLicense varchar(11) not null,
+    phone varchar(17) not null,
+    isDriver BOOLEAN not null,
+    institutionalEmail varchar(50) not null,
+    password text not null,
     userImage text,
     gender char
 );
@@ -32,14 +32,14 @@ create table classDays(
 create table address(
     idAddress SERIAL primary key,
     idUser SERIAL,
-    zipCode varchar(9),
-    street varchar(100),
-    neighborhood varchar(50),
-    city varchar(50),
-    number numeric(5),
+    zipCode varchar(9) not null,
+    street varchar(100) not null,
+    neighborhood varchar(50) not null,
+    city varchar(50) not null,
+    number numeric(5) not null,
     additionalInfo varchar(50),
     referencePoint varchar(50),
-    state varchar(50),
+    state varchar(50) not null,
     FOREIGN KEY (idUser) REFERENCES users(idUser)
 );
 
@@ -47,14 +47,14 @@ create table address(
 create table vehicle(
     idVehicle SERIAL primary key,
     idUser SERIAL,
-    manufacturingYear varchar(4),
-    modelYear varchar(4),
-    color varchar(45),
-    brand varchar(45),
-    model varchar(45),
-    plate varchar(7),
-	city varchar(45),
-	state varchar(45),
+    manufacturingYear varchar(4) not null,
+    modelYear varchar(4) not null,
+    color varchar(45) not null,
+    brand varchar(45) not null,
+    model varchar(45) not null,
+    plate varchar(7) not null,
+	city varchar(45) not null,
+	state varchar(45) not null,
     FOREIGN KEY (idUser) REFERENCES users(idUser)
 );
 
@@ -62,7 +62,7 @@ create table vehicle(
 create table route(
     idRoute SERIAL primary key,
     idUser SERIAL,
-    routeName varchar(50),
+    routeName varchar(50) not null,
     FOREIGN KEY (idUser) REFERENCES users(idUser)
 );
 
@@ -80,7 +80,7 @@ create table relationship(
 create table ride(
     idRide SERIAL primary key,
     idRelationship SERIAL,
-    dateOfRide date,
+    dateOfRide date DEFAULT CURRENT_DATE,
     FOREIGN KEY (idRelationship) REFERENCES relationship(idRelationship)
 );
 
