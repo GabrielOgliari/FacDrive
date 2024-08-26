@@ -111,6 +111,9 @@ export const VehicleScreen = () => {
     },
   );
 
+  const plateAlreadyRegistered =
+    verifyVehicleHasAlreadyRegisteredQuery.data?.plateAlreadyRegistered;
+
   const saveMutation = useMutation(
     (data: SaveSignUpData) => signUpService.save(data),
     {
@@ -186,16 +189,15 @@ export const VehicleScreen = () => {
       <View style={{ gap: width * 0.08, marginBottom: width * 0.08 }}>
         <ProgressCar currentStep={5} totalSteps={5} />
 
-        <Button
-          disabled={
-            saveMutation.isLoading ||
-            verifyVehicleHasAlreadyRegisteredQuery.data?.plateAlreadyRegistered
-          }
-          backgroundColor="#4ccbf8"
-          label="Cadastrar"
-          labelColor="black"
-          onPress={handlePressRegisterButton}
-        />
+        {!saveMutation.isLoading && (
+          <Button
+            disabled={plateAlreadyRegistered}
+            backgroundColor={plateAlreadyRegistered ? '#C7253E' : '#4ccbf8'}
+            labelColor={plateAlreadyRegistered ? 'white' : 'black'}
+            label={plateAlreadyRegistered ? 'Placa já Cadastrada' : 'Cadastrar'}
+            onPress={handlePressRegisterButton}
+          />
+        )}
       </View>
     </Container>
   );
