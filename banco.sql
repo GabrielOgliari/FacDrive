@@ -10,7 +10,7 @@ create table users(
     phone varchar(17),
     isDriver BOOLEAN,
     institutionalEmail varchar(50),
-    password varchar(50),
+    password varchar(200),
     userImage text,
     gender char
 );
