@@ -28,7 +28,6 @@ class CRUDUser {
         data.phone,
         data.isDriver,
         data.institutionalEmail,
-        data.password,
         hashedPassword, // Armazenar a senha criptografada
         data.gender,
       ];
