@@ -6,7 +6,7 @@ export interface SaveSignUpData {
     registration?: string; // Matrícula
     name?: string;
     surname?: string;
-    birthDate?: Date;
+    birthDate?: string;
     driverLicense?: string;
     phone?: string;
     isDriver?: boolean;

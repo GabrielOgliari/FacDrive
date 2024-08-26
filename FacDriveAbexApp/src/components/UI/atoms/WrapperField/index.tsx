@@ -6,6 +6,7 @@ export type WrapperFieldProps = {
   hasSubmitted: boolean;
   errorMessage: string;
   size: 'sm' | 'lg';
+  hidden?: boolean;
 };
 
 export const WrapperField = ({
@@ -13,7 +14,12 @@ export const WrapperField = ({
   hasSubmitted,
   errorMessage,
   size = 'lg',
+  hidden = false,
 }: WrapperFieldProps) => {
+  if (hidden) {
+    return null;
+  }
+
   const isShowErrorMessage = hasSubmitted && errorMessage;
 
   return (

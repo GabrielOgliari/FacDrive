@@ -115,7 +115,7 @@ export const AddressScreen = () => {
       // TODO: Corrigir 'birthDate', o campo deve ser Date e trazer a data correta
 
       saveMutation.mutateAsync({
-        user: { ...userObject, isDriver, birthDate: new Date() },
+        user: { ...userObject, birthDate: '2004-04-12T03:00:00.000Z' },
         address: addressObject,
       });
     }
