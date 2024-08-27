@@ -95,6 +95,15 @@ app.get('/validations/plate/:plate', async (req, res) => {
 
 
 
+app.get('/cleam', async (req, res) => {
+    try {
+        const result = await cruds.limpeza.limpeza();
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
 });
