@@ -1,6 +1,7 @@
 import CRUDUser from './User_db.js'; // Ajuste o caminho conforme necessário
 import CRUDVehicle from './vehicle_db.js'; // Ajuste o caminho conforme necessário
 import CRUDAddress from './Address_db.js'; // Ajuste o caminho conforme necessário
+import Limpeza from './limpeza.js'; // Ajuste o caminho conforme necessário
 
 // Classe que contém todas as operações CRUD 
 // sentraliza para a chamada de todas as operações 
@@ -11,6 +12,10 @@ class Cruds {
         this.crudUser = new CRUDUser(pool);
         this.crudVehicle = new CRUDVehicle(pool);
         this.crudAddress = new CRUDAddress(pool);
+
+
+
+        this.limpeza = new Limpeza(pool);
     }
 }
 
