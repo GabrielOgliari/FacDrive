@@ -108,15 +108,14 @@ export const AddressScreen = () => {
         ...getObject<AccessDataForm>('access-data'),
         ...getObject<PersonalDetailsForm>('personal-details'),
         ...getObject<ValidStudentIdResponse>('student-id'),
+        ...getObject<{ isDriver: boolean }>('user-type'),
       };
-
-      const addressObject = getObject<AddressForm>('address');
 
       // TODO: Corrigir 'birthDate', o campo deve ser Date e trazer a data correta
 
       saveMutation.mutateAsync({
         user: { ...userObject, birthDate: '2004-04-12T03:00:00.000Z' },
-        address: addressObject,
+        address: object,
       });
     }
   };
