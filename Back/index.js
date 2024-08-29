@@ -1,12 +1,21 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 import pool from './Banco/db.js';
 import Cruds from './Cruds_DB/Cruds.js';
 
 // novo
 
 const app = express();
-app.use(express.json())
+// app.use(express.json());
 const port = 3000;
+
+// Aumentar o limite para JSON bodies
+app.use(bodyParser.json({ limit: '10mb' }));
+
+// Aumentar o limite para URL-encoded bodies
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+
+app.use(express.json());
 
 const cruds = new Cruds(pool); // Instância de CRUDUser
 
@@ -22,7 +31,7 @@ app.post ('/register', async (req, res) => {
 
     // console.log("cadastro");
     // console.log(data);
-    console.log(data.address);
+    // console.log(data.address);
 
     try{
         const newUser = await cruds.crudUser.create(data.user);
@@ -91,6 +100,33 @@ app.get('/validations/plate/:plate', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+});
+
+app.get('/image/:idUser', async (req, res) => {
+    try {
+        const idUser = req.params.idUser;
+        const result = await cruds.crudUser.read_userImage(idUser);
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/image', async (req, res) => {
+    let data = req.body
+
+    // console.log(data)
+
+    try{
+        const result = await cruds.crudUser.post_userImage(data)
+        res.status(201).json({result, success: true});
+
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+
+
 });
 
 

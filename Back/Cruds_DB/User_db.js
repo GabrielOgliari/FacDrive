@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 
 // crudUser.js
 class CRUDUser {
@@ -42,7 +42,6 @@ class CRUDUser {
     }
   }
 
-  
   // Função de login
   async login(email, password) {
     try {
@@ -51,14 +50,14 @@ class CRUDUser {
       const user = res.rows[0];
 
       if (!user) {
-        return { success: false, message: 'Email não encontrado' };
+        return { success: false, message: "Email não encontrado" };
       }
 
       // Comparar a senha fornecida com a senha criptografada armazenada
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return { success: false, message: 'Senha incorreta' };
+        return { success: false, message: "Senha incorreta" };
       }
 
       return { success: true, userId: user.iduser };
@@ -132,10 +131,9 @@ class CRUDUser {
       const res = await this.pool.query(query, [email]);
       // console.log(res.rows[0]);
       if (res.rows[0] == undefined) {
-        return {"emailAlreadyRegistered": false};
-      }
-      else{
-        return {"emailAlreadyRegistered": true};
+        return { emailAlreadyRegistered: false };
+      } else {
+        return { emailAlreadyRegistered: true };
       }
       return res.rows[0];
     } catch (error) {
@@ -149,9 +147,33 @@ class CRUDUser {
       const res = await this.pool.query(query, [cpf]);
       // console.log(res.rows[0]);
       if (res.rows[0] == undefined) {
-        return {"cpfAlreadyRegistered": false};
+        return { cpfAlreadyRegistered: false };
       }
-      return {"cpfAlreadyRegistered": true};
+      return { cpfAlreadyRegistered: true };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async read_userImage(id) {
+    try {
+      const query = `SELECT userImage FROM ${this.tableName} WHERE idUser = $1`;
+      const res = await this.pool.query(query, [id]);
+      return res.rows[0];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async post_userImage(data) {
+    try {
+      const query = `update ${this.tableName} SET userImage = $1 WHERE idUser = $2`;
+      const values = [
+        data.userImage, 
+        data.idUser,
+      ];
+      const res = await this.pool.query(query, values);
+      return res.rows[0];
     } catch (error) {
       throw error;
     }
