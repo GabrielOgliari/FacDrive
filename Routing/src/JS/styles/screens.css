@@ -1,0 +1,77 @@
+#my-routes-screen {
+    position: absolute;
+    height: 95vh;
+    width: 100%;
+    background-color: #FFFFFF;
+    bottom: 0;
+    transition: 250ms;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    z-index: 10;
+}
+
+#dark-background {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 11;
+}
+
+#my-routes-header {
+    height: 8%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#my-routes-header span {
+    color: black;
+    font-size: 20px;
+}
+
+#exit-my-routes-button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+}
+
+#exit-my-routes-button i {
+    font-size: 16px;
+    color: black;
+}
+
+#my-routes-body {
+    height: 82%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#my-routes-footer {
+    height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#select-route-button {
+    background-color: #75a9bc;
+    border-radius: 8px;
+    height: 80%;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#select-route-button span {
+    font-size: 20px;
+    color: white;
+}

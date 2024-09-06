@@ -1,11 +1,79 @@
-#create-routing-button {
+#circle-button {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.expanded-button {
     position: absolute;
-    border-radius: 8px;
-    position: absolute;
-    left: 50%;
-    bottom: 10px;
-    transform: translate(-50%, 0);
-    width: 200px;
-    height: 70px;
-    background-color: #18B9F0;
+    bottom: 15px;
+    right: 15px;
+    height: 60px;
+    width: 60px;
+    background-color: #2e63d1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: bottom 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.expanded-button.up-button {
+    bottom: calc(30vh + 15px);
+    transform: rotate(180deg);
+}
+
+
+.expanded-button i {
+    color: white;
+    font-size: 25px;
+}
+
+#generic-button {
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.medium-button {
+    height: 36%;
+    width: 45%;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.medium-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+#generic-button.blue {
+    background-color: #3a77d1;
+}
+
+#generic-button.orange {
+    background-color: #e98b30;
+}
+
+#generic-button.green {
+    background-color: #2bb74c;
+}
+
+#generic-button span {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+#generic-button i {
+    color: white;
+    font-size: 30px;
+}
+
+.large-button span {
+    font-size: 20px !important;
 }

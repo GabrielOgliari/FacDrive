@@ -2,8 +2,10 @@
     "name": "alexa/routing",
     "autoload": {
         "psr-4": {
-            "Alexa\\Routing\\": "src/PHP/"
+            "Routing\\": "src/PHP/"
         }
     },
-    "require": {}
+    "require": {
+        "ext-pdo": "*"
+    }
 }
