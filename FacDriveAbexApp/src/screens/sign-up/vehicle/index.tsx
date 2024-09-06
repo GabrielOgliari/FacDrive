@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { useMutation, useQuery } from 'react-query';
 import { Button } from '../../../components/UI/atoms/Button';
@@ -34,8 +34,6 @@ export type VehicleForm = {
 
 export const VehicleScreen = () => {
   const { navigate } = useNavigation();
-
-  const [plateAlreadyRegistered, setPlateAlreadyRegistered] = useState(false);
 
   const { getObject } = useFormStateContext();
 
@@ -85,51 +83,59 @@ export const VehicleScreen = () => {
         setValue('city', data.city);
         setValue('state', data.state);
       },
-      enabled: String(watch('plate')).length === 7 && !plateAlreadyRegistered,
+      enabled: String(watch('plate')).length === 7,
       onError: () => {
-        dispatchToast('Erro ao obter dados do veículo.', { type: 'error' });
+        dispatchToast({
+          title: 'Erro ao obter dados do veículo.',
+          type: 'error',
+        });
       },
     },
   );
 
   const verifyVehicleHasAlreadyRegisteredQuery = useQuery(
     ['verify-plate', watch('plate')],
-    () => signUpService.verifyVehicleHasAlreadyRegistered(watch('plate')),
+    () =>
+      signUpService.verifyVehicleHasAlreadyRegistered(watch('plate') as string),
     {
       onSuccess: ({ plateAlreadyRegistered }) => {
-        setPlateAlreadyRegistered(plateAlreadyRegistered);
-
         if (plateAlreadyRegistered) {
-          dispatchToast(
-            'Placa já registrada. Você deve cadastrar outra placa.',
-            { type: 'error' },
-          );
+          dispatchToast({
+            title: 'Placa já registrada.',
+            description: 'Você deve cadastrar outra placa.',
+            type: 'error',
+          });
         }
       },
       enabled: String(watch('plate')).length === 7,
     },
   );
 
+  const plateAlreadyRegistered =
+    verifyVehicleHasAlreadyRegisteredQuery.data?.plateAlreadyRegistered;
+
   const saveMutation = useMutation(
     (data: SaveSignUpData) => signUpService.save(data),
     {
-      onError: () => {
-        dispatchToast(
-          'Erro ao salvar os dados! Por favor, tente novamente mais tarde!',
-          { type: 'error' },
-        );
-      },
       onSuccess: () => {
-        dispatchToast(
-          'Cadastro realizado com sucesso! Faça login para usar o app.',
-        );
+        dispatchToast({
+          title: 'Cadastro realizado com sucesso!',
+          description: ' Faça login para usar o app.',
+        });
         navigate('login');
+      },
+      onError: () => {
+        dispatchToast({
+          title: 'Erro ao salvar os dados!',
+          description: 'Por favor, tente novamente mais tarde!',
+          type: 'error',
+        });
       },
     },
   );
 
   const handlePressRegisterButton = () => {
-    if (!applyValidations() || plateAlreadyRegistered) {
+    if (!applyValidations()) {
       return;
     }
 
@@ -145,7 +151,7 @@ export const VehicleScreen = () => {
     // TODO: Corrigir 'birthDate', o campo deve ser Date e trazer a data correta
 
     saveMutation.mutateAsync({
-      user: { ...userObject, birthDate: new Date() },
+      user: { ...userObject, birthDate: '2004-04-12T03:00:00.000Z' },
       address: addressObject,
       vehicle: object,
     });
@@ -183,13 +189,15 @@ export const VehicleScreen = () => {
       <View style={{ gap: width * 0.08, marginBottom: width * 0.08 }}>
         <ProgressCar currentStep={5} totalSteps={5} />
 
-        <Button
-          disabled={saveMutation.isLoading}
-          backgroundColor="#4ccbf8"
-          label="Cadastrar"
-          labelColor="black"
-          onPress={handlePressRegisterButton}
-        />
+        {!saveMutation.isLoading && (
+          <Button
+            disabled={plateAlreadyRegistered}
+            backgroundColor={plateAlreadyRegistered ? '#C7253E' : '#4ccbf8'}
+            labelColor={plateAlreadyRegistered ? 'white' : 'black'}
+            label={plateAlreadyRegistered ? 'Placa já Cadastrada' : 'Cadastrar'}
+            onPress={handlePressRegisterButton}
+          />
+        )}
       </View>
     </Container>
   );

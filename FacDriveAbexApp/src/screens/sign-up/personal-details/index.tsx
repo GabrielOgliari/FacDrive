@@ -9,9 +9,9 @@ import { Fields } from '../../../components/UI/organisms/Fields/root';
 import { GenderOptions } from '../../../constants/gender-options';
 import { useFormStateContext } from '../../../context/useFormStateContext';
 import { GenderEnum } from '../../../enums/gender-enum';
+import { dispatchToast } from '../../../helpers/dispatchToast';
 import { useForm } from '../../../hooks/useForm';
 import signUpService from '../../../services/sign-up/sign-up-service';
-import { SendValidationData } from '../../../services/sign-up/types/send-validation-data';
 import { ValidStudentIdResponse } from '../../../services/sign-up/types/valid-student-id';
 import { width } from '../../../utils/dimensions';
 import { isEmpty } from '../../../utils/validators/isEmpty';
@@ -32,6 +32,8 @@ export const PersonalDetailsScreen = () => {
 
   const { navigate } = useNavigation();
 
+  const { isDriver } = getObject<{ isDriver: boolean }>('user-type');
+
   const { object, register, applyValidations, watch } =
     useForm<PersonalDetailsForm>({
       validations: {
@@ -50,37 +52,44 @@ export const PersonalDetailsScreen = () => {
       },
     });
 
-  const sendValidationDataMutation = useMutation({
-    mutationFn: (data: SendValidationData) =>
-      signUpService.sendValidationData(data),
-    onError: error => console.error(error),
+  const verifyCpfAlreadyRegisteredMutation = useMutation({
+    mutationFn: (cpf: string) => signUpService.verifyCpfAlreadyRegistered(cpf),
+
+    onError: () => {
+      dispatchToast({
+        title: 'Erro ao verificar CPF já cadastrado.',
+        type: 'error',
+      });
+    },
   });
 
   const handlePressRegisterButton = () => {
     if (applyValidations()) {
-      const { birthDate, cpf, email, registration, status } =
-        getObject<ValidStudentIdResponse>('student-id');
+      const { cpf } = getObject<ValidStudentIdResponse>('student-id');
 
-      sendValidationDataMutation.mutateAsync({
-        studentId: {
-          birthDate,
-          cpf,
-          email,
-          registration,
-          status,
-        },
-        personalDetails: {
-          name: watch('name'),
-          surname: watch('surname'),
-          birthDate: watch('birthDate'),
-          gender: watch('gender'),
-          cpf: watch('cpf'),
-          phone: watch('phone'),
-        },
-      });
+      if (watch('cpf') !== cpf) {
+        dispatchToast({
+          title: 'O CPF não corresponde ao da Universidade.',
+          type: 'error',
+        });
+        return;
+      }
 
-      setObject('personal-details', object);
-      navigate('address');
+      verifyCpfAlreadyRegisteredMutation
+        .mutateAsync(watch('cpf') as string)
+        .then(cpfAlreadyRegistered => {
+          if (cpfAlreadyRegistered) {
+            dispatchToast({
+              title: 'CPF já cadastrado.',
+              description: 'Você não pode utilizar esse CPF.',
+              type: 'error',
+            });
+            return;
+          }
+
+          setObject('personal-details', object);
+          navigate('address');
+        });
     }
   };
 
@@ -108,6 +117,7 @@ export const PersonalDetailsScreen = () => {
           {...register('driverLicense')}
           placeholder="Carteira de Motorista"
           keyboard="numeric"
+          hidden={!isDriver}
         />
 
         <Fields.Dropdown

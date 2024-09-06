@@ -80,7 +80,7 @@ export const Input = ({
         editable={!blocked}
         autoComplete="off"
         placeholderTextColor="#6C6C6C"
-        secureTextEntry={showPassword}
+        secureTextEntry={mode === 'password' ? !showPassword : false}
         value={formatValue(value)}
         placeholder={placeholder}
         onChangeText={handleTextChange}
