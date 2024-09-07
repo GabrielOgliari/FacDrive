@@ -1,0 +1,42 @@
+#bottom-sheet-menu {
+    height: 30vh;
+    width: 100%;
+    position: absolute;
+    bottom: -100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.3);
+    transition: bottom 0.3s ease-in-out;
+}
+
+
+#bottom-sheet-menu.expanded {
+    bottom: 0;
+}
+
+#header-bottom-sheet {
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#body-bottom-sheet {
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+
+#header-bottom-sheet span {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+}
+

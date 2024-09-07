@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src/PHP:/var/www/html/src/PHP
+      - ./vendor:/var/www/html/vendor
+      - ./.htaccess:/var/www/html/.htaccess
+      - ./composer.json:/var/www/html/composer.json
+      - ./composer.lock:/var/www/html/composer.lock
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
