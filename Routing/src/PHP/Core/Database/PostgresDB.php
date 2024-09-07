@@ -14,7 +14,10 @@ class PostgresDB
     private PDO $connection;
     private string $table;
 
-    public function __construct(string $table)
+    /**
+     * @param string $table
+     */
+    public function setTable(string $table): void
     {
         $this->table = $table;
     }
@@ -50,7 +53,12 @@ class PostgresDB
 
         $sql = "INSERT INTO " . $this->table . " ($fieldList) VALUES ($placeholders)";
         $stmt = $this->connection->prepare($sql);
-        return ['status' => $stmt->execute($valueList), 'lastInsertID' => $this->connection->lastInsertId()];
+        return ['status' => $stmt->execute($valueList)];
+    }
+
+    public function getLatsID(): false|string
+    {
+        return $this->connection->lastInsertId();
     }
 
     public function update($id, array $fields, array $values): void
@@ -70,12 +78,24 @@ class PostgresDB
         $stmt->execute([$id]);
     }
 
-    public function select(string $query): array
+    public function select(string $fields, array $where, array $joins = []): array
     {
-        $stmt = $this->connection->prepare($query);
-        $stmt->execute();
+        $query = "SELECT {$fields} FROM {$this->table}";
 
-        return $stmt->fetchAll();
+        if (!empty($where)) {
+            $query .= " WHERE ";
+            $conditions = [];
+            foreach ($where as $item) {
+                $conditions[] = "{$item['column']} {$item['operator']} ?";
+            }
+            $query .= implode(' AND ', $conditions);
+        }
+
+        $stmt = $this->connection->prepare($query);
+        $values = array_map(fn($item) => $item['value'], $where);
+        $stmt->execute($values);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }

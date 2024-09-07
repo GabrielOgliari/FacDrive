@@ -1,12 +1,12 @@
 <?php
 return [
     'facdrive' => [
-        'router' => [
+        'Routing\Controller\RouterController' => [
             'GET' => [
-
+                'getUserRoutesAction'
             ],
             'POST' => [
-                'save-route'
+                'saveRouteAction'
             ],
             'PUT' => [
 

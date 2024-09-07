@@ -10,11 +10,8 @@ class RoutePointsRepository extends AbstractRepository
         parent::__construct(self::TABLE);
     }
 
-    public function saveRoutePoints($data): bool
+    public function saveRoutePoints($data): array
     {
-        foreach ($data as $routePoint) {
-            $this->getDb()->insert($routePoint);
-        }
-        return true;
+        return $this->getDb()->insert($data);
     }
 }

@@ -12,8 +12,9 @@ abstract class AbstractRepository {
      */
     public function __construct(string $tableName)
     {
-        $this->db = new PostgresDB($tableName);
+        $this->db = new PostgresDB();
         $this->db->connect();
+        $this->db->setTable($tableName);
     }
 
     /**
