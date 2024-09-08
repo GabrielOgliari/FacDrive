@@ -3,7 +3,9 @@ return [
     'facdrive' => [
         'Routing\Controller\RouterController' => [
             'GET' => [
-                'getUserRoutesAction'
+                'getUserRoutesAction',
+                'getRoutePointsAction',
+                'getNearbyRoutesAction'
             ],
             'POST' => [
                 'saveRouteAction'

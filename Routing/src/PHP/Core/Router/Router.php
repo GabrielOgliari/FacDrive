@@ -16,7 +16,7 @@ class Router
     {
         $this->url = $_SERVER['REQUEST_URI'] ?? '/';
         $this->method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-        $this->routes = require __DIR__ . '/Routes.php';
+        $this->routes = require __DIR__ . '/routes.php';
         $this->setVariables();
     }
 

@@ -78,22 +78,43 @@ class PostgresDB
         $stmt->execute([$id]);
     }
 
-    public function select(string $fields, array $where, array $joins = []): array
+    public function select(string $columns, array $where, array $join = [], string $having = '', string $orderBy = '', string $limit = '', $groupBy = ''): array
     {
-        $query = "SELECT {$fields} FROM {$this->table}";
+        $query = "SELECT {$columns} FROM {$this->table}";
+
+        if (!empty($join)) {
+            foreach ($join as $item) {
+                $query .= " {$item['type']} {$item['table']} ON {$item['V1']} {$item['operator']} {$item['V2']}";
+            }
+        }
 
         if (!empty($where)) {
             $query .= " WHERE ";
             $conditions = [];
             foreach ($where as $item) {
-                $conditions[] = "{$item['column']} {$item['operator']} ?";
+                $conditions[] = "{$item['column']} {$item['operator']} {$item['value']}";
             }
             $query .= implode(' AND ', $conditions);
         }
 
+        if (!empty($groupBy)) {
+            $query .= " GROUP BY {$groupBy}";
+        }
+
+        if (!empty($having)) {
+            $query .= " HAVING {$having}";
+        }
+
+        if (!empty($orderBy)) {
+            $query .= " ORDER BY {$orderBy}";
+        }
+
+        if (!empty($limit)) {
+            $query .= " LIMIT {$limit}";
+        }
+
         $stmt = $this->connection->prepare($query);
-        $values = array_map(fn($item) => $item['value'], $where);
-        $stmt->execute($values);
+        $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

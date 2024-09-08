@@ -53,4 +53,48 @@ class RouterService
         return $this->routeRepository->getRoutes($columns, $where);
     }
 
+    public function getRoutePoints($data): array
+    {
+        $columns = 'idroutepoints, idroute, longitude, latitude';
+        $where = [];
+        $where[] = ['column' => 'idroute', 'operator' => '=', 'value' => $data['idroute']];
+        return $this->routePointsRepository->getRoutePoints($columns, $where);
+    }
+
+    public function getNearbyRoutes($data): array
+    {
+        $userID = $data['userID'];
+        $coordinates = ['latitude' => $data['latitude'], 'longitude' => $data['longitude']];
+        $distance = $this->sqlToCalculateDistanceInMeters($coordinates);
+
+        $columns = "route.idroute, route.iduser, route.routename,
+               routepoints.idroutepoints,
+               CAST(routepoints.latitude AS numeric) AS latitude,
+               CAST(routepoints.longitude AS numeric) AS longitude,
+               {$distance} AS distance";
+        $join = [
+            ['type' => "JOIN", 'table' => 'routepoints', 'V1' => 'route.idroute', 'operator' => '=', 'V2' => 'routepoints.idroute']
+        ];
+        $where = [
+            ['column' => 'route.iduser', 'operator' => '!=', 'value' => $userID]
+        ];
+        $groupBy = "route.idroute, route.iduser, route.routename, routepoints.idroutepoints, routepoints.latitude, routepoints.longitude";
+        $having = "{$distance} < 50";
+        $orderBy = 'distance ASC';
+        $limit = '1';
+
+        return $this->routeRepository->getRoutes($columns, $where, $join, $having, $orderBy, $limit, $groupBy);
+    }
+
+    private function sqlToCalculateDistanceInMeters($coordinates): string
+    {
+        return "(
+                   6371000 * acos(
+                           cos(radians({$coordinates['latitude']})) * cos(radians(CAST(routepoints.latitude AS numeric))) *
+                           cos(radians(CAST(routepoints.longitude AS numeric)) - radians({$coordinates['longitude']})) +
+                           sin(radians({$coordinates['latitude']})) * sin(radians(CAST(routepoints.latitude AS numeric)))
+                             )
+               )";
+    }
+
 }

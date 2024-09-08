@@ -28,4 +28,18 @@ class RouterController extends AbstractController {
         $routerService = new RouterService();
         return ['status' => 'true', 'response' => $routerService->getUserRoutes($data)];
     }
+
+    public function  getRoutePointsAction(): array
+    {
+        $data = $this->getData();
+        $routerService = new RouterService();
+        return ['status' => 'true', 'response' => $routerService->getRoutePoints($data)];
+    }
+
+    public function getNearbyRoutesAction(): array
+    {
+        $data = $this->getData();
+        $routerService = new RouterService();
+        return ['status' => 'true', 'response' => $routerService->getNearbyRoutes($data)];
+    }
 }

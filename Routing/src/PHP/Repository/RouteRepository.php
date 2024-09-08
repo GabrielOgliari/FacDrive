@@ -22,8 +22,8 @@ class RouteRepository extends AbstractRepository
         return $this->db->getLatsID();
     }
 
-    public function getRoutes($columns, $where): array
+    public function getRoutes(string $columns, array $where, array $join = [], string $having = '', string $orderBy = '', string $limit = '', string $groupBy = ''): array
     {
-        return $this->db->select($columns, $where);
+        return $this->db->select($columns, $where, $join, $having, $orderBy, $limit, $groupBy);
     }
 }
