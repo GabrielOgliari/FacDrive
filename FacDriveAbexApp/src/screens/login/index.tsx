@@ -4,11 +4,12 @@ import { View } from 'react-native';
 import { useMutation } from 'react-query';
 import { Button } from '../../components/UI/atoms/Button';
 import { Container } from '../../components/UI/atoms/Container';
-import { FullScreenLoader } from '../../components/UI/atoms/FullScreenLoader';
+import { Loader } from '../../components/UI/atoms/Loader';
 import { Fields } from '../../components/UI/organisms/Fields/root';
 import { dispatchToast } from '../../helpers/dispatchToast';
 import { useForm } from '../../hooks/useForm';
 import authenticationService from '../../services/authentication/authentication-service';
+import StorageService from '../../services/storage-service/storage-service';
 import { width } from '../../utils/dimensions';
 import { isEmpty } from '../../utils/validators/isEmpty';
 import { isValidInstitutionalEmail } from '../../utils/validators/isValidInstitutionalEmail';
@@ -31,7 +32,7 @@ export const LoginScreen = () => {
       });
     },
     onSuccess: ({ userId }) => {
-      console.log(userId); // Setar globalmente
+      StorageService.set('user_id', String(userId));
       navigate('dashboard');
     },
     onError: (error: AxiosError<{ message: string }>) => {
@@ -73,7 +74,7 @@ export const LoginScreen = () => {
 
   return (
     <>
-      {isLoading && <FullScreenLoader />}
+      {isLoading && <Loader />}
 
       <Container title="Login">
         <View style={{ gap: width * 0.08 }}>

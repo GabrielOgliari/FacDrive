@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { useMutation, useQuery } from 'react-query';
 import { Button } from '../../../components/UI/atoms/Button';
 import { Container } from '../../../components/UI/atoms/Container';
-import { FullScreenLoader } from '../../../components/UI/atoms/FullScreenLoader';
+import { Loader } from '../../../components/UI/atoms/Loader';
 import { ProgressCar } from '../../../components/UI/atoms/ProgressCar';
 import { Fields } from '../../../components/UI/organisms/Fields/root';
 import { useFormStateContext } from '../../../context/useFormStateContext';
@@ -159,7 +159,7 @@ export const VehicleScreen = () => {
 
   return (
     <Container title="Dados do Veículo">
-      <FullScreenLoader
+      <Loader
         loading={
           vehicleByPlateQuery.isLoading ||
           verifyVehicleHasAlreadyRegisteredQuery.isLoading
