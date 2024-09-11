@@ -13,5 +13,5 @@ export const LogoutButton = styled.TouchableOpacity`
 
 export const TextButton = styled.Text`
   color: #ffffff;
-  text-align: center;
+  width: 100px;
 `;

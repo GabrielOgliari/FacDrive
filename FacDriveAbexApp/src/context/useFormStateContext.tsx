@@ -5,7 +5,7 @@ type FormStateProps = {
   getObject: <T>(key: string) => T;
 };
 
-const formStateContext = createContext<FormStateProps>({} as FormStateProps);
+const formStateContext = createContext({} as FormStateProps);
 
 export const FormStateProvider = ({ children }: { children: ReactNode }) => {
   const [formValues, setFormValues] = useState<Record<string, any>>({});
