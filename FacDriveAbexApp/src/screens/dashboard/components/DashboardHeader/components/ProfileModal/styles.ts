@@ -16,6 +16,8 @@ export const ModalContainer = styled.View`
 `;
 
 export const ModalView = styled.View`
+  gap: 8px;
+
   margin: 20px;
   background-color: white;
   border-radius: 20px;
