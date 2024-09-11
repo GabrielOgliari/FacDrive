@@ -1,14 +1,14 @@
 import { DashboardScreen } from '../screens/dashboard';
 import { LoginScreen } from '../screens/login';
 import { PresentationScreen } from '../screens/presentation';
+import { ProfileScreen } from '../screens/profile';
+import { RoutesScreen } from '../screens/routes';
 import { AccessDataScreen } from '../screens/sign-up/access-data';
 import { AddressScreen } from '../screens/sign-up/address';
 import { PersonalDetailsScreen } from '../screens/sign-up/personal-details';
 import { StudentIdScreen } from '../screens/sign-up/student-id';
 import { UserTypeScreen } from '../screens/sign-up/user-type';
 import { VehicleScreen } from '../screens/sign-up/vehicle';
-import {RoutesScreen} from "../screens/routes";
-import {ProfileScreen} from "../screens/profile";
 
 export const bottomRoutes = {
   initialRoute: 'dashboard',
@@ -16,11 +16,13 @@ export const bottomRoutes = {
     { path: 'dashboard', component: DashboardScreen },
     { path: 'route', component: RoutesScreen },
     { path: 'profile', component: ProfileScreen },
-  ]
-}
+  ],
+};
+
 export const stackRouter = {
   initialRoute: 'presentation',
   routes: [
+    { path: 'dashboard', component: DashboardScreen },
     { path: 'presentation', component: PresentationScreen },
     { path: 'access-data', component: AccessDataScreen },
     { path: 'user-type', component: UserTypeScreen },

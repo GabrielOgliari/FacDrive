@@ -6,7 +6,7 @@ import { useMutation } from 'react-query';
 import { Button } from '../../../components/UI/atoms/Button';
 import { Container } from '../../../components/UI/atoms/Container';
 import { FetchDataButton } from '../../../components/UI/atoms/FetchDataButton';
-import { FullScreenLoader } from '../../../components/UI/atoms/FullScreenLoader';
+import { Loader } from '../../../components/UI/atoms/Loader';
 import { ProgressCar } from '../../../components/UI/atoms/ProgressCar';
 import { useFormStateContext } from '../../../context/useFormStateContext';
 import { dispatchToast } from '../../../helpers/dispatchToast';
@@ -92,7 +92,7 @@ export const StudentIdScreen = () => {
 
   return (
     <Container title="Identificação do Estudante">
-      <FullScreenLoader loading={validStudentIdMutation.isLoading} />
+      <Loader loading={validStudentIdMutation.isLoading} />
 
       <FetchDataButton
         onPress={handleImagePicker}
