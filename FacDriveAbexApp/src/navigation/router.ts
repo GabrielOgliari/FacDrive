@@ -22,7 +22,6 @@ export const bottomRoutes = {
 export const stackRouter = {
   initialRoute: 'presentation',
   routes: [
-    { path: 'dashboard', component: DashboardScreen },
     { path: 'presentation', component: PresentationScreen },
     { path: 'access-data', component: AccessDataScreen },
     { path: 'user-type', component: UserTypeScreen },

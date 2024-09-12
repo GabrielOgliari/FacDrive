@@ -26,7 +26,7 @@ export const Navigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={stackRouter.initialRoute}
+        initialRouteName={'BottonTabs'}
         screenOptions={{ headerShown: false }}
       >
         {stackRouter.routes.map(({ path, component }) => (
