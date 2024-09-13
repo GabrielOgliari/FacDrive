@@ -1,5 +1,6 @@
 import { DashboardScreen } from '../screens/dashboard';
 import { LoginScreen } from '../screens/login';
+import { PaymentScreen } from '../screens/payment';
 import { PresentationScreen } from '../screens/presentation';
 import { ProfileScreen } from '../screens/profile';
 import { RoutesScreen } from '../screens/routes';
@@ -22,7 +23,6 @@ export const bottomRoutes = {
 export const stackRouter = {
   initialRoute: 'presentation',
   routes: [
-    { path: 'dashboard', component: DashboardScreen },
     { path: 'presentation', component: PresentationScreen },
     { path: 'access-data', component: AccessDataScreen },
     { path: 'user-type', component: UserTypeScreen },
@@ -31,5 +31,6 @@ export const stackRouter = {
     { path: 'address', component: AddressScreen },
     { path: 'vehicle', component: VehicleScreen },
     { path: 'login', component: LoginScreen },
+    { path: 'payment', component: PaymentScreen },
   ],
 };

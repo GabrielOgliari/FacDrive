@@ -2,8 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import { AxiosError } from 'axios';
 import { View } from 'react-native';
 import { useMutation } from 'react-query';
+import { MainTemplate } from '../../components/templates/Main';
 import { Button } from '../../components/UI/atoms/Button';
-import { Container } from '../../components/UI/atoms/Container';
 import { Loader } from '../../components/UI/atoms/Loader';
 import { Fields } from '../../components/UI/organisms/Fields/root';
 import { dispatchToast } from '../../helpers/dispatchToast';
@@ -76,7 +76,7 @@ export const LoginScreen = () => {
     <>
       {isLoading && <Loader />}
 
-      <Container title="Login">
+      <MainTemplate title="Login">
         <View style={{ gap: width * 0.08 }}>
           <Fields.Input placeholder="Email" {...register('email')} />
 
@@ -95,7 +95,7 @@ export const LoginScreen = () => {
             onPress={handlePressEntryButton}
           />
         </View>
-      </Container>
+      </MainTemplate>
     </>
   );
 };
