@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator();
 
 const BottomTabs = () => {
   return (
-    <Tab.Navigator screenOptions={screenOptions} initialRouteName={'dashboard'}>
+    <Tab.Navigator screenOptions={screenOptions} initialRouteName={'profile'}>
       {bottomRoutes.routes.map(({ path, component }) => (
         <Tab.Screen
           key={path}
