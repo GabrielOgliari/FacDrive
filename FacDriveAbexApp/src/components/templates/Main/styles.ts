@@ -1,6 +1,6 @@
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import styled from 'styled-components/native';
-import { width } from '../../../../utils/dimensions';
+import { width } from '../../../utils/dimensions';
 
 export const Container = styled(KeyboardAvoidingView).attrs({
   behavior: Platform.OS === 'ios' ? 'padding' : 'height',

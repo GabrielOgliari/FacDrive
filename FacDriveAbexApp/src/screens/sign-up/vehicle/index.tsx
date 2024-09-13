@@ -2,8 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 import { useMutation, useQuery } from 'react-query';
+import { MainTemplate } from '../../../components/templates/Main';
 import { Button } from '../../../components/UI/atoms/Button';
-import { Container } from '../../../components/UI/atoms/Container';
 import { Loader } from '../../../components/UI/atoms/Loader';
 import { ProgressCar } from '../../../components/UI/atoms/ProgressCar';
 import { Fields } from '../../../components/UI/organisms/Fields/root';
@@ -158,7 +158,7 @@ export const VehicleScreen = () => {
   };
 
   return (
-    <Container title="Dados do Veículo">
+    <MainTemplate title="Dados do Veículo">
       <Loader
         loading={
           vehicleByPlateQuery.isLoading ||
@@ -199,6 +199,6 @@ export const VehicleScreen = () => {
           />
         )}
       </View>
-    </Container>
+    </MainTemplate>
   );
 };

@@ -2,8 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 import { useMutation } from 'react-query';
+import { MainTemplate } from '../../../components/templates/Main';
 import { Button } from '../../../components/UI/atoms/Button';
-import { Container } from '../../../components/UI/atoms/Container';
 import { Loader } from '../../../components/UI/atoms/Loader';
 import { ProgressCar } from '../../../components/UI/atoms/ProgressCar';
 import { Fields } from '../../../components/UI/organisms/Fields/root';
@@ -97,7 +97,7 @@ export const AccessDataScreen = () => {
   };
 
   return (
-    <Container title="Vamos Começar o Seu Cadastro">
+    <MainTemplate title="Vamos Começar o Seu Cadastro">
       <Loader loading={verifyEmailAlreadyRegisteredMutation.isLoading} />
 
       <View style={{ gap: width * 0.08 }}>
@@ -130,6 +130,6 @@ export const AccessDataScreen = () => {
           onPress={handlePressContinueButton}
         />
       </View>
-    </Container>
+    </MainTemplate>
   );
 };

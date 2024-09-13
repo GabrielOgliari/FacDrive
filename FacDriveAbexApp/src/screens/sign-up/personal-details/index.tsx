@@ -2,8 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 import { useMutation } from 'react-query';
+import { MainTemplate } from '../../../components/templates/Main';
 import { Button } from '../../../components/UI/atoms/Button';
-import { Container } from '../../../components/UI/atoms/Container';
 import { ProgressCar } from '../../../components/UI/atoms/ProgressCar';
 import { Fields } from '../../../components/UI/organisms/Fields/root';
 import { GenderOptions } from '../../../constants/gender-options';
@@ -94,7 +94,7 @@ export const PersonalDetailsScreen = () => {
   };
 
   return (
-    <Container title="Dados Pessoais">
+    <MainTemplate title="Dados Pessoais">
       <View style={{ gap: width * 0.08 }}>
         <Fields.Input {...register('name')} placeholder="Nome" />
 
@@ -143,6 +143,6 @@ export const PersonalDetailsScreen = () => {
           onPress={handlePressRegisterButton}
         />
       </View>
-    </Container>
+    </MainTemplate>
   );
 };

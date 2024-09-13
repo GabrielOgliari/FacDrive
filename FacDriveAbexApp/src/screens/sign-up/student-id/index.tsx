@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useMutation } from 'react-query';
+import { MainTemplate } from '../../../components/templates/Main';
 import { Button } from '../../../components/UI/atoms/Button';
-import { Container } from '../../../components/UI/atoms/Container';
 import { FetchDataButton } from '../../../components/UI/atoms/FetchDataButton';
 import { Loader } from '../../../components/UI/atoms/Loader';
 import { ProgressCar } from '../../../components/UI/atoms/ProgressCar';
@@ -91,7 +91,7 @@ export const StudentIdScreen = () => {
   };
 
   return (
-    <Container title="Identificação do Estudante">
+    <MainTemplate title="Identificação do Estudante">
       <Loader loading={validStudentIdMutation.isLoading} />
 
       <FetchDataButton
@@ -111,6 +111,6 @@ export const StudentIdScreen = () => {
           disabled={!base64}
         />
       </View>
-    </Container>
+    </MainTemplate>
   );
 };

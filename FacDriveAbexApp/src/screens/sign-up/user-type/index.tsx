@@ -2,8 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
+import { MainTemplate } from '../../../components/templates/Main';
 import { Button } from '../../../components/UI/atoms/Button';
-import { Container } from '../../../components/UI/atoms/Container';
 import { ProgressCar } from '../../../components/UI/atoms/ProgressCar';
 import { useFormStateContext } from '../../../context/useFormStateContext';
 import { height, width } from '../../../utils/dimensions';
@@ -21,7 +21,7 @@ export const UserTypeScreen = () => {
   };
 
   return (
-    <Container title="Tipo de Usuário">
+    <MainTemplate title="Tipo de Usuário">
       <View style={{ gap: width * 0.08 }}>
         <ButtonStylized
           $selected={!isDriver}
@@ -45,7 +45,7 @@ export const UserTypeScreen = () => {
           onPress={handlePressContinueButton}
         />
       </View>
-    </Container>
+    </MainTemplate>
   );
 };
 

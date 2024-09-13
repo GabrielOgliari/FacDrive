@@ -2,12 +2,12 @@ import React, { ReactNode } from 'react';
 import { ScrollView } from 'react-native';
 import * as Styles from './styles';
 
-type ContainerProps = {
+type MainTemplateProps = {
   title: string;
   children: ReactNode;
 };
 
-export const Container = ({ title, children }: ContainerProps) => {
+export const MainTemplate = ({ title, children }: MainTemplateProps) => {
   return (
     <Styles.Container>
       <ScrollView
