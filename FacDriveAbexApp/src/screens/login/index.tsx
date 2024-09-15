@@ -33,7 +33,7 @@ export const LoginScreen = () => {
     },
     onSuccess: ({ userId }) => {
       StorageService.set('user_id', String(userId));
-      navigate('dashboard');
+      navigate('BottonTabs');
     },
     onError: (error: AxiosError<{ message: string }>) => {
       const errorMessage =
