@@ -11,11 +11,11 @@ export const RowBox = styled.View`
     align-items: center;
     flex-direction: row;
 
-    width: ${width * 0.8}px;
-    height: ${height * 0.06}px;
+    width: ${width * 0.9}px;
+    height: ${height * 0.05}px;
 
     border-radius: 10px;
-    background-color: rgba(0, 130, 200, 1);
+    background-color: #0082c8;
     border-color: black;
 `;
 

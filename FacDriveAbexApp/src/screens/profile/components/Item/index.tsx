@@ -1,5 +1,6 @@
 import * as S from './styles';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { HorisontalSeparator } from './components/HorisontalSeparator';
 
 type Data = {
     title: string;
@@ -14,11 +15,12 @@ export const Item = ({ title, content, icon }: Data) => {
                 <Icon
                     name={icon}
                     size={20}
-                    color="rgb(0, 0, 0)"
+                    color="#0082c8"
                     style={{ marginRight: 10 }}
                 />
                 <S.Title>{title}</S.Title>
-                <S.Content>- {content}</S.Content>
+                <HorisontalSeparator space={8} />
+                <S.Content>{content}</S.Content>
             </S.RowBox>
         </S.Body>
     );

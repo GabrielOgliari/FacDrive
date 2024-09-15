@@ -3,7 +3,7 @@ import { width, height } from '../../../../utils/dimensions';
 
 export const Body = styled.View`
     margin-top: 10px;
-    margin-left: ${width * 0.25}px;
+    padding-left: ${width * 0.08}px;
 `;
 
 export const RowBox = styled.View`
@@ -19,5 +19,6 @@ export const Title = styled.Text`
 
 export const Content = styled.Text`
     color: rgb(0, 0, 0);
-    margin-left: 10px;
+    width: 200px;
+    overflow-wrap: break-word;
 `;
