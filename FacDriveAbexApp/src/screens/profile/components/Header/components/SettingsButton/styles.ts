@@ -10,8 +10,4 @@ export const Button = styled.TouchableOpacity`
 
     align-items: center;
     justify-content: center;
-
-    border-width: 1px;
-    border-color: gray;
-    border-radius: 10px;
 `;

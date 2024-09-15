@@ -1,49 +1,19 @@
-import { launchImageLibrary } from 'react-native-image-picker';
 import * as S from './styles';
-import { useState, useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-export const ProfileImage = ({ imageSrc }) => {
-    // TODO Get the image from the back-end api
-    const [imageData, setImageData] = useState(null);
-
-    const fetchImage = async () => {
-        try {
-            const response = await fetch(imageSrc);
-            const blob = await response.blob();
-
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const base64data = reader.result.split(',')[1];
-                setImageData(base64data);
-            };
-            reader.readAsDataURL(blob);
-        } catch (error) {
-            console.error('Error fetching the image:', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchImage();
-    }, []);
-
-    const selectImage = () => {
-        const options = {
-            mediaType: 'photo',
-            includeBase64: true,
-        };
-
-        launchImageLibrary(options, response => {
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.errorCode) {
-                console.log('Image Picker Error: ', response.errorMessage);
-            } else {
-                setImageData(response.assets[0].base64);
-                // TODO Send the image to the back-end API
-            }
-        });
-    };
+export const ProfileImage = ({ imageData, selectImage }) => {
+    if (!imageData) {
+        return (
+            <S.Body>
+                <TouchableOpacity onPress={selectImage}>
+                    <S.Warper>
+                        <Icon name="user" size={180} color="#0082c8" />
+                    </S.Warper>
+                </TouchableOpacity>
+            </S.Body>
+        );
+    }
 
     return (
         <S.Body>
