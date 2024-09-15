@@ -4,12 +4,15 @@ import { ProfileImage } from './components/Image';
 import { Item } from './components/Item';
 import { Separator } from './components/Separator';
 import { Header } from './components/Header';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { launchImageLibrary } from 'react-native-image-picker';
+import StorageService from '../../services/storage-service/storage-service';
+import setPerfilImage from '../../services/dashboard/dashboard-service';
+import axios from 'axios';
 
 export const ProfileScreen = () => {
     const [imageData, setImageData] = useState(null);
-    const userId = 1;
+    const userId = StorageService.get('user_id');
 
     const changeImage = () => {
         const options = {
@@ -24,12 +27,25 @@ export const ProfileScreen = () => {
                 console.log('Image Picker Error: ', response.errorMessage);
             } else {
                 setImageData(response.assets[0].base64);
-                // TODO Send the image to the back-end API
+                setPerfilImage(response.assets[0].base64, userId);
             }
         });
     };
 
-    const getData = (userId: number) => {
+    async function fetchData() {
+        const apiNodeUrl = process.env.API_NODE_URL;
+        const endpoint = '';
+        const { data } = await axios({
+            method: 'get',
+            url: apiNodeUrl + endpoint + '/' + userId,
+        });
+
+        return data;
+    }
+
+    const getData = () => {
+        const userData = fetchData();
+
         return {
             name: 'Matheus Eickhoff',
             address: 'Avenida Fernando Machado',
@@ -40,7 +56,7 @@ export const ProfileScreen = () => {
             image: imageData,
         };
     };
-    const user = getData(userId);
+    const user = getData();
 
     return (
         <S.Body>
