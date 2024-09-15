@@ -1,10 +1,7 @@
 import styled from 'styled-components/native';
 
 export const Body = styled.View`
-    margin-top: 2%;
-    justify-content: center;
-    align-items: flex-end;
-    margin-right: 40px;
+    margin-left: 20px;
 `;
 
 export const Button = styled.TouchableOpacity`

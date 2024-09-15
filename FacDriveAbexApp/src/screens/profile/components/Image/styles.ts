@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import { width, height } from '../../../../utils/dimensions';
 
 export const Body = styled.View`
-    margin-top: 5%;
+    margin-top: 1%;
     align-items: center;
 `;
 
