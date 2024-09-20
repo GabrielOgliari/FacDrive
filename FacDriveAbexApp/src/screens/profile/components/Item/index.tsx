@@ -1,6 +1,6 @@
+import { HorisontalSeparator } from '../../../../components/UI/atoms/HorisontalSeparator';
 import * as S from './styles';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { HorisontalSeparator } from './components/HorisontalSeparator';
 
 type Data = {
     title: string;

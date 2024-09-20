@@ -1,6 +1,7 @@
 import { CarpoolDays } from './components/CarpoolDays';
 import { Confirmation } from './components/Confirmation';
 import { DashboardHeader } from './components/DashboardHeader';
+import { RideOptions } from './components/RideOptions';
 import { Welcome } from './components/Welcome';
 import * as S from './styles';
 
@@ -20,6 +21,8 @@ export const DashboardScreen = () => {
           <Confirmation onConfirm={handleConfirm} onCancel={handleCancel} />
 
           <CarpoolDays />
+
+          <RideOptions />
         </S.Content>
       </S.Body>
     </>

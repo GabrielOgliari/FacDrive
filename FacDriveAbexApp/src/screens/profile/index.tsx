@@ -2,13 +2,13 @@ import * as S from './styles';
 import { Card } from './components/Card';
 import { ProfileImage } from './components/Image';
 import { Item } from './components/Item';
-import { Separator } from './components/Separator';
 import { Header } from './components/Header';
 import { useState } from 'react';
 import { launchImageLibrary } from 'react-native-image-picker';
 import StorageService from '../../services/storage-service/storage-service';
 import DashboardService from '../../services/dashboard/dashboard-service';
 import axios from 'axios';
+import { Separator } from '../../components/UI/atoms/Separator';
 
 export const ProfileScreen = () => {
     const [imageData, setImageData] = useState(null);
