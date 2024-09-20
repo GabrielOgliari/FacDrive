@@ -5,7 +5,6 @@ export type CardProps = {
   passengerName: string;
   costRide: number;
   image: string;
-  isPaid: boolean;
   onStatus: () => void;
 };
 
@@ -13,7 +12,6 @@ export const Card = ({
   passengerName,
   costRide,
   image,
-  isPaid,
   onStatus,
 }: CardProps) => {
   return (
@@ -33,10 +31,8 @@ export const Card = ({
           </S.Group>
         </S.Wrapper>
 
-        <S.Button onPress={onStatus} $isPaid={isPaid}>
-          <S.TextButton>
-            {isPaid ? 'Marcar como Pago' : 'Desmarcar como Pago'}
-          </S.TextButton>
+        <S.Button onPress={onStatus}>
+          <S.TextButton>Marcar como Pago</S.TextButton>
         </S.Button>
       </S.Container>
     </S.Card>
