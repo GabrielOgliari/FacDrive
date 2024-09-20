@@ -6,18 +6,34 @@ import { Header } from './components/Header';
 import { useEffect, useState } from 'react';
 import { launchImageLibrary } from 'react-native-image-picker';
 import StorageService from '../../services/storage-service/storage-service';
-import service from '../../services/dashboard/dashboard-service';
 import axios from 'axios';
 import { Separator } from '../../components/UI/atoms/Separator';
 
+const setPerfilImage = async (id: number, image: string, endpoint: string) => {
+    const apiNodeUrl = process.env.API_NODE_URL;
+
+    const { data } = await axios({
+        method: 'post',
+        url: apiNodeUrl + endpoint,
+        data: {
+            idUser: id,
+            userImage: image,
+        },
+    });
+
+    return {
+        success: data.success,
+    };
+};
+
 export const ProfileScreen = () => {
     const [imageData, setImageData] = useState(null);
-    const [userRole, setUserRole] = useState(undefined);
-    const [userUniversity, setUserUniversity] = useState(undefined);
-    const [userAddress, setUserAddress] = useState(undefined);
-    const [userBirth, setUserBirth] = useState(undefined);
-    const [userCar, setUserCar] = useState(undefined);
-    const [userName, setUserName] = useState(undefined);
+    const [userRole, setUserRole] = useState('');
+    const [userUniversity, setUserUniversity] = useState('');
+    const [userAddress, setUserAddress] = useState('');
+    const [userBirth, setUserBirth] = useState('');
+    const [userCar, setUserCar] = useState('');
+    const [userName, setUserName] = useState('');
 
     // const userId = StorageService.get('user_id');
     const userId = 79;
@@ -39,7 +55,7 @@ export const ProfileScreen = () => {
                 console.log('Image Picker Error: ', response.errorMessage);
             } else {
                 setImageData(response.assets[0].base64);
-                service.setPerfilImage(userId, response.assets[0].base64);
+                setPerfilImage(userId, response.assets[0].base64, 'image');
             }
         });
     };
@@ -59,16 +75,17 @@ export const ProfileScreen = () => {
 
         const role: any = userData.usuario.isdriver ? 'Mororista' : 'Caroneiro';
         const car = userData.veiculo.brand + userData.veiculo.model;
+        const birthDate: string = userData.usuario.birthdate.slice(0, 10);
+        const completeName: string =
+            userData.usuario.name + ' ' + userData.usuario.surname;
 
-        setUserName(userData.usuario.name + " " + userData.usuario.surname);
+        setUserName(completeName);
         setUserAddress(userData.endereco.street);
         setUserUniversity('Unochapecó');
-        setUserBirth(userData.usuario.birthdate);
+        setUserBirth(birthDate);
         setUserRole(role);
         setUserCar(car);
         setImageData(userData.usuario.userimage);
-
-        console.log(userName, userBirth, userCar, userUniversity, userRole);
     };
 
     return (
