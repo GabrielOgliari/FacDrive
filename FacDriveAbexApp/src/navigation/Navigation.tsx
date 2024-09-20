@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { itemOptions, screenOptions } from './options.tsx';
+import { ItemOptions, screenOptions } from './options.tsx';
 import { bottomRoutes, stackRouter } from './router';
 
 const Tab = createBottomTabNavigator();
@@ -18,7 +18,7 @@ const BottomTabs = () => {
           key={path}
           name={path}
           component={component}
-          options={itemOptions}
+          options={ItemOptions}
         />
       ))}
     </Tab.Navigator>
