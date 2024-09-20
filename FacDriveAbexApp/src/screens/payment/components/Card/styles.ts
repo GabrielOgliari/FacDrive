@@ -44,8 +44,8 @@ export const Text = styled.Text`
   color: #404040;
 `;
 
-export const Button = styled.TouchableOpacity<{ $isPaid: boolean }>`
-  background-color: ${({ $isPaid }) => ($isPaid ? '#4AA053' : '#A04A4A')};
+export const Button = styled.TouchableOpacity`
+  background-color: #4aa053;
   border-radius: 4px;
   padding: 8px 12px;
   align-items: center;
