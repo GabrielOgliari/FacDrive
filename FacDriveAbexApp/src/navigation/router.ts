@@ -21,7 +21,8 @@ export const bottomRoutes = {
 };
 
 export const stackRouter = {
-  initialRoute: 'presentation',
+  initialRoute: 'BottomTabs',
+  // initialRoute: 'presentation',
   routes: [
     { path: 'presentation', component: PresentationScreen },
     { path: 'access-data', component: AccessDataScreen },

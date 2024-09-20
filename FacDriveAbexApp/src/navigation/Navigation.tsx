@@ -9,7 +9,10 @@ const Stack = createNativeStackNavigator();
 
 const BottomTabs = () => {
   return (
-    <Tab.Navigator screenOptions={screenOptions} initialRouteName={'dashboard'}>
+    <Tab.Navigator
+      screenOptions={screenOptions}
+      initialRouteName={bottomRoutes.initialRoute}
+    >
       {bottomRoutes.routes.map(({ path, component }) => (
         <Tab.Screen
           key={path}
@@ -26,15 +29,15 @@ export const Navigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={'presentation'}
+        initialRouteName={stackRouter.initialRoute}
         screenOptions={{ headerShown: false }}
       >
         {stackRouter.routes.map(({ path, component }) => (
           <Stack.Screen key={path} name={path} component={component} />
         ))}
         <Stack.Screen
-          key={'BottonTabs'}
-          name={'BottonTabs'}
+          key="BottomTabs"
+          name="BottomTabs"
           component={BottomTabs}
         />
       </Stack.Navigator>
