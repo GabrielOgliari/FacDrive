@@ -142,6 +142,54 @@ app.get('/user/:id', async (req, res) => {
     }
 });
 
+// Rota de class day
+app.post('/classdays', async (req, res) => {
+    try {
+        const data = req.body;
+        const result = await cruds.crudClassDay.create(data);
+        res.status(201).json(result);
+    } catch (error) {
+        console.error('Erro ao criar um novo dia da semana:', error);
+        res.status(500).json({ error: 'Erro ao criar um novo dia da semana' });
+    }
+});
+
+// listar por ID do usuário
+app.get('/classdays/id/:id', async (req, res) => {
+    try {
+        
+        const userId = req.params.id;
+        // Buscar os dias da semana associados ao ID do usuário
+        const classDays = await cruds.crudClassDay.read(userId);
+
+        if (!classDays) {
+            return res.status(404).json({ error: 'Dias da semana não encontrados' });
+        }
+
+        res.status(200).json(classDays);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// listar dias próximos
+app.get('/classdays/nearby/:user', async (req, res) => {
+    try {
+        const userId = req.params.user;
+        // Buscar os dias próximos
+        const nearbyDays = await cruds.crudClassDay.readNearbyDays(userId);
+
+        if (!nearbyDays) {
+            return res.status(404).json({ error: 'Nenhum registro encontrado' });
+        }
+
+        res.status(200).json(nearbyDays);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 
 app.get('/cleam', async (req, res) => {
     try {
