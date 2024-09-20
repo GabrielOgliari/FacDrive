@@ -2,25 +2,22 @@ import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { height } from '../utils/dimensions.ts';
-
-const Icons = {
-  dashboard: 'car-alt',
-  routes: 'map-marked-alt',
-  profile: 'user-graduate',
-} as const;
-
-type Icons = keyof typeof Icons;
+import { BottomRoutes } from './router.ts';
 
 type ItemOptionsProps = {
-  route: { name: Icons };
+  optionIndex: number;
 };
 
 export const ItemOptions = ({
-  route,
+  optionIndex,
 }: ItemOptionsProps): BottomTabNavigationOptions => {
   return {
     tabBarIcon: (props: { focused: boolean; color: string; size: number }) => (
-      <Icon name={Icons[route.name]} size={30} color={props.color} />
+      <Icon
+        name={BottomRoutes.routes[optionIndex].icon}
+        size={30}
+        color={props.color}
+      />
     ),
   };
 };
