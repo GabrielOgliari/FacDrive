@@ -129,6 +129,18 @@ app.post('/image', async (req, res) => {
 
 });
 
+app.get('/user/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const usuario = await cruds.crudUser.read(id);
+        const endereco = await cruds.crudAddress.read(id);
+        const veiculo = await cruds.crudVehicle.read(id);
+        const result = { usuario, endereco, veiculo };
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 
 app.get('/cleam', async (req, res) => {
