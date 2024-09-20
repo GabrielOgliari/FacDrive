@@ -3,8 +3,6 @@ import { useQuery } from 'react-query';
 import dashboardService from '../../../../services/dashboard/dashboard-service';
 import { AppTitle } from './components/AppTitle';
 import { ChargeButton } from './components/ChargeButton';
-import { ProfileButton } from './components/ProfileButton';
-import { ProfileModal } from './components/ProfileModal';
 import * as S from './styles';
 
 export const DashboardHeader = () => {
@@ -33,10 +31,6 @@ export const DashboardHeader = () => {
 
   const handleCharge = () => {};
 
-  const handleProfile = () => {
-    toggle();
-  };
-
   return (
     <>
       <S.DashboardHeader>
@@ -44,17 +38,8 @@ export const DashboardHeader = () => {
 
         <S.Flex>
           <ChargeButton onCharge={handleCharge} />
-          <ProfileButton onProfile={handleProfile} srcImage={data?.userImage} />
         </S.Flex>
       </S.DashboardHeader>
-
-      <ProfileModal
-        open={open}
-        close={toggle}
-        srcImage={data?.userImage}
-        onUpdateImage={refetch}
-        userId={userId}
-      />
     </>
   );
 };

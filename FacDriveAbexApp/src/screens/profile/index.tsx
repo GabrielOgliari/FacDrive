@@ -7,7 +7,7 @@ import { Header } from './components/Header';
 import { useState } from 'react';
 import { launchImageLibrary } from 'react-native-image-picker';
 import StorageService from '../../services/storage-service/storage-service';
-import setPerfilImage from '../../services/dashboard/dashboard-service';
+import DashboardService from '../../services/dashboard/dashboard-service';
 import axios from 'axios';
 
 export const ProfileScreen = () => {
@@ -27,7 +27,7 @@ export const ProfileScreen = () => {
                 console.log('Image Picker Error: ', response.errorMessage);
             } else {
                 setImageData(response.assets[0].base64);
-                setPerfilImage(response.assets[0].base64, userId);
+                DashboardService.setPerfilImage(response.assets[0].base64, userId);
             }
         });
     };
