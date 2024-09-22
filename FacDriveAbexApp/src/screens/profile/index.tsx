@@ -2,17 +2,45 @@ import * as S from './styles';
 import { Card } from './components/Card';
 import { ProfileImage } from './components/Image';
 import { Item } from './components/Item';
-import { Separator } from './components/Separator';
 import { Header } from './components/Header';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { launchImageLibrary } from 'react-native-image-picker';
 import StorageService from '../../services/storage-service/storage-service';
-import DashboardService from '../../services/dashboard/dashboard-service';
 import axios from 'axios';
+import { Separator } from '../../components/UI/atoms/Separator';
+
+const setPerfilImage = async (id: number, image: string, endpoint: string) => {
+    const apiNodeUrl = process.env.API_NODE_URL;
+
+    const { data } = await axios({
+        method: 'post',
+        url: apiNodeUrl + endpoint,
+        data: {
+            idUser: id,
+            userImage: image,
+        },
+    });
+
+    return {
+        success: data.success,
+    };
+};
 
 export const ProfileScreen = () => {
     const [imageData, setImageData] = useState(null);
+    const [userRole, setUserRole] = useState('');
+    const [userUniversity, setUserUniversity] = useState('');
+    const [userAddress, setUserAddress] = useState('');
+    const [userBirth, setUserBirth] = useState('');
+    const [userCar, setUserCar] = useState('');
+    const [userName, setUserName] = useState('');
+
     const userId = StorageService.get('user_id');
+    // const userId = 79;
+
+    useEffect(() => {
+        getData();
+    }, []);
 
     const changeImage = () => {
         const options = {
@@ -27,54 +55,56 @@ export const ProfileScreen = () => {
                 console.log('Image Picker Error: ', response.errorMessage);
             } else {
                 setImageData(response.assets[0].base64);
-                DashboardService.setPerfilImage(response.assets[0].base64, userId);
+                setPerfilImage(userId, response.assets[0].base64, 'image');
             }
         });
     };
 
-    async function fetchData() {
+    async function fetchUserData(endpoint: string, userId: number) {
         const apiNodeUrl = process.env.API_NODE_URL;
-        const endpoint = '';
-        const { data } = await axios({
+        const response = await axios({
             method: 'get',
-            url: apiNodeUrl + endpoint + '/' + userId,
+            url: apiNodeUrl + '/' + endpoint + '/' + userId,
         });
 
-        return data;
+        return response.data;
     }
 
-    const getData = () => {
-        const userData = fetchData();
+    const getData = async () => {
+        const userData = await fetchUserData('user', userId);
 
-        return {
-            name: 'Matheus Eickhoff',
-            address: 'Avenida Fernando Machado',
-            university: 'Unochapecó',
-            birth: '22/04/2005',
-            role: 'Motorista',
-            car: 'Fiat Uno',
-            image: imageData,
-        };
+        const role: any = userData.usuario.isdriver ? 'Mororista' : 'Caroneiro';
+        const car = userData.veiculo.brand + userData.veiculo.model;
+        const birthDate: string = userData.usuario.birthdate.slice(0, 10);
+        const completeName: string =
+            userData.usuario.name + ' ' + userData.usuario.surname;
+
+        setUserName(completeName);
+        setUserAddress(userData.endereco.street);
+        setUserUniversity('Unochapecó');
+        setUserBirth(birthDate);
+        setUserRole(role);
+        setUserCar(car);
+        setImageData(userData.usuario.userimage);
     };
-    const user = getData();
 
     return (
         <S.Body>
             <Header />
-            <ProfileImage imageData={user.image} selectImage={changeImage} />
-            <Card name={user.name} role={user.role} />
+            <ProfileImage imageData={imageData} selectImage={changeImage} />
+            <Card name={userName} role={userRole} />
 
             <Separator space={20} />
 
-            <Item title="Endereço" content={user.address} icon="map-sharp" />
-            <Item title="Universidade" content={user.university} icon="book" />
+            <Item title="Endereço" content={userAddress} icon="map-sharp" />
+            <Item title="Universidade" content={userUniversity} icon="book" />
             <Item
                 title="Data de Nascimento"
-                content={user.birth}
+                content={userBirth}
                 icon="calendar-number"
             />
-            {user.role === 'Motorista' && (
-                <Item title="Carro" content={user.car} icon="car" />
+            {userRole === 'Motorista' && (
+                <Item title="Carro" content={userCar} icon="car" />
             )}
         </S.Body>
     );
