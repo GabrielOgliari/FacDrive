@@ -1,0 +1,25 @@
+services:
+  server:
+    container_name: server
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - app-network
+
+  php:
+    container_name: php
+    build: .
+    ports:
+      - "9001:9001"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
