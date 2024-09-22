@@ -94,7 +94,6 @@ class CRUDClassDay {
                     CROSS JOIN TargetDays td
                     WHERE u.idUser <> $1
                 )
-                
                 SELECT
                     ud.idUser,
                     ud.name,
@@ -103,8 +102,8 @@ class CRUDClassDay {
                     (6 - ud.common_days_count) AS difference  -- Diferença total de dias menos os dias comuns
                 FROM UserDays ud
                 ORDER BY ud.common_days_count DESC,  -- Ordenar pelos dias comuns (descendente)
-                         (6 - ud.common_days_count) ASC;  -- Ordenar pela diferença calculada (ascendente)
-                `;
+                         (6 - ud.common_days_count) ASC  -- Ordenar pela diferença calculada (ascendente)
+                LIMIT 6;`;
                 values = [user];
             } else {
                 query = `SELECT * FROM ${this.tableName}`;
