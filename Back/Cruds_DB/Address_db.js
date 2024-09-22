@@ -37,19 +37,6 @@ class CRUDAddress {
     }
   }
 
-  //Read - Id vehicle
-  async readIdPlate(plate) {
-    console.log("Placa:",plate);
-    try {
-      const query = `SELECT idVehicle FROM ${this.tableName} WHERE plate = $1`;
-      const res = await this.pool.query(query, [plate]);
-      // console.log("Resposta:",res.rows[0].idVehicle);
-      return res.rows[0].idVehicle;
-    } catch (error) {
-      throw error;
-    }
-  }
-
   // Read - Obter todos os veiculos ou um usuário específico
   async read(id) {
     try {

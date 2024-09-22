@@ -2,7 +2,6 @@ import { useQuery } from 'react-query';
 import { Text } from '../../../../components/UI/atoms/Text';
 import dashboardService from '../../../../services/dashboard/dashboard-service';
 import { Container } from '../Container';
-import * as S from './styles';
 
 // TODO: Lista mockada, todos os valores devem ser falsos!
 
@@ -26,7 +25,7 @@ export const CarpoolDays = () => {
     <Container>
       <Text type="text">Esses são os seus dias de carona 😊</Text>
 
-      <S.Days>
+      {/* <S.Days>
         {data?.map(({ day, active }) => {
           return (
             <S.DayItem key={day} $isActive={active}>
@@ -34,7 +33,7 @@ export const CarpoolDays = () => {
             </S.DayItem>
           );
         })}
-      </S.Days>
+      </S.Days> */}
     </Container>
   );
 };

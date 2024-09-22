@@ -1,25 +1,29 @@
 import { DashboardScreen } from '../screens/dashboard';
 import { LoginScreen } from '../screens/login';
+import { PaymentScreen } from '../screens/payment';
 import { PresentationScreen } from '../screens/presentation';
+import { ProfileScreen } from '../screens/profile';
+import { RoutesScreen } from '../screens/routes';
 import { AccessDataScreen } from '../screens/sign-up/access-data';
 import { AddressScreen } from '../screens/sign-up/address';
 import { PersonalDetailsScreen } from '../screens/sign-up/personal-details';
 import { StudentIdScreen } from '../screens/sign-up/student-id';
 import { UserTypeScreen } from '../screens/sign-up/user-type';
 import { VehicleScreen } from '../screens/sign-up/vehicle';
-import {RoutesScreen} from "../screens/routes";
-import {ProfileScreen} from "../screens/profile";
 
-export const bottomRoutes = {
+export const BottomRoutes = {
   initialRoute: 'dashboard',
   routes: [
-    { path: 'dashboard', component: DashboardScreen },
-    { path: 'route', component: RoutesScreen },
-    { path: 'profile', component: ProfileScreen },
-  ]
-}
-export const stackRouter = {
-  initialRoute: 'presentation',
+    { path: 'dashboard', icon: 'car-alt', component: DashboardScreen },
+    { path: 'route', icon: 'map-marked-alt', component: RoutesScreen },
+    { path: 'payment', icon: 'credit-card', component: PaymentScreen },
+    { path: 'profile', icon: 'user-graduate', component: ProfileScreen },
+  ],
+};
+
+export const StackRouter = {
+  initialRoute: 'BottomTabs',
+  // initialRoute: 'presentation',
   routes: [
     { path: 'presentation', component: PresentationScreen },
     { path: 'access-data', component: AccessDataScreen },

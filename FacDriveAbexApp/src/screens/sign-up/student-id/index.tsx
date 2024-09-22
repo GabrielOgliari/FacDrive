@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useMutation } from 'react-query';
+import { MainTemplate } from '../../../components/templates/Main';
 import { Button } from '../../../components/UI/atoms/Button';
-import { Container } from '../../../components/UI/atoms/Container';
 import { FetchDataButton } from '../../../components/UI/atoms/FetchDataButton';
-import { FullScreenLoader } from '../../../components/UI/atoms/FullScreenLoader';
+import { Loader } from '../../../components/UI/atoms/Loader';
 import { ProgressCar } from '../../../components/UI/atoms/ProgressCar';
 import { useFormStateContext } from '../../../context/useFormStateContext';
 import { dispatchToast } from '../../../helpers/dispatchToast';
@@ -91,8 +91,8 @@ export const StudentIdScreen = () => {
   };
 
   return (
-    <Container title="Identificação do Estudante">
-      <FullScreenLoader loading={validStudentIdMutation.isLoading} />
+    <MainTemplate title="Identificação do Estudante">
+      <Loader loading={validStudentIdMutation.isLoading} />
 
       <FetchDataButton
         onPress={handleImagePicker}
@@ -111,6 +111,6 @@ export const StudentIdScreen = () => {
           disabled={!base64}
         />
       </View>
-    </Container>
+    </MainTemplate>
   );
 };
