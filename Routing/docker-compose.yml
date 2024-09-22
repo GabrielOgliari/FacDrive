@@ -1,16 +1,38 @@
 version: '3.8'
 
 services:
-  web:
-    build: .
+  server:
+    container_name: serverR
+    image: nginx:alpine
     ports:
-      - "8080:80"
+      - "8001:80"
     volumes:
-      - ./src/PHP:/var/www/html/src/PHP
-      - ./vendor:/var/www/html/vendor
-      - ./.htaccess:/var/www/html/.htaccess
-      - ./composer.json:/var/www/html/composer.json
-      - ./composer.lock:/var/www/html/composer.lock
+      - ./src:/var/www/html
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+      - node
+    networks:
+      - app-network
+
+  php:
+    container_name: phpR
+    build:
+      context: .
+      dockerfile: Dockerfiles/php.dockerfile
+    ports:
+      - "4565:9000"
+    networks:
+      - app-network
+
+  node:
+    container_name: nodeR
+    build:
+      context: .
+      dockerfile: Dockerfiles/node.dockerfile
+    working_dir: /usr/src/app
+    ports:
+      - "3000:3000"
     networks:
       - app-network
 

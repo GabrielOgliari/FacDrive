@@ -49,7 +49,7 @@ class RouterService
     {
         $columns = 'idroute, iduser, routename';
         $where = [];
-        $where[] = ['column' => 'iduser', 'operator' => '=', 'value' => $data['iduser']];
+        $where[] = ['column' => 'iduser', 'operator' => '=', 'value' => $data['iduser'] ?? 0];
         return $this->routeRepository->getRoutes($columns, $where);
     }
 
@@ -57,14 +57,14 @@ class RouterService
     {
         $columns = 'idroutepoints, idroute, longitude, latitude';
         $where = [];
-        $where[] = ['column' => 'idroute', 'operator' => '=', 'value' => $data['idroute']];
+        $where[] = ['column' => 'idroute', 'operator' => '=', 'value' => $data['idroute'] ?? 0];
         return $this->routePointsRepository->getRoutePoints($columns, $where);
     }
 
     public function getNearbyRoutes($data): array
     {
-        $userID = $data['userID'];
-        $coordinates = ['latitude' => $data['latitude'], 'longitude' => $data['longitude']];
+        $userID = $data['userID'] ?? 0;
+        $coordinates = ['latitude' => $data['latitude'] ?? 0, 'longitude' => $data['longitude'] ?? 0];
         $distance = $this->sqlToCalculateDistanceInMeters($coordinates);
 
         $columns = "route.idroute, route.iduser, route.routename,
