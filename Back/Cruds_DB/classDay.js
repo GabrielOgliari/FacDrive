@@ -76,6 +76,7 @@ class CRUDClassDay {
                     SELECT 
                         u.idUser,
                         u.name,
+                        u.surname,
                         (CASE WHEN cd.monday THEN 1 ELSE 0 END +
                          CASE WHEN cd.tuesday THEN 1 ELSE 0 END +
                          CASE WHEN cd.wednesday THEN 1 ELSE 0 END +
@@ -97,6 +98,7 @@ class CRUDClassDay {
                 SELECT
                     ud.idUser,
                     ud.name,
+                    ud.surname,
                     ud.days_count,
                     ud.common_days_count,
                     (6 - ud.common_days_count) AS difference  -- Diferença total de dias menos os dias comuns
