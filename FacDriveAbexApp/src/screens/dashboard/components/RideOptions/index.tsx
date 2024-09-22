@@ -12,8 +12,8 @@ export const RideOptions = () => {
     }
 
     const [userData, setUserData] = useState([{}]);
-    const currentUserId: number = StorageService.get('user_id');
-    // const currentUserId: number = 79;
+    // const currentUserId: number = StorageService.get('user_id');
+    const currentUserId: number = 79;
 
     const fetchUsers = (userId: number) => {
         const apiNodeUrl = process.env.API_NODE_URL;

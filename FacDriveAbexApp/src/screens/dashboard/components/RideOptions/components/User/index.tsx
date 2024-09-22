@@ -13,8 +13,8 @@ interface UserProps {
 }
 
 export const User = ({ name, days, userId, setAllState }: UserProps) => {
-    const currentUserId: number = StorageService.get('user_id');
-    // const currentUserId: number = 79;
+    // const currentUserId: number = StorageService.get('user_id');
+    const currentUserId: number = 79;
 
     const removeFromArray = () => {
         setAllState(prev => {
