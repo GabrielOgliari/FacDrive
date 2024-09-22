@@ -43,8 +43,6 @@ export const User = ({ name, days, userId, setAllState }: UserProps) => {
         <S.User>
             <S.InfoView>
                 <S.Username>{name}</S.Username>
-                <HorisontalSeparator space={10} />
-
                 <S.CommunDays>{days} Dias em comum</S.CommunDays>
             </S.InfoView>
 
