@@ -159,7 +159,7 @@ app.get('/classdays/id/:id', async (req, res) => {
     try {
         
         const userId = req.params.id;
-        // Buscar os dias da semana associados ao ID do usuário
+    
         const classDays = await cruds.crudClassDay.read(userId);
 
         if (!classDays) {
@@ -189,6 +189,79 @@ app.get('/classdays/nearby/:user', async (req, res) => {
     }
 });
 
+// rota para criar um novo relacionamento
+app.post('/relationship', async (req, res) => {
+    try {
+        const { driverId, riderId, amount } = req.body;
+
+        // Verificar se os valores estão definidos
+        if (driverId == null || riderId == null || amount == null) {
+            return res.status(400).json({ error: 'driverId, riderId e amount são obrigatórios' });
+        }
+
+        const newRelationship = await cruds.crudRelationship.create({ driverId, riderId, amount });
+        res.status(201).json(newRelationship);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+//Rota para ler relacionamentos
+app.get('/relationship/:id?', async (req, res) => {
+    try {
+        const relationships = await crudRelationship.read(req.params.id);
+        res.status(200).json(relationships);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// rota para listar relacionamentos de um usuário
+app.get('/relationships/:userId', async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        const relationships = await cruds.crudRelationship.listByUser(userId);
+        res.status(200).json(relationships);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// rota para atualizar um relacionamento
+app.put('/relationship/:id', async (req, res) => {
+    const relationshipId = req.params.id;
+    const { amount } = req.body;
+
+    try {
+        const updatedRelationship = await cruds.crudRelationship.update(relationshipId, { amount });
+        res.status(200).json(updatedRelationship);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// rota para zerar o valor de amount de um relacionamento
+app.put('/relationship/:id/reset-amount', async (req, res) => {
+    const relationshipId = req.params.id;
+
+    try {
+        const updatedRelationship = await cruds.crudRelationship.update(relationshipId, { amount: 0 });
+        res.status(200).json(updatedRelationship);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+//Rota para deletar um relacionamento.
+app.delete('/relationship/:id', async (req, res) => {
+    try {
+        const deletedRelationship = await cruds.crudRelationship.delete(req.params.id);
+        res.status(200).json(deletedRelationship);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 
 app.get('/cleam', async (req, res) => {
