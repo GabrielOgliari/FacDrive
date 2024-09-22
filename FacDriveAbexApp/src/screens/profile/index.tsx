@@ -35,8 +35,8 @@ export const ProfileScreen = () => {
     const [userCar, setUserCar] = useState('');
     const [userName, setUserName] = useState('');
 
-    // const userId = StorageService.get('user_id');
-    const userId = 79;
+    const userId = StorageService.get('user_id');
+    // const userId = 79;
 
     useEffect(() => {
         getData();
