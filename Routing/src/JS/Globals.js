@@ -17,3 +17,33 @@ export const components = {
 
 /** @type {Utils} */
 export const utils = {};
+
+/**
+ *
+ * @typedef {Object} Route
+ * @property {boolean} createRouteIsActive - Flag mode is active
+ * @property {array} coordinates - Route coordinates
+ */
+
+/**
+ *
+ * @type {Route}
+ */
+export const route = {
+    createRouteIsActive: false,
+    coordinates: []
+};
+
+
+/**
+ *
+ * @typedef {Object} Menus
+ * @property {BottomSheetMenu} bottomSheetMenu - instance of BottomSheet menu
+ * @property {CreateRoutesMenu} createRoutesMenu - instance of CreateRoutesMenu menu
+ */
+
+/**
+ *
+ * @type {Menus}
+ */
+export const menus = {}

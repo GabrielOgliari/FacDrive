@@ -5,7 +5,7 @@
     bottom: -100%;
     display: flex;
     flex-direction: column;
-    background-color: #FFFFFF;
+    background-color: #ececec;
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
     box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.3);
@@ -39,4 +39,143 @@
     color: #333;
     font-weight: bold;
 }
+
+#routes-menu-container {
+    height: 12vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    background-color: #ececec;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.distance-component {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    height: 5vh;
+}
+
+.label-distance {
+    color: black;
+    font-size: 16px;
+}
+
+.create-route-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 6vh;
+    border-radius: 12px;
+}
+
+.create-route-button.save {
+    width: 60%;
+    background-color: #2bb74c;
+}
+
+.create-route-button.exit {
+    width: 35%;
+    background-color: #de092c;
+}
+
+.create-route-button span {
+    color: white;
+    font-size: 18px;
+}
+
+.create-routes-bottom-buttons {
+    height: 6vh;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#vertical-create-route-container {
+    position: fixed;
+    right: calc(-25vw - 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 11;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: right 0.3s ease-in-out;
+}
+
+#vertical-create-route-container.expanded {
+    right: 0;
+}
+
+.open-vertical-button-container {
+    width: 30px;
+    height: 10vh;
+    background-color: #ececec;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    box-shadow: -10px 0 15px -5px rgba(0, 0, 0, 0.5);
+    z-index: 12;
+}
+.create-route-vertical-button {
+    height: 30%;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.create-route-vertical-button i {
+    color: white;
+    font-size: 20px;
+}
+
+.create-route-vertical-button span {
+    font-size: 14px;
+    color: white;
+    text-align: center;
+    font-weight: 800;
+}
+
+.create-route-vertical-button.complete {
+    background-color: #2bb74c;
+}
+
+.create-route-vertical-button.last-point{
+    background-color: #2e63d1;
+}
+
+.create-route-vertical-button.restart {
+    background-color: #e98b30;
+}
+
+.vertical-buttons-container {
+    height: 40vh;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    background-color: #ececec;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 25vw;
+    flex-direction: column;
+    box-shadow: -10px 0 15px -5px rgba(0, 0, 0, 0.5);
+    padding: 4px;
+    gap: 4px;
+}
+
 

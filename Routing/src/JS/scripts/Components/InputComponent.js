@@ -1,11 +1,11 @@
 export class  InputComponent {
-    createSearchBox() {
+    createSearchBox(container) {
         const searchBox = document.createElement('input');
         searchBox.setAttribute('id', 'pac-input');
         searchBox.setAttribute('class', 'controls');
         searchBox.setAttribute('type', 'text');
         searchBox.setAttribute('placeholder', 'Pesquisar...');
 
-        return searchBox;
+        container.appendChild(searchBox);
     }
 }

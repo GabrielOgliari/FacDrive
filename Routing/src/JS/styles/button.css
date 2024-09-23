@@ -25,6 +25,9 @@
     transform: rotate(180deg);
 }
 
+.expanded-button.hide {
+    bottom: -100px
+}
 
 .expanded-button i {
     color: white;

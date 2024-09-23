@@ -41,7 +41,6 @@ export class MyRoutesScreen {
     createBody() {
         const body = document.createElement('div');
         body.setAttribute('id', 'my-routes-body');
-        // Add content to the body as needed
         return body;
     }
 

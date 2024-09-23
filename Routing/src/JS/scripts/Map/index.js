@@ -183,6 +183,19 @@ export class Map {
         );
     }
 
+    enableCreateRouteMode() {
+
+    }
+
+    calculateCoordinatesDistance(coordinates) {
+        let totalDistance = 0;
+        for (let i = 0; i < coordinates.length - 1; i++) {
+            const distance = google.maps.geometry.spherical.computeDistanceBetween(coordinates[i], coordinates[i + 1]);
+            totalDistance += distance;
+        }
+        return (totalDistance / 1000).toFixed(2) //km
+    }
+
 
     requestLocationPermission() {
         if (navigator.geolocation) {

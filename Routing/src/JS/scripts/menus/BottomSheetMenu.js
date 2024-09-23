@@ -1,4 +1,4 @@
-import {components, utils} from "../../Globals";
+import {components, menus, utils} from "../../Globals";
 import {MyRoutesScreen} from "../Screens/MyRoutesScreen";
 
 export class BottomSheetMenu {
@@ -64,7 +64,9 @@ export class BottomSheetMenu {
             icon: 'fa-solid fa-plus',
             class: 'medium-button orange',
             label: 'Criar rota',
-            event: this.expandedMenu
+            event: () => {
+                menus.createRoutesMenu.init()
+            }
         }
         return components.button.mediumButton(buttonOptions);
     }
@@ -98,7 +100,6 @@ export class BottomSheetMenu {
     }
 
     _showBestRoute() {
-        console.log('fui clicado')
         if (utils.hasGeolocation) {
             utils.map.getBestRoute();
             return;

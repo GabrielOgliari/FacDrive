@@ -4,7 +4,6 @@
     width: 100%;
     background-color: #FFFFFF;
     bottom: 0;
-    transition: 250ms;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
     z-index: 10;
@@ -62,7 +61,7 @@
 }
 
 #select-route-button {
-    background-color: #75a9bc;
+    background-color: #3a77d1;
     border-radius: 8px;
     height: 80%;
     width: 80%;
