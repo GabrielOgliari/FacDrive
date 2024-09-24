@@ -266,16 +266,18 @@ app.delete('/relationship/:id', async (req, res) => {
 app.get('/debt', async (req, res) => {
     try {
         const result = await cruds.crudDebt.listDebts();
+        //const adicionar = await cruds.crudDebt.addDebt();
+        //res.status(200).json(adicionar);
         res.status(200).json(result);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-app.post('/debt', async (req, res) => {
+app.delete('/debt', async (req, res) => {
     try{
-        const { idDebt } = req.body;
-        const result = await cruds.crudDebt.markAsPaid(idDebt);
+        const { idrelationship } = req.body;
+        const result = await cruds.crudDebt.markAsPaid(idrelationship);
         res.status(201).json(result);
     }
     catch (error) {

@@ -6,19 +6,19 @@ class CRUDDebt {
         this.tableName = 'debt';
     }
 
-    async addDebt(idRelationship, amount) {
-        const query = `INSERT INTO ${this.tableName} (idRelationship, amount) VALUES ($1, $2)`;
+    async addDebt(idrelationship, amount) {
+        const query = `INSERT INTO ${this.tableName} (idrelationship, amount) VALUES ($1, $2)`;
         try {
-            await this.pool.query(query, [idRelationship, amount]);
+            await this.pool.query(query, [idrelationship, amount]);
         } catch (error) {
             throw error;
         }
     }
 
-    async markAsPaid(idDebt) {
-        const query = `DELETE FROM ${this.tableName} WHERE idDebt = $1`;
+    async markAsPaid(idrelationship) {
+        const query = `DELETE FROM ${this.tableName} WHERE idrelationship = $1`;
         try {
-            await this.pool.query(query, [idDebt]);
+            await this.pool.query(query, [idrelationship]);
         } catch (error) {
             throw error;
         }
@@ -34,11 +34,11 @@ class CRUDDebt {
         }
     }
 
-    async read(idDebt) {
+    async read(iddebt) {
         try {
-            if (idDebt) {
-                const query = `SELECT * FROM ${this.tableName} WHERE idDebt = $1`;
-                const res = await this.pool.query(query, [idDebt]);
+            if (iddebt) {
+                const query = `SELECT * FROM ${this.tableName} WHERE iddebt = $1`;
+                const res = await this.pool.query(query, [iddebt]);
                 return res.rows[0];
             } else {
                 const query = `SELECT * FROM ${this.tableName}`;
