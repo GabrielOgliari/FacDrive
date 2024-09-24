@@ -142,6 +142,25 @@ app.get('/user/:id', async (req, res) => {
     }
 });
 
+app.get('/debt', async (req, res) => {
+    try {
+        const result = await cruds.crudDebt.listDebts();
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/debt', async (req, res) => {
+    try{
+        const { idDebt } = req.body;
+        const result = await cruds.crudDebt.markAsPaid(idDebt);
+        res.status(201).json(result);
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 app.get('/cleam', async (req, res) => {
     try {
