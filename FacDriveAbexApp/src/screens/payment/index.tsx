@@ -13,7 +13,6 @@ const mockedData = [
     costRide: 20,
     image:
       'https://avatars.githubusercontent.com/u/135643864?s=400&u=b807b4c5afdbaf672873ad51ab57d5acab78ed70&v=4',
-    isPaid: true,
     passengerName: 'Rafael Kramer',
   },
   {
@@ -21,7 +20,6 @@ const mockedData = [
     costRide: 20,
     image:
       'https://avatars.githubusercontent.com/u/135643864?s=400&u=b807b4c5afdbaf672873ad51ab57d5acab78ed70&v=4',
-    isPaid: true,
     passengerName: 'Rafael Kramer',
   },
 ];
@@ -37,10 +35,19 @@ export const PaymentScreen = () => {
 
   const setPaymentStatusMutation = useMutation({
     mutationFn: (statusId: number) => paymentService.setPaymentStatus(statusId),
-    onSuccess: () => dispatchToast({ title: 'Status alterado!' }),
+    onSuccess: () =>
+      dispatchToast({ title: 'Confirmação de pagamento realizada!' }),
     onError: () =>
       dispatchToast({ title: 'Erro ao alterar status!', type: 'error' }),
   });
+
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ['test'],
+  //   queryFn: async (statusId: number) => paymentService.getPaymentHistory(statusId),
+  //   onError: () =>
+  //     dispatchToast({ title: 'Erro ao carregar histórico!', type: 'error' }),
+  //   initialData: mockedData,
+  // });
 
   return (
     <MainTemplate title="Pagamentos">
@@ -53,7 +60,6 @@ export const PaymentScreen = () => {
             passengerName={item.passengerName}
             costRide={item.costRide}
             image={item.image}
-            isPaid={item.isPaid}
             onStatus={() => setPaymentStatusMutation.mutate(item.id)}
           />
         )}
