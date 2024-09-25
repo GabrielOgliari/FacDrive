@@ -1,67 +1,68 @@
 class CRUDClassDay {
-    constructor(pool) {
-        this.pool = pool;
-        this.tableName = 'classdays'; // Substitua pelo nome da sua tabela
-    }
+  constructor(pool) {
+    this.pool = pool;
+    this.tableName = "classdays"; // Substitua pelo nome da sua tabela
+  }
 
-    // Método para criar um novo dia da semana
-    async create(data) {
-        try {
-            const query = `
+  // Método para criar um novo dia da semana
+  async create(data) {
+    try {
+      const query = `
                 INSERT INTO classDays 
                 (idUser, monday, tuesday, wednesday, thursday, friday, saturday) 
                 VALUES ($1, $2, $3, $4, $5, $6, $7) 
                 RETURNING *`;
-            const values = [
-                data.idUser,
-                data.monday,
-                data.tuesday,
-                data.wednesday,
-                data.thursday,
-                data.friday,
-                data.saturday
-            ];
-            const res = await this.pool.query(query, values);
-            console.log(res.rows[0]);
-            return res.rows[0];
-        } catch (error) {
-            throw error;
-        }
+      const values = [
+        data.idUser,
+        data.monday,
+        data.tuesday,
+        data.wednesday,
+        data.thursday,
+        data.friday,
+        data.saturday,
+      ];
+
+      const res = await this.pool.query(query, values);
+      console.log(res.rows[0]);
+      return res.rows[0];
+    } catch (error) {
+      throw error;
     }
+  }
 
-    // Método de listagem
-    async read(user) {
-        try {
-            let query;
-            let values = [];
+  // Método de listagem
+  async read(user) {
+    try {
+      let query;
+      let values = [];
 
-            if (user) {
-                query = `SELECT * FROM ${this.tableName} WHERE idUser = $1`;
-                values = [user];
-            } else {
-                query = `SELECT * FROM ${this.tableName}`;
-            }
+      if (user) {
+        query = `SELECT * FROM ${this.tableName} WHERE idUser = $1`;
+        values = [user];
+      } else {
+        query = `SELECT * FROM ${this.tableName}`;
+      }
 
-            const res = await this.pool.query(query, values);
+      const res = await this.pool.query(query, values);
 
-            if (res.rows.length === 0) {
-                return null; // Ou você pode retornar uma mensagem indicando que não há registros
-            }
+      if (res.rows.length === 0) {
+        return null; // Ou você pode retornar uma mensagem indicando que não há registros
+      }
 
-            return res.rows;
-        } catch (error) {
-            throw error;
-        }
+      return res.rows;
+    } catch (error) {
+      throw error;
     }
+  }
 
-    // Método de listagem de dias próximos
-    async readNearbyDays(user) {
-        try {
-            let query;
-            let values = [];
+  // Método de listagem de dias próximos
+  async readNearbyDays(user) {
+    try {
+      let query;
+      let values = [];
 
-            if (user) {
-                query = `WITH TargetDays AS (
+      if (user) {
+        query = `WITH TargetDays AS (
                     SELECT
                         monday,
                         tuesday,
@@ -106,22 +107,22 @@ class CRUDClassDay {
                 ORDER BY ud.common_days_count DESC,  -- Ordenar pelos dias comuns (descendente)
                          (6 - ud.common_days_count) ASC  -- Ordenar pela diferença calculada (ascendente)
                 LIMIT 6;`;
-                values = [user];
-            } else {
-                query = `SELECT * FROM ${this.tableName}`;
-            }
+        values = [user];
+      } else {
+        query = `SELECT * FROM ${this.tableName}`;
+      }
 
-            const res = await this.pool.query(query, values);
+      const res = await this.pool.query(query, values);
 
-            if (res.rows.length === 0) {
-                return null; // Ou você pode retornar uma mensagem indicando que não há registros
-            }
+      if (res.rows.length === 0) {
+        return null; // Ou você pode retornar uma mensagem indicando que não há registros
+      }
 
-            return res.rows;
-        } catch (error) {
-            throw error;
-        }
+      return res.rows;
+    } catch (error) {
+      throw error;
     }
+  }
 }
 
 export default CRUDClassDay;

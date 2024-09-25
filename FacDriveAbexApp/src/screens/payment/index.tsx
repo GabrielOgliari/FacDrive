@@ -7,36 +7,20 @@ import { dispatchToast } from '../../helpers/dispatchToast';
 import paymentService from '../../services/payment/payment-service';
 import { Card } from './components/Card';
 
-const mockedData = [
-  {
-    id: 1,
-    costRide: 20,
-    image:
-      'https://avatars.githubusercontent.com/u/135643864?s=400&u=b807b4c5afdbaf672873ad51ab57d5acab78ed70&v=4',
-    passengerName: 'Rafael Kramer',
-  },
-  {
-    id: 1,
-    costRide: 20,
-    image:
-      'https://avatars.githubusercontent.com/u/135643864?s=400&u=b807b4c5afdbaf672873ad51ab57d5acab78ed70&v=4',
-    passengerName: 'Rafael Kramer',
-  },
-];
-
 export const PaymentScreen = () => {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ['get-payment-history'],
     queryFn: (statusId: number) => paymentService.getPaymentHistory(statusId),
     onError: () =>
       dispatchToast({ title: 'Erro ao carregar histórico!', type: 'error' }),
-    initialData: mockedData,
   });
 
   const setPaymentStatusMutation = useMutation({
     mutationFn: (statusId: number) => paymentService.setPaymentStatus(statusId),
-    onSuccess: () =>
-      dispatchToast({ title: 'Confirmação de pagamento realizada!' }),
+    onSuccess: () => {
+      dispatchToast({ title: 'Confirmação de pagamento realizada!' });
+      refetch();
+    },
     onError: () =>
       dispatchToast({ title: 'Erro ao alterar status!', type: 'error' }),
   });
