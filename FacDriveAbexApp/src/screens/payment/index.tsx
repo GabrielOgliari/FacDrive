@@ -1,8 +1,10 @@
 import React from 'react';
+import { View } from 'react-native';
 import { useMutation, useQuery } from 'react-query';
 import styled from 'styled-components/native';
 import { MainTemplate } from '../../components/templates/Main';
 import { Loader } from '../../components/UI/atoms/Loader';
+import { Text } from '../../components/UI/atoms/Text/styles';
 import { dispatchToast } from '../../helpers/dispatchToast';
 import paymentService from '../../services/payment/payment-service';
 import { Card } from './components/Card';
@@ -14,6 +16,8 @@ export const PaymentScreen = () => {
     onError: () =>
       dispatchToast({ title: 'Erro ao carregar histórico!', type: 'error' }),
   });
+
+  const hasPayments = data?.length >= 1;
 
   const setPaymentStatusMutation = useMutation({
     mutationFn: (statusId: number) => paymentService.setPaymentStatus(statusId),
@@ -37,17 +41,28 @@ export const PaymentScreen = () => {
     <MainTemplate title="Pagamentos">
       {(isLoading || setPaymentStatusMutation.isLoading) && <Loader />}
 
-      <History
-        data={data}
-        renderItem={({ item }) => (
-          <Card
-            passengerName={item.passengerName}
-            costRide={item.costRide}
-            image={item.image}
-            onStatus={() => setPaymentStatusMutation.mutate(item.id)}
-          />
-        )}
-      />
+      {!hasPayments ? (
+        <View
+          style={{
+            justifyContent: 'center',
+            height: '100%',
+          }}
+        >
+          <Text>Não existem pagamentos pendentes</Text>
+        </View>
+      ) : (
+        <History
+          data={data}
+          renderItem={({ item }) => (
+            <Card
+              passengerName={item.passengerName}
+              costRide={item.costRide}
+              image={item.image}
+              onStatus={() => setPaymentStatusMutation.mutate(item.id)}
+            />
+          )}
+        />
+      )}
     </MainTemplate>
   );
 };
