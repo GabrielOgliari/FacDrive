@@ -3,6 +3,7 @@ import { LoginScreen } from '../screens/login';
 import { PaymentScreen } from '../screens/payment';
 import { PresentationScreen } from '../screens/presentation';
 import { ProfileScreen } from '../screens/profile';
+import { Relations } from '../screens/relations';
 import { RoutesScreen } from '../screens/routes';
 import { AccessDataScreen } from '../screens/sign-up/access-data';
 import { AddressScreen } from '../screens/sign-up/address';
@@ -33,5 +34,6 @@ export const StackRouter = {
     { path: 'address', component: AddressScreen },
     { path: 'vehicle', component: VehicleScreen },
     { path: 'login', component: LoginScreen },
+    { path: 'relations', component: Relations},
   ],
 };

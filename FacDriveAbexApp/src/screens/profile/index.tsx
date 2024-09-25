@@ -8,6 +8,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import StorageService from '../../services/storage-service/storage-service';
 import axios from 'axios';
 import { Separator } from '../../components/UI/atoms/Separator';
+import { useNavigation } from '@react-navigation/native';
 
 const setPerfilImage = async (id: number, image: string, endpoint: string) => {
     const apiNodeUrl = process.env.API_NODE_URL;
@@ -27,6 +28,8 @@ const setPerfilImage = async (id: number, image: string, endpoint: string) => {
 };
 
 export const ProfileScreen = () => {
+    const { navigate } = useNavigation();
+
     const [imageData, setImageData] = useState(null);
     const [userRole, setUserRole] = useState('');
     const [userUniversity, setUserUniversity] = useState('');
@@ -88,6 +91,10 @@ export const ProfileScreen = () => {
         setImageData(userData.usuario.userimage);
     };
 
+    const logout = () => {
+        navigate('login');
+    };
+
     return (
         <S.Body>
             <Header />
@@ -106,6 +113,12 @@ export const ProfileScreen = () => {
             {userRole === 'Motorista' && (
                 <Item title="Carro" content={userCar} icon="car" />
             )}
+
+            <S.LogoutView>
+                <S.Logout onPress={logout}>
+                    <S.Text>Logout</S.Text>
+                </S.Logout>
+            </S.LogoutView>
         </S.Body>
     );
 };
