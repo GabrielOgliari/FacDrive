@@ -183,6 +183,20 @@ app.get("/classdays/nearby/:user", async (req, res) => {
   }
 });
 
+// Rota para atualizar os dias da semana de um usuário específico
+
+app.put('/classdays/:user', async (req, res) => {
+  const userId = req.params.user;
+  const data = req.body;
+
+  try {
+      const updatedClassDay = await cruds.crudClassDay.update(userId, data);
+      res.status(200).json(updatedClassDay);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
+
 // rota para criar um novo relacionamento
 app.post("/relationship", async (req, res) => {
   try {
