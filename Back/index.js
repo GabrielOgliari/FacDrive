@@ -242,6 +242,19 @@ app.get("/relationships/:userId", async (req, res) => {
   }
 });
 
+
+// metodo para listar relacionamentos com detalhes (MATHES)
+app.get("/relationship/user/:userId", async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const relationships = await cruds.crudRelationship.listByUserWithDetails(userId);
+    res.status(200).json(relationships);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // rota para atualizar um relacionamento
 app.put("/relationship/:id", async (req, res) => {
   const relationshipId = req.params.id;
