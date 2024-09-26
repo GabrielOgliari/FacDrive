@@ -123,6 +123,34 @@ class CRUDClassDay {
       throw error;
     }
   }
+ 
+  async update(userId, data) {
+    try {
+        const query = `
+            UPDATE ${this.tableName} 
+            SET monday = $2, tuesday = $3, wednesday = $4, thursday = $5, friday = $6, saturday = $7
+            WHERE idUser = $1
+            RETURNING *`;
+        const values = [
+            userId,
+            data.monday,
+            data.tuesday,
+            data.wednesday,
+            data.thursday,
+            data.friday,
+            data.saturday,
+        ];
+
+        const res = await this.pool.query(query, values);
+        return res.rows[0];
+    } catch (error) {
+        throw error;
+    }
 }
+
+  
+}
+
+
 
 export default CRUDClassDay;

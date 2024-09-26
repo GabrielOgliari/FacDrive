@@ -35,11 +35,7 @@ export const Navigator = () => {
         {StackRouter.routes.map(({ path, component }) => (
           <Stack.Screen key={path} name={path} component={component} />
         ))}
-        <Stack.Screen
-          key="BottomTabs"
-          name="BottomTabs"
-          component={BottomTabs}
-        />
+        <Stack.Screen name="bottom-tabs" component={BottomTabs} />
       </Stack.Navigator>
     </NavigationContainer>
   );

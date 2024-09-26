@@ -13,7 +13,7 @@ import { UserTypeScreen } from '../screens/sign-up/user-type';
 import { VehicleScreen } from '../screens/sign-up/vehicle';
 
 export const BottomRoutes = {
-  initialRoute: 'dashboard',
+  initialRoute: 'BottomTabs',
   routes: [
     { path: 'dashboard', icon: 'car-alt', component: DashboardScreen },
     { path: 'route', icon: 'map-marked-alt', component: RoutesScreen },
@@ -23,8 +23,7 @@ export const BottomRoutes = {
 };
 
 export const StackRouter = {
-  initialRoute: 'BottomTabs',
-  // initialRoute: 'presentation',
+  initialRoute: 'presentation',
   routes: [
     { path: 'presentation', component: PresentationScreen },
     { path: 'access-data', component: AccessDataScreen },
