@@ -11,16 +11,17 @@ import { StudentIdScreen } from '../screens/sign-up/student-id';
 import { UserTypeScreen } from '../screens/sign-up/user-type';
 import { VehicleScreen } from '../screens/sign-up/vehicle';
 
-export const bottomRoutes = {
-  initialRoute: 'dashboard',
+export const BottomRoutes = {
+  initialRoute: 'BottomTabs',
   routes: [
-    { path: 'dashboard', component: DashboardScreen },
-    { path: 'route', component: RoutesScreen },
-    { path: 'profile', component: ProfileScreen },
+    { path: 'dashboard', icon: 'car-alt', component: DashboardScreen },
+    { path: 'route', icon: 'map-marked-alt', component: RoutesScreen },
+    { path: 'payment', icon: 'credit-card', component: PaymentScreen },
+    { path: 'profile', icon: 'user-graduate', component: ProfileScreen },
   ],
 };
 
-export const stackRouter = {
+export const StackRouter = {
   initialRoute: 'presentation',
   routes: [
     { path: 'presentation', component: PresentationScreen },
@@ -31,6 +32,5 @@ export const stackRouter = {
     { path: 'address', component: AddressScreen },
     { path: 'vehicle', component: VehicleScreen },
     { path: 'login', component: LoginScreen },
-    { path: 'payment', component: PaymentScreen },
   ],
 };

@@ -1,3 +1,4 @@
 export const isEmpty = (value: any): boolean => {
-  return !value;
+  if (value === null || value === undefined || value === '') return true;
+  return false;
 };

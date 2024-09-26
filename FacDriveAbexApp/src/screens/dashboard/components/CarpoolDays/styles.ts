@@ -7,7 +7,7 @@ export const Days = styled.View`
   gap: 16px;
 `;
 
-export const DayItem = styled.View<{ $isActive: boolean }>`
+export const DayItem = styled.TouchableOpacity<{ $isActive: boolean }>`
   border-width: 1px;
 
   border-color: ${({ $isActive }) => {
