@@ -108,6 +108,38 @@ class CRUDRelationship {
             throw error;
         }
     }
+
+    async listByUserWithDetails(userId) {
+        try {
+            const query = `
+                SELECT 
+                    relationship.idRelationship,
+                    driver.idUser AS driverId,
+                    driver.name AS driverName,
+                    driver.surname AS driverSurname,
+                    rider.idUser AS riderId,
+                    rider.name AS riderName,
+                    rider.surname AS riderSurname,
+                    relationship.amount
+                FROM 
+                    ${this.tableName} 
+                JOIN 
+                    users driver ON relationship.driverId = driver.idUser
+                JOIN 
+                    users rider ON relationship.riderId = rider.idUser
+                WHERE 
+                    driver.idUser = $1 OR rider.idUser = $1;
+            `;
+            const values = [userId];
+
+            const res = await this.pool.query(query, values);
+            return res.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    
 }
 
 export default CRUDRelationship;
