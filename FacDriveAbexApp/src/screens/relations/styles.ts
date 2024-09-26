@@ -1,6 +1,8 @@
 import styled from 'styled-components/native';
 
-export const Body = styled.View`
+export const Body = styled.ScrollView``;
+
+export const Content = styled.View`
     align-items: center;
 `;
 
