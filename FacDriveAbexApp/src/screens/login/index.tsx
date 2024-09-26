@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-import { AxiosError } from 'axios';
 import { View } from 'react-native';
 import { useMutation } from 'react-query';
 import { MainTemplate } from '../../components/templates/Main';
@@ -22,7 +21,7 @@ type LoginForm = {
 export const LoginScreen = () => {
   const { navigate } = useNavigation();
 
-  const { mutateAsync, isLoading } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: () => {
       const email = watch('email') as string;
       const password = watch('password') as string;
@@ -33,14 +32,11 @@ export const LoginScreen = () => {
     },
     onSuccess: ({ userId }) => {
       StorageService.set('user_id', String(userId));
-      navigate('BottonTabs');
+      navigate('bottom-tabs');
     },
-    onError: (error: AxiosError<{ message: string }>) => {
-      const errorMessage =
-        error.response?.data?.message || 'Ocorreu um erro inesperado';
-
+    onError: () => {
       dispatchToast({
-        title: `${errorMessage}.`,
+        title: 'Email ou senha incorretos.',
         type: 'error',
       });
     },
@@ -69,7 +65,7 @@ export const LoginScreen = () => {
       return;
     }
 
-    mutateAsync();
+    mutate();
   };
 
   return (
