@@ -16,25 +16,33 @@ export class CreateRoutesMenu {
 
         this.menuContainer = document.createElement('div');
         this.menuContainer.setAttribute('id', 'routes-menu-container');
+        this.menuContainer.setAttribute('class', 'expanded')
         const distanceComponent = this.createDistanceComponent();
+
+        const completeRouteButton = this.createCompleteRouteButton();
+        const backLastPointButton = this.createBackLastPointButton();
+        const restartButton = this.createRestartButton();
         const saveButton = this.createSaveButton();
         const exitButton = this.createExitButton();
 
-        const bottomButtonsContainer = document.createElement('div');
-        bottomButtonsContainer.setAttribute('class', 'create-routes-bottom-buttons')
-        bottomButtonsContainer.append(exitButton, saveButton);
+        this.bottomButtonsContainer = document.createElement('div');
+        this.bottomButtonsContainer.setAttribute('class', 'create-routes-bottom-buttons')
+        this.bottomButtonsContainer.append(exitButton, saveButton);
 
-        this.verticalMenuContainer = this.createVerticalMenuButtons();
+        this.actionButtonsContainer = document.createElement('div');
+        this.actionButtonsContainer.setAttribute('class', 'create-routes-bottom-buttons')
+        this.actionButtonsContainer.append(completeRouteButton, backLastPointButton, restartButton)
 
-        this.menuContainer.append(distanceComponent, bottomButtonsContainer);
-        this.container.append(this.menuContainer, this.verticalMenuContainer);
+        const resizeButton = this.createResizeMenuButton();
+
+        this.menuContainer.append(resizeButton, distanceComponent, this.actionButtonsContainer, this.bottomButtonsContainer);
+        this.container.append(this.menuContainer);
     }
 
     exit() {
         route.createRouteIsActive = false;
         this.showBottomSheetMenu();
         this.menuContainer.remove();
-        this.verticalMenuContainer.remove();
     }
 
     hideBottomSheetMenu() {
@@ -91,42 +99,9 @@ export class CreateRoutesMenu {
         return exitButton;
     }
 
-    createVerticalMenuButtons() {
-        const verticalContainer = document.createElement('div');
-        verticalContainer.setAttribute('id', 'vertical-create-route-container');
-
-        const completeRouteButton = this.createCompleteRouteButton();
-        const backLastPointButton = this.createBackLastPointButton();
-        const restartButton = this.createRestartButton();
-
-        const buttonsContainer = document.createElement('div');
-        buttonsContainer.setAttribute('class', 'vertical-buttons-container')
-        buttonsContainer.append(completeRouteButton, backLastPointButton, restartButton);
-
-        const openVerticalContainerButton = document.createElement('div');
-        openVerticalContainerButton.setAttribute('class', 'open-vertical-button-container');
-        const iconOpen = document.createElement('i');
-        iconOpen.setAttribute('class', 'fa-solid fa-chevron-left')
-
-        openVerticalContainerButton.addEventListener('click', () => {
-            verticalContainer.classList.toggle('expanded')
-            if (iconOpen.classList.contains('fa-chevron-left')) {
-                iconOpen.classList.remove('fa-chevron-left');
-                iconOpen.classList.add('fa-chevron-right');
-            } else {
-                iconOpen.classList.remove('fa-chevron-right');
-                iconOpen.classList.add('fa-chevron-left');
-            }
-        })
-
-        openVerticalContainerButton.appendChild(iconOpen);
-        verticalContainer.append(openVerticalContainerButton, buttonsContainer);
-        return verticalContainer;
-    }
-
     createCompleteRouteButton() {
         const completeRoute = document.createElement('div');
-        completeRoute.setAttribute('class', 'create-route-vertical-button complete');
+        completeRoute.setAttribute('class', 'create-route-action-button');
 
         const buttonName = document.createElement('span')
         buttonName.innerHTML = 'Completar caminho';
@@ -141,7 +116,7 @@ export class CreateRoutesMenu {
 
     createBackLastPointButton() {
         const backLastPoint = document.createElement('div');
-        backLastPoint.setAttribute('class', 'create-route-vertical-button last-point');
+        backLastPoint.setAttribute('class', 'create-route-action-button');
 
         const buttonName = document.createElement('span')
         buttonName.innerHTML = 'Voltar ponto';
@@ -156,7 +131,7 @@ export class CreateRoutesMenu {
 
     createRestartButton() {
         const restartButton = document.createElement('div');
-        restartButton.setAttribute('class', 'create-route-vertical-button restart');
+        restartButton.setAttribute('class', 'create-route-action-button');
 
         const buttonName = document.createElement('span')
         buttonName.innerHTML = 'Reiniciar';
@@ -167,6 +142,28 @@ export class CreateRoutesMenu {
         restartButton.append(buttonName, icon);
         restartButton.addEventListener('click', this.exit)
         return restartButton;
+    }
+
+    createResizeMenuButton() {
+        const resizeContainerButton = document.createElement('div');
+        resizeContainerButton.setAttribute('class', 'resize-menu-button-container');
+        const iconOpen = document.createElement('i');
+        iconOpen.setAttribute('class', 'fa-solid fa-chevron-down')
+        resizeContainerButton.appendChild(iconOpen);
+
+        resizeContainerButton.addEventListener('click', () => {
+            this.bottomButtonsContainer.classList.toggle('collapsed')
+            this.actionButtonsContainer.classList.toggle('collapsed')
+            if (iconOpen.classList.contains('fa-chevron-down')) {
+                iconOpen.classList.remove('fa-chevron-down');
+                iconOpen.classList.add('fa-chevron-up');
+            } else {
+                iconOpen.classList.remove('fa-chevron-up');
+                iconOpen.classList.add('fa-chevron-down');
+            }
+        })
+
+        return resizeContainerButton;
     }
 
     saveRoute() {

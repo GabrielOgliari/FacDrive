@@ -1,5 +1,5 @@
 import { Loader } from "@googlemaps/js-api-loader"
-import {utils} from "../../Globals";
+import {route, utils} from "../../Globals";
 
 export class Map {
     constructor(container) {
@@ -7,8 +7,10 @@ export class Map {
         this.map = null;
         this.directionsService = null;
         this.directionsRenderer = null;
+        this.polyline = null;
         this.markers = [];
         this.waypoints = [];
+        this.path = [];
         this.universityPosition = {lat: -27.09390800094124, lng: -52.66638176434375}
     }
 
@@ -25,7 +27,6 @@ export class Map {
 
         try {
             const { Map, places  } = await loader.importLibrary("maps");
-            const { SearchBox } = await loader.importLibrary("places");
 
             this.map = new Map(document.getElementById("map"), {
                 center: { lat: -27.093898594238937, lng: -52.6664602479717 },
@@ -45,34 +46,8 @@ export class Map {
             this.directionsRenderer = new google.maps.DirectionsRenderer();
             this.directionsRenderer.setMap(this.map);
 
-            const input = document.getElementById("pac-input");
-            const searchBox = new SearchBox(input);
-
-            this.map.addListener("bounds_changed", () => {
-                searchBox.setBounds(this.map.getBounds());
-            });
-
-            searchBox.addListener("places_changed", () => {
-                const places = searchBox.getPlaces();
-
-                if (places.length === 0) {
-                    return;
-                }
-
-                const place = places[0];
-
-                if (!place.geometry || !place.geometry.location) {
-                    console.log("Returned place contains no geometry");
-                    return;
-                }
-
-                if (place.geometry.viewport) {
-                    this.map.fitBounds(place.geometry.viewport);
-                } else {
-                    this.map.setCenter(place.geometry.location);
-                    this.map.setZoom(10);
-                }
-            });
+            await this.createSearchBox(loader);
+            this.createPolyline();
         } catch (error) {
             console.error("Erro ao carregar a biblioteca Google Maps:", error);
         }
@@ -81,26 +56,82 @@ export class Map {
 
     initMapEvents() {
         this.map.addListener("click", (event) => {
-            const latLng = event.latLng;
+            if (route.createRouteIsActive) {
+                this.drawRoute(event);
+            }
+            // const latLng = event.latLng;
+            //
+            // const marker = new google.maps.Marker({
+            //     position: latLng,
+            //     map: this.map,
+            //     label: `${this.markers.length + 1}`,
+            // });
+            //
+            // this.markers.push(marker);
+            //
+            // if (this.markers.length > 1) {
+            //     this.waypoints.push({
+            //         location: latLng,
+            //         stopover: true,
+            //     });
+            // }
+            //
+            // if (this.markers.length > 1) {
+            //     this.calculateAndDisplayRoute();
+            // }
+        });
+    }
 
-            const marker = new google.maps.Marker({
-                position: latLng,
-                map: this.map,
-                label: `${this.markers.length + 1}`,
-            });
+    async createSearchBox(loader) {
+        const { SearchBox } = await loader.importLibrary("places");
+        const input = document.getElementById("pac-input");
+        const searchBox = new SearchBox(input);
 
-            this.markers.push(marker);
+        this.map.addListener("bounds_changed", () => {
+            searchBox.setBounds(this.map.getBounds());
+        });
 
-            if (this.markers.length > 1) {
-                this.waypoints.push({
-                    location: latLng,
-                    stopover: true,
-                });
+        searchBox.addListener("places_changed", () => {
+            const places = searchBox.getPlaces();
+
+            if (places.length === 0) {
+                return;
             }
 
-            if (this.markers.length > 1) {
-                this.calculateAndDisplayRoute();
+            const place = places[0];
+
+            if (!place.geometry || !place.geometry.location) {
+                return;
             }
+
+            if (place.geometry.viewport) {
+                this.map.fitBounds(place.geometry.viewport);
+            } else {
+                this.map.setCenter(place.geometry.location);
+                this.map.setZoom(10);
+            }
+        });
+    }
+
+    createPolyline() {
+        this.polyline = new google.maps.Polyline({
+            path: this.path,
+            strokeColor: '#FF0000',
+            strokeOpacity: 1.0,
+            strokeWeight: 3,
+        });
+
+        this.polyline.setMap(this.map);
+    }
+
+    drawRoute(event){
+        this.path.push(event.latLng);
+
+        this.polyline.setPath(this.path);
+
+        new google.maps.Marker({
+            position: event.latLng,
+            map: this.map,
         });
     }
 
