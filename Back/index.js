@@ -301,12 +301,32 @@ app.delete("/relationship/:id", async (req, res) => {
 //Rota para listar uma dívida
 app.get('/debt/:id', async (req, res) => {
     try {
-        const id = req.params.id;
-        const { idrelationship} = req.body;
-        const debts = await cruds.crudDebt.listDebts(idrelationship);
-        const user = await cruds.crudUser.read(id);
-        const result = { debts, user, id };
-        res.status(200).json(result);
+      const all = []
+      let idrelationship
+
+      const id = req.params.id;
+      const User = await cruds.crudUser.read(id)
+      
+      if (User.isdriver) {
+        idrelationship = await cruds.crudRelationship.readUserDriver(id);
+      }
+      else{
+        idrelationship = await cruds.crudRelationship.readUserRider(id);
+      }
+
+      for (const relationship of idrelationship) {
+        //console.log(`ID Relationship: ${relationship.idrelationship}, Driver ID: ${relationship.driverid}, Rider ID: ${relationship.riderid}`);
+        const debt = await cruds.crudDebt.listDebts(relationship.idrelationship);
+        
+        all.push(...debt);
+      }
+      const result = {
+        name: User.name,
+        surname: User.surname,
+        userimage: User.userimage,
+        debts : all
+    };
+      res.status(200).json(result);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
