@@ -1,21 +1,23 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useUser } from '../../../../context/useUser';
 import { User } from './components/User';
 import * as S from './styles';
 
+interface UserDataType {
+  name: string;
+  days: number;
+  userId: number;
+}
+
 export const RideOptions = () => {
-  interface UserDataType {
-    name: string;
-    days: number;
-    userId: number;
-  }
+  const { user } = useUser();
 
   const [userData, setUserData] = useState([{}]);
-  const currentUserId: number = 79;
 
-  const fetchUsers = (userId: number) => {
+  const fetchUsers = () => {
     const apiNodeUrl = process.env.API_NODE_URL;
-    axios.get(apiNodeUrl + '/classdays/nearby/' + userId).then(fetchData => {
+    axios.get(apiNodeUrl + '/classdays/nearby/' + user.id).then(fetchData => {
       const treatedData = fetchData.data.map(userUntreat => {
         const name = `${userUntreat.name} ${userUntreat.surname}`;
         const days = userUntreat.days_count;
@@ -35,7 +37,7 @@ export const RideOptions = () => {
   };
 
   useEffect(() => {
-    fetchUsers(currentUserId);
+    fetchUsers(user.id);
   }, []);
 
   const showTitle = userData.length == 0 ? 'none' : 'flex';
