@@ -97,22 +97,6 @@ class CRUDUser {
     }
   }
 
-  async isDriver(id) {
-    try {
-      if (id) {
-        const query = `SELECT isDriver FROM ${this.tableName} WHERE idUser = $1`;
-        const res = await this.pool.query(query, [id]);
-        return res.rows[0];
-      } else {
-        const query = `SELECT * FROM ${this.tableName}`;
-        const res = await this.pool.query(query);
-        return res.rows;
-      }
-    } catch (error) {
-      throw error;
-    }
-  }
-
   // Update - Atualizar um usuário específico
   async update(id, data) {
     try {

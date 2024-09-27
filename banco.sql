@@ -70,7 +70,7 @@ create table route(
 create table relationship(
     idRelationship SERIAL primary key,
     driverId SERIAL,
-    riderId SERIAL,
+    riderId SERIAL UNIQUE,
     amount NUMERIC(10, 2),
     FOREIGN KEY (driverId) REFERENCES users(idUser),
     FOREIGN KEY (riderId) REFERENCES users(idUser)
