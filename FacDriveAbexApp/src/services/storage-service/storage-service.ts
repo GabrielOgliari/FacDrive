@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 class StorageService {
   static async set(key: string, value: string) {
     try {

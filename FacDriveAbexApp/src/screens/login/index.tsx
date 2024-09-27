@@ -5,10 +5,10 @@ import { MainTemplate } from '../../components/templates/Main';
 import { Button } from '../../components/UI/atoms/Button';
 import { Loader } from '../../components/UI/atoms/Loader';
 import { Fields } from '../../components/UI/organisms/Fields/root';
+import { useUser } from '../../context/useUser';
 import { dispatchToast } from '../../helpers/dispatchToast';
 import { useForm } from '../../hooks/useForm';
 import authenticationService from '../../services/authentication/authentication-service';
-import StorageService from '../../services/storage-service/storage-service';
 import { width } from '../../utils/dimensions';
 import { isEmpty } from '../../utils/validators/isEmpty';
 import { isValidInstitutionalEmail } from '../../utils/validators/isValidInstitutionalEmail';
@@ -20,6 +20,7 @@ type LoginForm = {
 
 export const LoginScreen = () => {
   const { navigate } = useNavigation();
+  const { setUser } = useUser();
 
   const { mutate, isLoading } = useMutation({
     mutationFn: () => {
@@ -31,7 +32,7 @@ export const LoginScreen = () => {
       });
     },
     onSuccess: ({ userId }) => {
-      StorageService.set('user_id', String(userId));
+      setUser({ id: userId });
       navigate('bottom-tabs');
     },
     onError: () => {

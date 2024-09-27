@@ -3,10 +3,6 @@ import { DaysOfTheWeek } from '../../enums/days-of-the-week';
 import { CarpoolDaysParams } from './types/carpool-days-params';
 import { GetCarpoolDaysInput } from './types/get-carpool-days-input';
 import { GetCarpoolDaysOutput } from './types/get-carpool-days-output';
-import { GetPerfilImageInput } from './types/get-perfil-image-input';
-import { GetPerfilImageOutput } from './types/get-perfil-image-output';
-import { SetPerfilImageParams } from './types/set-perfil-image-params';
-import { SetPerfilImageResponse } from './types/set-perfil-image-response';
 
 interface IDashboardService {
   confirmRide({ confirmation }: { confirmation: boolean }): Promise<any>;
@@ -27,15 +23,13 @@ class DashboardService implements IDashboardService {
     return response.data;
   }
 
-  async getCarpoolDays(id: number): Promise<GetCarpoolDaysOutput> {
+  async getCarpoolDays(id?: number): Promise<GetCarpoolDaysOutput> {
     const endpoint = '/classdays/id';
 
     const response = await axios<GetCarpoolDaysInput[]>({
       method: 'get',
-      url: this.apiNodeUrl + endpoint + '/' + 79,
+      url: this.apiNodeUrl + endpoint + '/' + id,
     });
-
-    console.log('end', this.apiNodeUrl + endpoint + '/' + 79);
 
     const { data } = response;
 
@@ -49,71 +43,67 @@ class DashboardService implements IDashboardService {
     ];
   }
 
-  async createCarpoolDays({ id, day }: CarpoolDaysParams) {
+  async createCarpoolDays({ id, days }: CarpoolDaysParams) {
     const endpoint = '/classdays';
+
+    days.some(({ value }) => value === DaysOfTheWeek.Monday);
 
     await axios<GetCarpoolDaysInput>({
       method: 'post',
-      url: this.apiNodeUrl + endpoint + '/' + id,
+      url: this.apiNodeUrl + endpoint,
       data: {
-        monday: day === DaysOfTheWeek.Monday,
-        tuesday: day === DaysOfTheWeek.Tuesday,
-        wednesday: day === DaysOfTheWeek.Wednesday,
-        thursday: day === DaysOfTheWeek.Thursday,
-        friday: day === DaysOfTheWeek.Friday,
-        saturday: day === DaysOfTheWeek.Saturday,
+        idUser: id,
+        monday: days.some(
+          ({ value, active }) => value === DaysOfTheWeek.Monday && active,
+        ),
+        tuesday: days.some(
+          ({ value, active }) => value === DaysOfTheWeek.Tuesday && active,
+        ),
+        wednesday: days.some(
+          ({ value, active }) => value === DaysOfTheWeek.Wednesday && active,
+        ),
+        thursday: days.some(
+          ({ value, active }) => value === DaysOfTheWeek.Thursday && active,
+        ),
+        friday: days.some(
+          ({ value, active }) => value === DaysOfTheWeek.Friday && active,
+        ),
+        saturday: days.some(
+          ({ value, active }) => value === DaysOfTheWeek.Saturday && active,
+        ),
       },
     });
   }
 
-  async updateCarpoolDays({ id, day }: CarpoolDaysParams) {
+  async updateCarpoolDays({ id, days }: CarpoolDaysParams) {
     const endpoint = '/classdays';
+
+    console.log(days);
 
     await axios<GetCarpoolDaysInput>({
       method: 'put',
       url: this.apiNodeUrl + endpoint + '/' + id,
       data: {
-        monday: day === DaysOfTheWeek.Monday,
-        tuesday: day === DaysOfTheWeek.Tuesday,
-        wednesday: day === DaysOfTheWeek.Wednesday,
-        thursday: day === DaysOfTheWeek.Thursday,
-        friday: day === DaysOfTheWeek.Friday,
-        saturday: day === DaysOfTheWeek.Saturday,
+        monday: days.some(
+          ({ value, active }) => value === DaysOfTheWeek.Monday && active,
+        ),
+        tuesday: days.some(
+          ({ value, active }) => value === DaysOfTheWeek.Tuesday && active,
+        ),
+        wednesday: days.some(
+          ({ value, active }) => value === DaysOfTheWeek.Wednesday && active,
+        ),
+        thursday: days.some(
+          ({ value, active }) => value === DaysOfTheWeek.Thursday && active,
+        ),
+        friday: days.some(
+          ({ value, active }) => value === DaysOfTheWeek.Friday && active,
+        ),
+        saturday: days.some(
+          ({ value, active }) => value === DaysOfTheWeek.Saturday && active,
+        ),
       },
     });
-  }
-
-  async getPerfilImage(id: number): Promise<GetPerfilImageOutput> {
-    const endpoint = '/image';
-
-    const { data } = await axios<GetPerfilImageInput>({
-      method: 'get',
-      url: this.apiNodeUrl + endpoint + '/' + id,
-    });
-
-    return {
-      userImage: data.userimage,
-    };
-  }
-
-  async setPerfilImage({
-    id,
-    image,
-  }: SetPerfilImageParams): Promise<SetPerfilImageResponse> {
-    const endpoint = '/image';
-
-    const { data } = await axios<SetPerfilImageResponse>({
-      method: 'post',
-      url: this.apiNodeUrl + endpoint,
-      data: {
-        idUser: id,
-        userImage: image,
-      },
-    });
-
-    return {
-      success: data.success,
-    };
   }
 }
 
