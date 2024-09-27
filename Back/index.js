@@ -298,17 +298,21 @@ app.delete("/relationship/:id", async (req, res) => {
   }
 });
 
-app.get('/debt', async (req, res) => {
+//Rota para listar uma dívida
+app.get('/debt/:id', async (req, res) => {
     try {
-        const result = await cruds.crudDebt.listDebts();
-        //const adicionar = await cruds.crudDebt.addDebt();
-        //res.status(200).json(adicionar);
+        const id = req.params.id;
+        const { idrelationship} = req.body;
+        const debts = await cruds.crudDebt.listDebts(idrelationship);
+        const user = await cruds.crudUser.read(id);
+        const result = { debts, user, id };
         res.status(200).json(result);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
+//Rota para deletar uma dívida
 app.delete('/debt', async (req, res) => {
     try{
         const { idrelationship } = req.body;
