@@ -5,7 +5,6 @@ import { Item } from './components/Item';
 import { Header } from './components/Header';
 import { useEffect, useState } from 'react';
 import { launchImageLibrary } from 'react-native-image-picker';
-import StorageService from '../../services/storage-service/storage-service';
 import axios from 'axios';
 import { Separator } from '../../components/UI/atoms/Separator';
 import { useNavigation } from '@react-navigation/native';
@@ -38,12 +37,11 @@ export const ProfileScreen = () => {
     const [userCar, setUserCar] = useState('');
     const [userName, setUserName] = useState('');
 
-    // const userId = StorageService.get('user_id');
     const userId = 79;
 
     useEffect(() => {
         getData();
-    }, []);
+    });
 
     const changeImage = () => {
         const options = {
@@ -76,7 +74,7 @@ export const ProfileScreen = () => {
     const getData = async () => {
         const userData = await fetchUserData('user', userId);
 
-        const role: any = userData.usuario.isdriver ? 'Mororista' : 'Caroneiro';
+        const role: any = userData.usuario.isdriver ? 'Motorista' : 'Caroneiro';
         const car = userData.veiculo.brand + userData.veiculo.model;
         const birthDate: string = userData.usuario.birthdate.slice(0, 10);
         const completeName: string =

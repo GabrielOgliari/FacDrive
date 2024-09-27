@@ -31,7 +31,9 @@ export const Title = styled.Text`
     font-weight: bold;
 `;
 
-export const Text = styled.Text``;
+export const Text = styled.Text`
+    font-size: 11px;
+`;
 
 export const DriverView = styled.View`
     margin-right: 25px;
