@@ -13,7 +13,7 @@ export const dispatchToast = ({
 }: Props) => {
   Toast.show({
     type,
-    text1: title,
-    text2: description,
+    text1: String(title ?? ''),
+    text2: String(description ?? ''),
   });
 };

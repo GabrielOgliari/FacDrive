@@ -5,7 +5,7 @@ type FormStateProps = {
   getObject: <T>(key: string) => T;
 };
 
-const formStateContext = createContext({} as FormStateProps);
+const FormStateContext = createContext({} as FormStateProps);
 
 export const FormStateProvider = ({ children }: { children: ReactNode }) => {
   const [formValues, setFormValues] = useState<Record<string, any>>({});
@@ -22,20 +22,17 @@ export const FormStateProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <formStateContext.Provider value={{ setObject, getObject }}>
+    <FormStateContext.Provider value={{ setObject, getObject }}>
       {children}
-    </formStateContext.Provider>
+    </FormStateContext.Provider>
   );
 };
 
 export const useFormStateContext = () => {
-  const context = useContext(formStateContext);
-
-  if (!context) {
+  const context = useContext(FormStateContext);
+  if (!context)
     throw new Error(
       'useFormStateContext must be used within a FormStateProvider',
     );
-  }
-
   return context;
 };
