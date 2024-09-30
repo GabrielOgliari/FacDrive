@@ -30,10 +30,14 @@ class NotificationsWebsocket implements MessageComponentInterface {
             $recipientId = $data['recipientId'] ?? null;
             $message = $data['data'] ?? null;
 
-            if ($recipientId && $message && isset($this->userConnections[$recipientId])) {
-                $this->userConnections[$recipientId]->send(json_encode($message));
+            if ($recipientId && $message) {
+                if (isset($this->userConnections[$recipientId])) {
+                    $this->userConnections[$recipientId]->send(json_encode($message));
+                } else {
+                    echo "Usuario nao conectado\n";
+                }
             } else {
-                echo "User {$recipientId} not connected or invalid message format\n";
+                echo "Invalid message format\n";
             }
         }
     }
