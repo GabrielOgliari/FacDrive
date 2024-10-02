@@ -24,10 +24,10 @@ class CRUDDebt {
         }
     }
 
-    async listDebts() {
-        const query = `SELECT * FROM ${this.tableName}`;
+    async listDebts(idrelationship) {
+        const query = `SELECT * FROM ${this.tableName} WHERE idrelationship = $1`;
         try {
-            const res = await this.pool.query(query);
+            const res = await this.pool.query(query, [idrelationship]);
             return res.rows;
         } catch (error) {
             throw error;

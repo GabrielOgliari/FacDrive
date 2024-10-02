@@ -97,6 +97,7 @@ class CRUDUser {
     }
   }
 
+
   // Update - Atualizar um usuário específico
   async update(id, data) {
     try {

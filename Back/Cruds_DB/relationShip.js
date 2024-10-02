@@ -49,6 +49,7 @@ class CRUDRelationship {
         }
     }
 
+
     // Método para atualizar um relacionamento
     async update(id, data) {
         try {
@@ -138,7 +139,53 @@ class CRUDRelationship {
             throw error;
         }
     }
+    async readUserDriver(id) {
+        try {
+            let query;
+            let values = [];
 
+            if (id) {
+                query = `SELECT * FROM ${this.tableName} WHERE driverId = $1`;
+                values = [id];
+            } else {
+                query = `SELECT * FROM ${this.tableName}`;
+            }
+
+            const res = await this.pool.query(query, values);
+
+            if (res.rows.length === 0) {
+                return null; 
+            }
+
+            return res.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async readUserRider(id) {
+        try {
+            let query;
+            let values = [];
+
+            if (id) {
+                query = `SELECT idRelationship FROM ${this.tableName} WHERE riderId = $1`;
+                values = [id];
+            } else {
+                query = `SELECT idRelationship FROM ${this.tableName}`;
+            }
+
+            const res = await this.pool.query(query, values);
+
+            if (res.rows.length === 0) {
+                return null; 
+            }
+
+            return res.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
     
 }
 

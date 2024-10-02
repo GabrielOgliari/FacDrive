@@ -298,17 +298,44 @@ app.delete("/relationship/:id", async (req, res) => {
   }
 });
 
-app.get('/debt', async (req, res) => {
+//Rota para listar uma dívida
+app.get('/debt/:id', async (req, res) => {
     try {
-        const result = await cruds.crudDebt.listDebts();
-        //const adicionar = await cruds.crudDebt.addDebt();
-        //res.status(200).json(adicionar);
-        res.status(200).json(result);
+      const all = []
+      let idrelationship
+      let idUserReturn
+
+      const id = req.params.id;
+      const User = await cruds.crudUser.read(id)
+      
+      if (User.isdriver) {
+        idrelationship = await cruds.crudRelationship.readUserDriver(id);
+        idUserReturn = idrelationship[0].riderid
+      }
+      else{
+        idrelationship = await cruds.crudRelationship.readUserRider(id);
+        idUserReturn = id
+      }
+
+      for (const relationship of idrelationship) {
+        const debt = await cruds.crudDebt.listDebts(relationship.idrelationship);
+        const userDebt = await cruds.crudUser.read(idUserReturn)
+        const result = {
+            debt,
+            idUser: userDebt.iduser,
+            name: userDebt.name,
+            surname: userDebt.surname,
+            userimage: userDebt.userimage
+        };
+        all.push(result);
+      }
+      res.status(200).json(all);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
+//Rota para deletar uma dívida
 app.delete('/debt', async (req, res) => {
     try{
         const { idrelationship } = req.body;

@@ -1,4 +1,5 @@
-import React from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { useMutation, useQuery } from 'react-query';
 import styled from 'styled-components/native';
@@ -15,10 +16,15 @@ export const PaymentScreen = () => {
     queryFn: (statusId: number) => paymentService.getPaymentHistory(statusId),
     onError: () =>
       dispatchToast({ title: 'Erro ao carregar histórico!', type: 'error' }),
-    refetchInterval: 1000 * 30, // 30 seconds
   });
 
   const hasPayments = data !== undefined && data?.length >= 1;
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, []),
+  );
 
   const setPaymentStatusMutation = useMutation({
     mutationFn: (statusId: number) => paymentService.setPaymentStatus(statusId),

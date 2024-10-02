@@ -2,45 +2,46 @@ import { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { Loader } from '../../../../components/UI/atoms/Loader';
 import { Text } from '../../../../components/UI/atoms/Text';
+import { useUser } from '../../../../context/useUser';
 import { DaysOfTheWeek } from '../../../../enums/days-of-the-week';
 import { dispatchToast } from '../../../../helpers/dispatchToast';
-import { useUser } from '../../../../hooks/useUser';
 import dashboardService from '../../../../services/dashboard/dashboard-service';
+import { Days } from '../../../../services/dashboard/types/carpool-days-params';
 import { Container } from '../Container';
 import * as S from './styles';
 
 export const CarpoolDays = () => {
   const [isCreate, setIsCreate] = useState(false);
+  const { user } = useUser();
 
-  const { userId } = useUser();
-
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: ['get-carpool-days'],
-    queryFn: () => dashboardService.getCarpoolDays(Number(userId)),
-    onError: () => {
-      dispatchToast({
-        title: 'Erro ao obter dias de carona.',
-        type: 'error',
-      });
-
-      setIsCreate(true);
-    },
+    queryFn: () => dashboardService.getCarpoolDays(user.id),
+    onError: () => setIsCreate(true),
+    initialData: [
+      { day: 'Seg', active: false, value: DaysOfTheWeek.Monday },
+      { day: 'Ter', active: false, value: DaysOfTheWeek.Tuesday },
+      { day: 'Qua', active: false, value: DaysOfTheWeek.Wednesday },
+      { day: 'Qui', active: false, value: DaysOfTheWeek.Thursday },
+      { day: 'Sex', active: false, value: DaysOfTheWeek.Friday },
+      { day: 'Sáb', active: false, value: DaysOfTheWeek.Saturday },
+    ],
   });
 
   const createCarpoolDaysMutation = useMutation({
-    mutationFn: (day: DaysOfTheWeek) =>
-      dashboardService.createCarpoolDays({ id: Number(userId), day }),
+    mutationFn: (days: Days) =>
+      dashboardService.createCarpoolDays({ id: user.id, days }),
     onError: () =>
       dispatchToast({
-        title: 'Erro ao atualizar dias de carona.',
+        title: 'Erro ao criar dias de carona.',
         type: 'error',
       }),
     onSuccess: () => refetch(),
   });
 
   const updateCarpoolDaysMutation = useMutation({
-    mutationFn: (day: DaysOfTheWeek) =>
-      dashboardService.updateCarpoolDays({ id: Number(userId), day }),
+    mutationFn: (days: Days) =>
+      dashboardService.updateCarpoolDays({ id: user.id, days }),
     onError: () =>
       dispatchToast({
         title: 'Erro ao atualizar dias de carona.',
@@ -50,15 +51,24 @@ export const CarpoolDays = () => {
   });
 
   const setCarpoolDays = (value: DaysOfTheWeek) => {
+    if (!data) return;
+
+    const updatedData = data.map(item =>
+      item.value === value ? { ...item, active: !item.active } : item,
+    );
+
     if (isCreate) {
-      createCarpoolDaysMutation.mutate(value);
+      createCarpoolDaysMutation.mutate(updatedData);
+      setIsCreate(false);
+    } else {
+      updateCarpoolDaysMutation.mutate(updatedData);
     }
-    updateCarpoolDaysMutation.mutate(value);
   };
 
   return (
     <>
       {(isLoading ||
+        isFetching ||
         createCarpoolDaysMutation.isLoading ||
         updateCarpoolDaysMutation.isLoading) && <Loader />}
 
