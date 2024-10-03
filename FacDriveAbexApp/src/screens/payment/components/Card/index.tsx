@@ -1,39 +1,39 @@
+import { useUser } from '../../../../context/useUser';
 import { formatCurrency } from '../../../../utils/formatters/currency';
 import * as S from './styles';
 
 export type CardProps = {
-  passengerName: string;
-  costRide: number;
+  name: string;
+  amount: string;
   image: string;
   onStatus: () => void;
 };
 
-export const Card = ({
-  passengerName,
-  costRide,
-  image,
-  onStatus,
-}: CardProps) => {
+export const Card = ({ name, amount, image, onStatus }: CardProps) => {
+  const { user } = useUser();
+
   return (
     <S.Card>
-      <S.Image src={image} />
+      <S.Image src={`data:image/png;base64,${image}`} />
 
       <S.Container>
         <S.Wrapper>
           <S.Group>
             <S.Label>Passageiro(a)</S.Label>
-            <S.Text>{passengerName}</S.Text>
+            <S.Text>{name}</S.Text>
           </S.Group>
 
           <S.Group>
             <S.Label>Valor da Corrida</S.Label>
-            <S.Text>{formatCurrency(costRide)}</S.Text>
+            <S.Text>{formatCurrency(Number(amount))}</S.Text>
           </S.Group>
         </S.Wrapper>
 
-        <S.Button onPress={onStatus}>
-          <S.TextButton>Marcar como Pago</S.TextButton>
-        </S.Button>
+        {user.isDriver && (
+          <S.Button onPress={onStatus}>
+            <S.TextButton>Marcar como Pago</S.TextButton>
+          </S.Button>
+        )}
       </S.Container>
     </S.Card>
   );

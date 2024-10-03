@@ -5,19 +5,41 @@ import { GetPaymentHistoryOutput } from './types/get-payment-history-output';
 class PaymentService {
   protected apiNodeUrl = process.env.API_NODE_URL;
 
-  async getPaymentHistory(userId: number): Promise<GetPaymentHistoryOutput[]> {
+  async getPaymentHistory(userId?: number): Promise<GetPaymentHistoryOutput[]> {
     const endpoint = '/debt';
 
     const response = await axios<GetPaymentHistoryInput[]>({
       method: 'get',
-      url: this.apiNodeUrl + endpoint,
-      // url: this.apiNodeUrl + endpoint + '/' + userId,
+      url: `${this.apiNodeUrl}${endpoint}/${userId}`,
     });
 
-    const payments = response.data;
+    const { data } = response;
 
-    return payments.map(({ idrelationship, amount }) => {
-      return { id: idrelationship, costRide: Number(amount) };
+    if (!data || !Array.isArray(data)) {
+      return [];
+    }
+
+    return data.flatMap(item => {
+      if (!item.debt || !Array.isArray(item.debt) || item.debt.length === 0) {
+        return [];
+      }
+
+      return item.debt
+        .map(debtItem => {
+          if (!debtItem.idrelationship || !debtItem.amount) {
+            return null;
+          }
+
+          return {
+            id: debtItem.idrelationship,
+            name: `${item.name} ${item.surname}`.trim(),
+            amount: debtItem.amount,
+            image: item.userimage || '',
+          };
+        })
+        .filter(
+          (debtItem): debtItem is GetPaymentHistoryOutput => debtItem !== null,
+        );
     });
   }
 

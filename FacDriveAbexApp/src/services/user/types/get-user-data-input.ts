@@ -1,6 +1,6 @@
 import { GenderEnum } from '../../../enums/gender-enum';
 
-export type GetProfileDataInput = {
+export type GetUserDataInput = {
   usuario: {
     iduser: number;
     cpf: string;
