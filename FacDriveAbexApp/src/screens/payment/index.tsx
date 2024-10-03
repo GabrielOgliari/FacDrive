@@ -6,19 +6,22 @@ import styled from 'styled-components/native';
 import { MainTemplate } from '../../components/templates/Main';
 import { Loader } from '../../components/UI/atoms/Loader';
 import { Text } from '../../components/UI/atoms/Text';
+import { useUser } from '../../context/useUser';
 import { dispatchToast } from '../../helpers/dispatchToast';
 import paymentService from '../../services/payment/payment-service';
 import { Card } from './components/Card';
 
 export const PaymentScreen = () => {
+  const { user } = useUser();
+
   const { data, isLoading, isFetching, refetch } = useQuery({
-    queryKey: ['get-payment-history'],
-    queryFn: (statusId: number) => paymentService.getPaymentHistory(statusId),
+    queryKey: ['get-payment-history', user.id],
+    queryFn: () => paymentService.getPaymentHistory(user.id),
     onError: () =>
       dispatchToast({ title: 'Erro ao carregar histórico!', type: 'error' }),
   });
 
-  const hasPayments = data !== undefined && data?.length >= 1;
+  const hasPayments = data && Array.isArray(data) && data.length >= 1;
 
   useFocusEffect(
     useCallback(() => {
@@ -56,8 +59,9 @@ export const PaymentScreen = () => {
           data={data}
           renderItem={({ item }) => (
             <Card
-              passengerName={item.passengerName}
-              costRide={item.costRide}
+              key={item.id}
+              name={item.name}
+              amount={item.amount}
               image={item.image}
               onStatus={() => setPaymentStatusMutation.mutate(item.id)}
             />

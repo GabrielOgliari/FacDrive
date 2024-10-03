@@ -9,6 +9,7 @@ import { useUser } from '../../context/useUser';
 import { dispatchToast } from '../../helpers/dispatchToast';
 import { useForm } from '../../hooks/useForm';
 import authenticationService from '../../services/authentication/authentication-service';
+import userService from '../../services/user/user-service';
 import { width } from '../../utils/dimensions';
 import { isEmpty } from '../../utils/validators/isEmpty';
 import { isValidInstitutionalEmail } from '../../utils/validators/isValidInstitutionalEmail';
@@ -22,6 +23,14 @@ export const LoginScreen = () => {
   const { navigate } = useNavigation();
   const { setUser } = useUser();
 
+  const { mutateAsync: getUserData } = useMutation({
+    mutationFn: (userId?: number) => userService.getData(userId),
+    onSuccess: ({ id, isDriver, name }) => {
+      setUser({ id, isDriver, name });
+      navigate('bottom-tabs');
+    },
+  });
+
   const { mutate, isLoading } = useMutation({
     mutationFn: () => {
       const email = watch('email') as string;
@@ -32,8 +41,7 @@ export const LoginScreen = () => {
       });
     },
     onSuccess: ({ userId }) => {
-      setUser({ id: userId });
-      navigate('bottom-tabs');
+      getUserData(userId);
     },
     onError: () => {
       dispatchToast({

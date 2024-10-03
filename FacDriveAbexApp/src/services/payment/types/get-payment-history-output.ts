@@ -1,7 +1,6 @@
 export type GetPaymentHistoryOutput = {
   id: number;
-  passengerName: string;
-  costRide: number;
+  name: string;
+  amount: string;
   image: string;
-  isPaid: boolean;
 };
