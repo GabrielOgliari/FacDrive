@@ -10,3 +10,6 @@ API/.venv
 # Backend
 
 Back/node_modules
+
+Notifications/vendor
+Notifications/composer.lock
