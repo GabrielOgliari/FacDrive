@@ -3,6 +3,8 @@ import express from "express";
 import pool from "./Banco/db.js";
 import Cruds from "./Cruds_DB/Cruds.js";
 
+require('dotenv').config();
+
 // novo
 
 const app = express();

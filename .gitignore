@@ -10,3 +10,4 @@ API/.venv
 # Backend
 
 Back/node_modules
+Back/.env
