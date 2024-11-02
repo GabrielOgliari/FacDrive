@@ -2,8 +2,8 @@ import bodyParser from "body-parser";
 import express from "express";
 import pool from "./Banco/db.js";
 import Cruds from "./Cruds_DB/Cruds.js";
-
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 // novo
 
