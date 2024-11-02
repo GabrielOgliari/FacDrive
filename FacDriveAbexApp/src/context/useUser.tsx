@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
+import StorageService from "../services/storage-service/storage-service.ts";
 
 type User = {
   id?: number;
@@ -18,6 +19,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [object, setObject] = useState<User>({});
 
   const setUser = (props: User) => {
+    StorageService.set('userProps', {id: props.id})
     setObject(props);
   };
 
