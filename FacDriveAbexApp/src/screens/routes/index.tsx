@@ -3,6 +3,7 @@ import {WebViewMap} from "./components/WebViewMap";
 import {useEffect, useState} from "react";
 import {PermissionsAndroid, Platform, Text} from "react-native";
 import StorageService from "../../services/storage-service/storage-service.ts";
+import {Loader} from "../../components/UI/atoms/Loader";
 
 async function requestLocationPermission() {
     if (Platform.OS === 'android') {
@@ -36,7 +37,7 @@ export const RoutesScreen = () => {
     return (
         <S.Body>
             {userID === null ? (
-                <Text>Carregando...</Text>
+                <Loader loading={true}/>
             ) : (
                 <WebViewMap userID={userID} />
             )}
