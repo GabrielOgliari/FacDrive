@@ -6,25 +6,25 @@ import { Welcome } from './components/Welcome';
 import * as S from './styles';
 
 export const DashboardScreen = () => {
-  const handleConfirm = () => {};
+    const handleConfirm = () => {};
 
-  const handleCancel = () => {};
+    const handleCancel = () => {};
 
-  return (
-    <>
-      <DashboardHeader />
+    return (
+        <>
+            <DashboardHeader />
 
-      <S.Body>
-        <S.Content>
-          <Welcome />
+            <S.Body>
+                <S.Content>
+                    <Welcome />
 
-          <Confirmation onConfirm={handleConfirm} onCancel={handleCancel} />
+                    <Confirmation onConfirm={handleConfirm} onCancel={handleCancel} />
 
-          <CarpoolDays />
+                    <CarpoolDays />
 
-          <RideOptions />
-        </S.Content>
-      </S.Body>
-    </>
-  );
+                    <RideOptions />
+                </S.Content>
+            </S.Body>
+        </>
+    );
 };

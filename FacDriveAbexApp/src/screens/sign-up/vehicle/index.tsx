@@ -22,183 +22,167 @@ import { AddressForm } from '../address';
 import { PersonalDetailsForm } from '../personal-details';
 
 export type VehicleForm = {
-  plate: string;
-  color: string;
-  manufacturingYear: string;
-  modelYear: string;
-  brand: string;
-  model: string;
-  city: string;
-  state: string;
+    plate: string;
+    color: string;
+    manufacturingYear: string;
+    modelYear: string;
+    brand: string;
+    model: string;
+    city: string;
+    state: string;
 };
 
 export const VehicleScreen = () => {
-  const { navigate } = useNavigation();
+    const { navigate } = useNavigation();
 
-  const { getObject } = useFormStateContext();
+    const { getObject } = useFormStateContext();
 
-  const { object, register, applyValidations, watch, setValue } =
-    useForm<VehicleForm>({
-      validations: {
-        plate: value => {
-          if (isEmpty(value)) return 'Por favor, insira o campo Placa.';
+    const { object, register, applyValidations, watch, setValue } = useForm<VehicleForm>({
+        validations: {
+            plate: value => {
+                if (isEmpty(value)) return 'Por favor, insira o campo Placa.';
+            },
+            color: value => {
+                if (isEmpty(value)) return 'Por favor, insira o campo Cor.';
+            },
+            manufacturingYear: value => {
+                if (isEmpty(value)) return 'Por favor, insira o campo Ano de Fabricação.';
+            },
+            modelYear: value => {
+                if (isEmpty(value)) return 'Por favor, insira o campo Ano Modelo.';
+                if (!isValidYear(value, 1900, new Date().getFullYear())) return 'O ano informado não é válido.';
+            },
+            brand: value => {
+                if (isEmpty(value)) return 'Por favor, insira o campo Marca.';
+            },
+            model: value => {
+                if (isEmpty(value)) return 'Por favor, insira o campo Modelo.';
+            },
+            city: value => {
+                if (isEmpty(value)) return 'Por favor, insira o campo Cidade.';
+            },
+            state: value => {
+                if (isEmpty(value)) return 'Por favor, insira o campo Estado.';
+            },
         },
-        color: value => {
-          if (isEmpty(value)) return 'Por favor, insira o campo Cor.';
-        },
-        manufacturingYear: value => {
-          if (isEmpty(value))
-            return 'Por favor, insira o campo Ano de Fabricação.';
-        },
-        modelYear: value => {
-          if (isEmpty(value)) return 'Por favor, insira o campo Ano Modelo.';
-          if (!isValidYear(value, 1900, new Date().getFullYear()))
-            return 'O ano informado não é válido.';
-        },
-        brand: value => {
-          if (isEmpty(value)) return 'Por favor, insira o campo Marca.';
-        },
-        model: value => {
-          if (isEmpty(value)) return 'Por favor, insira o campo Modelo.';
-        },
-        city: value => {
-          if (isEmpty(value)) return 'Por favor, insira o campo Cidade.';
-        },
-        state: value => {
-          if (isEmpty(value)) return 'Por favor, insira o campo Estado.';
-        },
-      },
     });
 
-  const vehicleByPlateQuery = useQuery(
-    ['vehicle', watch('plate')],
-    () => signUpService.vehicleByPlate(watch('plate')),
-    {
-      onSuccess: (data: VehicleResponse) => {
-        setValue('color', data.color);
-        setValue('manufacturingYear', data.manufacturingYear);
-        setValue('modelYear', data.modelYear);
-        setValue('brand', data.brand);
-        setValue('model', data.model);
-        setValue('city', data.city);
-        setValue('state', data.state);
-      },
-      enabled: String(watch('plate')).length === 7,
-      onError: () => {
-        dispatchToast({
-          title: 'Erro ao obter dados do veículo.',
-          type: 'error',
-        });
-      },
-    },
-  );
+    const vehicleByPlateQuery = useQuery(
+        ['vehicle', watch('plate')],
+        () => signUpService.vehicleByPlate(watch('plate')),
+        {
+            onSuccess: (data: VehicleResponse) => {
+                setValue('color', data.color);
+                setValue('manufacturingYear', data.manufacturingYear);
+                setValue('modelYear', data.modelYear);
+                setValue('brand', data.brand);
+                setValue('model', data.model);
+                setValue('city', data.city);
+                setValue('state', data.state);
+            },
+            enabled: String(watch('plate')).length === 7,
+            onError: () => {
+                dispatchToast({
+                    title: 'Erro ao obter dados do veículo.',
+                    type: 'error',
+                });
+            },
+        },
+    );
 
-  const verifyVehicleHasAlreadyRegisteredQuery = useQuery(
-    ['verify-plate', watch('plate')],
-    () =>
-      signUpService.verifyVehicleHasAlreadyRegistered(watch('plate') as string),
-    {
-      onSuccess: ({ plateAlreadyRegistered }) => {
-        if (plateAlreadyRegistered) {
-          dispatchToast({
-            title: 'Placa já registrada.',
-            description: 'Você deve cadastrar outra placa.',
-            type: 'error',
-          });
+    const verifyVehicleHasAlreadyRegisteredQuery = useQuery(
+        ['verify-plate', watch('plate')],
+        () => signUpService.verifyVehicleHasAlreadyRegistered(watch('plate') as string),
+        {
+            onSuccess: ({ plateAlreadyRegistered }) => {
+                if (plateAlreadyRegistered) {
+                    dispatchToast({
+                        title: 'Placa já registrada.',
+                        description: 'Você deve cadastrar outra placa.',
+                        type: 'error',
+                    });
+                }
+            },
+            enabled: String(watch('plate')).length === 7,
+        },
+    );
+
+    const plateAlreadyRegistered = verifyVehicleHasAlreadyRegisteredQuery.data?.plateAlreadyRegistered;
+
+    const saveMutation = useMutation((data: SaveSignUpData) => signUpService.save(data), {
+        onSuccess: () => {
+            dispatchToast({
+                title: 'Cadastro realizado com sucesso!',
+                description: ' Faça login para usar o app.',
+            });
+            navigate('login');
+        },
+        onError: () => {
+            dispatchToast({
+                title: 'Erro ao salvar os dados!',
+                description: 'Por favor, tente novamente mais tarde!',
+                type: 'error',
+            });
+        },
+    });
+
+    const handlePressRegisterButton = () => {
+        if (!applyValidations()) {
+            return;
         }
-      },
-      enabled: String(watch('plate')).length === 7,
-    },
-  );
 
-  const plateAlreadyRegistered =
-    verifyVehicleHasAlreadyRegisteredQuery.data?.plateAlreadyRegistered;
+        const userObject = {
+            ...getObject<AccessDataForm>('access-data'),
+            ...getObject<PersonalDetailsForm>('personal-details'),
+            ...getObject<ValidStudentIdResponse>('student-id'),
+            ...getObject<{ isDriver: boolean }>('user-type'),
+        };
 
-  const saveMutation = useMutation(
-    (data: SaveSignUpData) => signUpService.save(data),
-    {
-      onSuccess: () => {
-        dispatchToast({
-          title: 'Cadastro realizado com sucesso!',
-          description: ' Faça login para usar o app.',
+        const addressObject = getObject<AddressForm>('address');
+
+        // TODO: Corrigir 'birthDate', o campo deve ser Date e trazer a data correta
+
+        saveMutation.mutateAsync({
+            user: { ...userObject, birthDate: '2004-04-12T03:00:00.000Z' },
+            address: addressObject,
+            vehicle: object,
         });
-        navigate('login');
-      },
-      onError: () => {
-        dispatchToast({
-          title: 'Erro ao salvar os dados!',
-          description: 'Por favor, tente novamente mais tarde!',
-          type: 'error',
-        });
-      },
-    },
-  );
-
-  const handlePressRegisterButton = () => {
-    if (!applyValidations()) {
-      return;
-    }
-
-    const userObject = {
-      ...getObject<AccessDataForm>('access-data'),
-      ...getObject<PersonalDetailsForm>('personal-details'),
-      ...getObject<ValidStudentIdResponse>('student-id'),
-      ...getObject<{ isDriver: boolean }>('user-type'),
     };
 
-    const addressObject = getObject<AddressForm>('address');
+    return (
+        <MainTemplate title="Dados do Veículo">
+            <Loader loading={vehicleByPlateQuery.isLoading || verifyVehicleHasAlreadyRegisteredQuery.isLoading} />
 
-    // TODO: Corrigir 'birthDate', o campo deve ser Date e trazer a data correta
+            <View style={{ gap: width * 0.08 }}>
+                <Fields.Input placeholder="Placa" {...register('plate')} />
 
-    saveMutation.mutateAsync({
-      user: { ...userObject, birthDate: '2004-04-12T03:00:00.000Z' },
-      address: addressObject,
-      vehicle: object,
-    });
-  };
+                <Fields.Input placeholder="Cor" {...register('color')} />
 
-  return (
-    <MainTemplate title="Dados do Veículo">
-      <Loader
-        loading={
-          vehicleByPlateQuery.isLoading ||
-          verifyVehicleHasAlreadyRegisteredQuery.isLoading
-        }
-      />
+                <Fields.Input placeholder="Ano Fabricação" {...register('manufacturingYear')} />
 
-      <View style={{ gap: width * 0.08 }}>
-        <Fields.Input placeholder="Placa" {...register('plate')} />
+                <Fields.Input placeholder="Ano Modelo" {...register('modelYear')} />
 
-        <Fields.Input placeholder="Cor" {...register('color')} />
+                <Fields.Input placeholder="Marca" {...register('brand')} />
 
-        <Fields.Input
-          placeholder="Ano Fabricação"
-          {...register('manufacturingYear')}
-        />
+                <Fields.Input placeholder="Modelo" {...register('model')} />
 
-        <Fields.Input placeholder="Ano Modelo" {...register('modelYear')} />
+                <Fields.Input placeholder="Cidade" {...register('city')} />
 
-        <Fields.Input placeholder="Marca" {...register('brand')} />
+                <Fields.Input placeholder="Estado" {...register('state')} />
+            </View>
+            <View style={{ gap: width * 0.08, marginBottom: width * 0.08 }}>
+                <ProgressCar currentStep={5} totalSteps={5} />
 
-        <Fields.Input placeholder="Modelo" {...register('model')} />
-
-        <Fields.Input placeholder="Cidade" {...register('city')} />
-
-        <Fields.Input placeholder="Estado" {...register('state')} />
-      </View>
-      <View style={{ gap: width * 0.08, marginBottom: width * 0.08 }}>
-        <ProgressCar currentStep={5} totalSteps={5} />
-
-        {!saveMutation.isLoading && (
-          <Button
-            disabled={plateAlreadyRegistered}
-            backgroundColor={plateAlreadyRegistered ? '#C7253E' : '#4ccbf8'}
-            labelColor={plateAlreadyRegistered ? 'white' : 'black'}
-            label={plateAlreadyRegistered ? 'Placa já Cadastrada' : 'Cadastrar'}
-            onPress={handlePressRegisterButton}
-          />
-        )}
-      </View>
-    </MainTemplate>
-  );
+                {!saveMutation.isLoading && (
+                    <Button
+                        disabled={plateAlreadyRegistered}
+                        backgroundColor={plateAlreadyRegistered ? '#C7253E' : '#4ccbf8'}
+                        labelColor={plateAlreadyRegistered ? 'white' : 'black'}
+                        label={plateAlreadyRegistered ? 'Placa já Cadastrada' : 'Cadastrar'}
+                        onPress={handlePressRegisterButton}
+                    />
+                )}
+            </View>
+        </MainTemplate>
+    );
 };

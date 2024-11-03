@@ -1,6 +1,6 @@
 export type GetPaymentHistoryOutput = {
-  id: number;
-  name: string;
-  amount: string;
-  image: string;
+    id: number;
+    name: string;
+    amount: string;
+    image: string;
 };

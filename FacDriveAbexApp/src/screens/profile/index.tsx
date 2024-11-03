@@ -8,8 +8,8 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import axios from 'axios';
 import { Separator } from '../../components/UI/atoms/Separator';
 import { useNavigation } from '@react-navigation/native';
-import StorageService from "../../services/storage-service/storage-service.ts";
-import {Loader} from "../../components/UI/atoms/Loader";
+import StorageService from '../../services/storage-service/storage-service.ts';
+import { Loader } from '../../components/UI/atoms/Loader';
 
 export const ProfileScreen = () => {
     const navigation = useNavigation();
@@ -22,7 +22,6 @@ export const ProfileScreen = () => {
     const [userCar, setUserCar] = useState('');
     const [userName, setUserName] = useState('');
     const [loading, setLoading] = useState(true);
-
 
     useEffect(() => {
         const getData = async () => {
@@ -107,9 +106,7 @@ export const ProfileScreen = () => {
             <Item title="Endereço" content={userAddress} icon="map-sharp" />
             <Item title="Universidade" content={userUniversity} icon="book" />
             <Item title="Data de Nascimento" content={userBirth} icon="calendar-number" />
-            {userRole === 'Motorista' && (
-                <Item title="Carro" content={userCar} icon="car" />
-            )}
+            {userRole === 'Motorista' && <Item title="Carro" content={userCar} icon="car" />}
 
             <S.LogoutView>
                 <S.Logout onPress={logout}>
