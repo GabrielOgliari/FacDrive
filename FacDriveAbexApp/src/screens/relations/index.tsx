@@ -26,9 +26,9 @@ export const Relations = () => {
                 return {
                     driver: `${item.drivername} ${item.driversurname}`,
                     rider: `${item.ridername} ${item.ridersurname}`,
-                    amount: item.amount
-                }
-            })
+                    amount: item.amount,
+                };
+            });
             setUserData(newObj);
         });
     });
@@ -41,13 +41,7 @@ export const Relations = () => {
                     <S.Title>Relacionamentos</S.Title>
                 </S.Header>
                 {userData?.map(item => {
-                    return (
-                        <User
-                            driverName={item.driver}
-                            riderName={item.rider}
-                            amount={item.amount}
-                        />
-                    );
+                    return <User driverName={item.driver} riderName={item.rider} amount={item.amount} />;
                 })}
             </S.Content>
         </S.Body>

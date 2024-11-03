@@ -1,11 +1,10 @@
-import WebView from "react-native-webview";
+import WebView from 'react-native-webview';
 
-export const WebViewMap = () => {
-    //aqui vou passar a url do meu front de roteamento
-    const url = '';
-    return (
-        <WebView
-            source={{ uri: url }}
-        />
-    )
-}
+export const WebViewMap = ({ userID }: { userID: number }) => (
+    <WebView
+        source={{
+            uri: `https://routing-beta-nine.vercel.app/?userID=${userID}`,
+        }}
+        cacheEnabled={false}
+    />
+);

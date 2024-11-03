@@ -1,4 +1,4 @@
 export type SetPerfilImageParams = {
-  id: number;
-  image: string;
+    id: number;
+    image: string;
 };

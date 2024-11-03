@@ -1,43 +1,43 @@
 import styled from 'styled-components/native';
 
 export const Days = styled.View`
-  justify-content: center;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 16px;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
 `;
 
 export const DayItem = styled.TouchableOpacity<{ $isActive: boolean }>`
-  border-width: 1px;
+    border-width: 1px;
 
-  border-color: ${({ $isActive }) => {
-    if (!$isActive) {
-      return '#d1d1d1';
-    }
-    return '#32535e';
-  }};
+    border-color: ${({ $isActive }) => {
+        if (!$isActive) {
+            return '#d1d1d1';
+        }
+        return '#32535e';
+    }};
 
-  background-color: ${({ $isActive }) => {
-    if (!$isActive) {
-      return '#d1d1d1';
-    }
-    return '#32535e';
-  }};
+    background-color: ${({ $isActive }) => {
+        if (!$isActive) {
+            return '#d1d1d1';
+        }
+        return '#32535e';
+    }};
 
-  border-radius: 8px;
+    border-radius: 8px;
 
-  width: 30%;
+    width: 30%;
 
-  padding: 16px;
+    padding: 16px;
 `;
 
 export const DayText = styled.Text<{ $isActive: boolean }>`
-  color: ${({ $isActive }) => {
-    if (!$isActive) {
-      return '#575757';
-    }
-    return '#ffffff';
-  }};
+    color: ${({ $isActive }) => {
+        if (!$isActive) {
+            return '#575757';
+        }
+        return '#ffffff';
+    }};
 
-  text-align: center;
+    text-align: center;
 `;

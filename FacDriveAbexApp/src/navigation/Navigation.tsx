@@ -8,35 +8,24 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const BottomTabs = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={screenOptions}
-      initialRouteName={BottomRoutes.initialRoute}
-    >
-      {BottomRoutes.routes.map(({ path, component }, optionIndex) => (
-        <Tab.Screen
-          key={path}
-          name={path}
-          component={component}
-          options={() => ItemOptions({ optionIndex })}
-        />
-      ))}
-    </Tab.Navigator>
-  );
+    return (
+        <Tab.Navigator screenOptions={screenOptions} initialRouteName={BottomRoutes.initialRoute}>
+            {BottomRoutes.routes.map(({ path, component }, optionIndex) => (
+                <Tab.Screen key={path} name={path} component={component} options={() => ItemOptions({ optionIndex })} />
+            ))}
+        </Tab.Navigator>
+    );
 };
 
 export const Navigator = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName={StackRouter.initialRoute}
-        screenOptions={{ headerShown: false }}
-      >
-        {StackRouter.routes.map(({ path, component }) => (
-          <Stack.Screen key={path} name={path} component={component} />
-        ))}
-        <Stack.Screen name="bottom-tabs" component={BottomTabs} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+    return (
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName={StackRouter.initialRoute} screenOptions={{ headerShown: false }}>
+                {StackRouter.routes.map(({ path, component }) => (
+                    <Stack.Screen key={path} name={path} component={component} />
+                ))}
+                <Stack.Screen name="bottom-tabs" component={BottomTabs} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
 };

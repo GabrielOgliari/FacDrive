@@ -5,56 +5,50 @@ import { User } from './components/User';
 import * as S from './styles';
 
 interface UserDataType {
-  name: string;
-  days: number;
-  userId: number;
+    name: string;
+    days: number;
+    userId: number;
 }
 
 export const RideOptions = () => {
-  const { user } = useUser();
+    const { user } = useUser();
 
-  const [userData, setUserData] = useState([{}]);
+    const [userData, setUserData] = useState([{}]);
 
-  const fetchUsers = () => {
-    const apiNodeUrl = process.env.API_NODE_URL;
-    axios.get(apiNodeUrl + '/classdays/nearby/' + user.id).then(fetchData => {
-      const treatedData = fetchData.data.map(userUntreat => {
-        const name = `${userUntreat.name} ${userUntreat.surname}`;
-        const days = userUntreat.days_count;
-        const userId = userUntreat.iduser;
+    const fetchUsers = () => {
+        const apiNodeUrl = process.env.API_NODE_URL;
+        axios.get(apiNodeUrl + '/classdays/nearby/' + user.id).then(fetchData => {
+            const treatedData = fetchData.data.map(userUntreat => {
+                const name = `${userUntreat.name} ${userUntreat.surname}`;
+                const days = userUntreat.days_count;
+                const userId = userUntreat.iduser;
 
-        const user: UserDataType = {
-          name,
-          days,
-          userId,
-        };
+                const user: UserDataType = {
+                    name,
+                    days,
+                    userId,
+                };
 
-        return user;
-      });
+                return user;
+            });
 
-      setUserData(treatedData);
-    });
-  };
+            setUserData(treatedData);
+        });
+    };
 
-  useEffect(() => {
-    fetchUsers(user.id);
-  }, []);
+    useEffect(() => {
+        fetchUsers(user.id);
+    }, []);
 
-  const showTitle = userData.length == 0 ? 'none' : 'flex';
+    const showTitle = userData.length == 0 ? 'none' : 'flex';
 
-  return (
-    <S.Body>
-      <S.Title style={{ display: showTitle }}>Recomendações de caronas</S.Title>
+    return (
+        <S.Body>
+            <S.Title style={{ display: showTitle }}>Recomendações de caronas</S.Title>
 
-      {userData.map((item, index) => (
-        <User
-          key={index}
-          name={item.name}
-          days={item.days}
-          userId={item.userId}
-          setAllState={setUserData}
-        />
-      ))}
-    </S.Body>
-  );
+            {userData.map((item, index) => (
+                <User key={index} name={item.name} days={item.days} userId={item.userId} setAllState={setUserData} />
+            ))}
+        </S.Body>
+    );
 };

@@ -7,13 +7,13 @@ export const Body = styled.View`
 export const LogoutView = styled.View`
     margin-top: 35%;
     align-items: center;
-`
+`;
 
 export const Logout = styled.TouchableOpacity`
     align-items: center;
     justify-content: center;
-    
-    background-color: #D2042D;
+
+    background-color: #d2042d;
 
     border-radius: 5px;
     border-color: gray;
@@ -22,8 +22,8 @@ export const Logout = styled.TouchableOpacity`
 
     width: 50%;
     height: 40px;
-`
+`;
 
 export const Text = styled.Text`
     color: white;
-`
+`;

@@ -1,3 +1,3 @@
 export interface ValidateCpfResponse {
-  isValidCpf: boolean;
+    isValidCpf: boolean;
 }

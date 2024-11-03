@@ -18,131 +18,110 @@ import { isEmpty } from '../../../utils/validators/isEmpty';
 import { isValidCpf } from '../../../utils/validators/isValidCpf';
 
 export type PersonalDetailsForm = {
-  name: string;
-  surname: string;
-  birthDate: Date;
-  driverLicense: string;
-  gender: GenderEnum;
-  cpf: string;
-  phone: string;
+    name: string;
+    surname: string;
+    birthDate: Date;
+    driverLicense: string;
+    gender: GenderEnum;
+    cpf: string;
+    phone: string;
 };
 
 export const PersonalDetailsScreen = () => {
-  const { setObject, getObject } = useFormStateContext();
+    const { setObject, getObject } = useFormStateContext();
 
-  const { navigate } = useNavigation();
+    const { navigate } = useNavigation();
 
-  const { isDriver } = getObject<{ isDriver: boolean }>('user-type');
+    const { isDriver } = getObject<{ isDriver: boolean }>('user-type');
 
-  const { object, register, applyValidations, watch } =
-    useForm<PersonalDetailsForm>({
-      validations: {
-        name: value => {
-          if (isEmpty(value)) return 'Por favor, insira o seu Nome.';
+    const { object, register, applyValidations, watch } = useForm<PersonalDetailsForm>({
+        validations: {
+            name: value => {
+                if (isEmpty(value)) return 'Por favor, insira o seu Nome.';
+            },
+            cpf: value => {
+                if (isEmpty(value)) return 'Por favor, insira o seu CPF.';
+                if (isValidCpf('132.291.791-18')) return 'Por favor, insira um CPF válido.';
+            },
+            birthDate: value => {
+                if (isEmpty(value)) return 'Por favor, insira a sua Data de Nascimento.';
+            },
         },
-        cpf: value => {
-          if (isEmpty(value)) return 'Por favor, insira o seu CPF.';
-          if (isValidCpf('132.291.791-18'))
-            return 'Por favor, insira um CPF válido.';
-        },
-        birthDate: value => {
-          if (isEmpty(value))
-            return 'Por favor, insira a sua Data de Nascimento.';
-        },
-      },
     });
 
-  const verifyCpfAlreadyRegisteredMutation = useMutation({
-    mutationFn: (cpf: string) => signUpService.verifyCpfAlreadyRegistered(cpf),
+    const verifyCpfAlreadyRegisteredMutation = useMutation({
+        mutationFn: (cpf: string) => signUpService.verifyCpfAlreadyRegistered(cpf),
 
-    onError: () => {
-      dispatchToast({
-        title: 'Erro ao verificar CPF já cadastrado.',
-        type: 'error',
-      });
-    },
-  });
-
-  const handlePressRegisterButton = () => {
-    if (applyValidations()) {
-      const { cpf } = getObject<ValidStudentIdResponse>('student-id');
-
-      if (watch('cpf') !== cpf) {
-        dispatchToast({
-          title: 'O CPF não corresponde ao da Universidade.',
-          type: 'error',
-        });
-        return;
-      }
-
-      verifyCpfAlreadyRegisteredMutation
-        .mutateAsync(watch('cpf') as string)
-        .then(cpfAlreadyRegistered => {
-          if (cpfAlreadyRegistered) {
+        onError: () => {
             dispatchToast({
-              title: 'CPF já cadastrado.',
-              description: 'Você não pode utilizar esse CPF.',
-              type: 'error',
+                title: 'Erro ao verificar CPF já cadastrado.',
+                type: 'error',
             });
-            return;
-          }
+        },
+    });
 
-          setObject('personal-details', object);
-          navigate('address');
-        });
-    }
-  };
+    const handlePressRegisterButton = () => {
+        if (applyValidations()) {
+            const { cpf } = getObject<ValidStudentIdResponse>('student-id');
 
-  return (
-    <MainTemplate title="Dados Pessoais">
-      <View style={{ gap: width * 0.08 }}>
-        <Fields.Input {...register('name')} placeholder="Nome" />
+            if (watch('cpf') !== cpf) {
+                dispatchToast({
+                    title: 'O CPF não corresponde ao da Universidade.',
+                    type: 'error',
+                });
+                return;
+            }
 
-        <Fields.Input {...register('surname')} placeholder="Sobrenome" />
+            verifyCpfAlreadyRegisteredMutation.mutateAsync(watch('cpf') as string).then(cpfAlreadyRegistered => {
+                if (cpfAlreadyRegistered) {
+                    dispatchToast({
+                        title: 'CPF já cadastrado.',
+                        description: 'Você não pode utilizar esse CPF.',
+                        type: 'error',
+                    });
+                    return;
+                }
 
-        <Fields.Input
-          {...register('cpf')}
-          placeholder="CPF"
-          keyboard="numeric"
-        />
+                setObject('personal-details', object);
+                navigate('address');
+            });
+        }
+    };
 
-        {/* Deve ser campo Data */}
-        <Fields.Input
-          {...register('birthDate')}
-          placeholder="Data de Nascimento"
-          keyboard="numeric"
-        />
+    return (
+        <MainTemplate title="Dados Pessoais">
+            <View style={{ gap: width * 0.08 }}>
+                <Fields.Input {...register('name')} placeholder="Nome" />
 
-        <Fields.Input
-          {...register('driverLicense')}
-          placeholder="Carteira de Motorista"
-          keyboard="numeric"
-          hidden={!isDriver}
-        />
+                <Fields.Input {...register('surname')} placeholder="Sobrenome" />
 
-        <Fields.Dropdown
-          {...register('gender')}
-          placeholder="Gênero"
-          options={GenderOptions}
-        />
+                <Fields.Input {...register('cpf')} placeholder="CPF" keyboard="numeric" />
 
-        <Fields.Input
-          {...register('phone')}
-          placeholder="Telefone"
-          keyboard="numeric"
-        />
-      </View>
+                {/* Deve ser campo Data */}
+                <Fields.Input {...register('birthDate')} placeholder="Data de Nascimento" keyboard="numeric" />
 
-      <View style={{ gap: width * 0.08, marginBottom: width * 0.08 }}>
-        <ProgressCar currentStep={3} totalSteps={5} />
+                <Fields.Input
+                    {...register('driverLicense')}
+                    placeholder="Carteira de Motorista"
+                    keyboard="numeric"
+                    hidden={!isDriver}
+                />
 
-        <Button
-          backgroundColor="#4ccbf8"
-          label="Cadastrar"
-          labelColor="black"
-          onPress={handlePressRegisterButton}
-        />
-      </View>
-    </MainTemplate>
-  );
+                <Fields.Dropdown {...register('gender')} placeholder="Gênero" options={GenderOptions} />
+
+                <Fields.Input {...register('phone')} placeholder="Telefone" keyboard="numeric" />
+            </View>
+
+            <View style={{ gap: width * 0.08, marginBottom: width * 0.08 }}>
+                <ProgressCar currentStep={3} totalSteps={5} />
+
+                <Button
+                    backgroundColor="#4ccbf8"
+                    label="Cadastrar"
+                    labelColor="black"
+                    onPress={handlePressRegisterButton}
+                />
+            </View>
+        </MainTemplate>
+    );
 };

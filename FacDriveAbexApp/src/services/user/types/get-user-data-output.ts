@@ -1,5 +1,5 @@
 export type GetUserDataOutput = {
-  id: number;
-  isDriver: boolean;
-  name: string;
+    id: number;
+    isDriver: boolean;
+    name: string;
 };
