@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import Icon from "react-native-vector-icons/FontAwesome";
 
 export const User = styled.View`
     flex-direction: row;
@@ -37,3 +38,15 @@ export const UserImage = styled.Image`
     width: 40px;
     border-radius: 20px;
 `;
+
+export const WhatsAppIcon = styled(Icon)`
+    color: green;
+    font-size: 26px;
+`
+
+export const ButtonWhatsApp = styled.TouchableOpacity`
+    height: 100%;
+    width: 40px;
+    align-items: center;
+    justify-content: center;
+`

@@ -7,6 +7,7 @@ import { request, PERMISSIONS, RESULTS, check } from 'react-native-permissions';
 import { useEffect, useRef } from 'react';
 import { NotificationManager } from "./src/services/notifications";
 import storageService from "./src/services/storage-service/storage-service.ts";
+import 'react-native-url-polyfill/auto';
 
 const queryClient = new QueryClient();
 

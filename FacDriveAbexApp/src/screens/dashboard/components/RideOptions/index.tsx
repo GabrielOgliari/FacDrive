@@ -47,7 +47,7 @@ export const RideOptions = () => {
             <S.Title style={{ display: showTitle }}>Recomendações de caronas</S.Title>
 
             {userData.map((item, index) => (
-                <User key={index} name={item.name} days={item.days} userId={item.userId} setAllState={setUserData} />
+                <User key={index} name={item.name} days={item.days} userId={item.userId} phone={item.phone} setAllState={setUserData} />
             ))}
         </S.Body>
     );
