@@ -55,7 +55,7 @@ export const ProfileScreen = () => {
     const setPerfilImage = async (image, endpoint) => {
         const apiNodeUrl = process.env.API_NODE_URL;
 
-        const { data } = await axios.post(apiNodeUrl + endpoint, {
+        const { data } = await axios.post(apiNodeUrl + '/' + endpoint, {
             idUser: userID,
             userImage: image,
         });
@@ -71,7 +71,7 @@ export const ProfileScreen = () => {
 
         launchImageLibrary(options, response => {
             if (response.didCancel) {
-                console.log('User cancelled image picker');
+                console.log('Riders cancelled image picker');
             } else if (response.errorCode) {
                 console.log('Image Picker Error:', response.errorMessage);
             } else {
@@ -87,7 +87,8 @@ export const ProfileScreen = () => {
         return response.data;
     };
 
-    const logout = () => {
+    const logout = async () => {
+        await StorageService.remove('userProps')
         navigation.navigate('login');
     };
 

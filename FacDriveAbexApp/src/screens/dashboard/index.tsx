@@ -4,11 +4,15 @@ import { DashboardHeader } from './components/DashboardHeader';
 import { RideOptions } from './components/RideOptions';
 import { Welcome } from './components/Welcome';
 import * as S from './styles';
+import {useUser} from "../../context/useUser.tsx";
+import {DriverOptions} from "./components/DiverOptions";
 
 export const DashboardScreen = () => {
     const handleConfirm = () => {};
 
     const handleCancel = () => {};
+
+    const user = useUser();
 
     return (
         <>
@@ -18,11 +22,12 @@ export const DashboardScreen = () => {
                 <S.Content>
                     <Welcome />
 
-                    <Confirmation onConfirm={handleConfirm} onCancel={handleCancel} />
+                    {! user.user.isDriver && <Confirmation onConfirm={handleConfirm} onCancel={handleCancel} />}
 
                     <CarpoolDays />
 
-                    <RideOptions />
+                    {! user.user.isDriver && <RideOptions />}
+                    {user.user.isDriver && <DriverOptions />}
                 </S.Content>
             </S.Body>
         </>

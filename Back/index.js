@@ -310,13 +310,14 @@ app.get('/debt/:id', async (req, res) => {
 
       const id = req.params.id;
       const User = await cruds.crudUser.read(id)
-      
+
       if (User.isdriver) {
-        idrelationship = await cruds.crudRelationship.readUserDriver(id);
-        idUserReturn = idrelationship[0].riderid
-      }
-      else{
-        idrelationship = await cruds.crudRelationship.readUserRider(id);
+        idrelationship = await cruds.crudRelationship.readUserDriver(id) ?? [];
+        if (idrelationship.length) {
+          idUserReturn = idrelationship[0].riderid
+        }
+      } else{
+        idrelationship = await cruds.crudRelationship.readUserRider(id) ?? [];
         idUserReturn = id
       }
 

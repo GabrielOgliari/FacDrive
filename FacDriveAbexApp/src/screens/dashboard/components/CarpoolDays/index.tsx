@@ -69,7 +69,7 @@ export const CarpoolDays = () => {
                 updateCarpoolDaysMutation.isLoading) && <Loader />}
 
             <Container>
-                <Text type="text">Esses são os seus dias de carona 😊</Text>
+                <Text type="text">Esses são os seus dias de aula 😊</Text>
                 <Text type="light">Para alterar, clique nos dias que deseja marcar</Text>
 
                 <S.Days>

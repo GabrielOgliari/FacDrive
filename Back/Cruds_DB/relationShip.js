@@ -9,12 +9,12 @@ class CRUDRelationship {
         try {
             const query = `
                 INSERT INTO ${this.tableName} 
-                (driverId, riderId, amount) 
+                (driverid, riderid, amount) 
                 VALUES ($1, $2, $3) 
                 RETURNING *`;
             const values = [
-                data.driverId,
-                data.riderId,
+                data.driverid,
+                data.riderid,
                 data.amount
             ];
             const res = await this.pool.query(query, values);
@@ -31,7 +31,7 @@ class CRUDRelationship {
             let values = [];
 
             if (id) {
-                query = `SELECT * FROM ${this.tableName} WHERE idRelationship = $1`;
+                query = `SELECT * FROM ${this.tableName} WHERE idrelationship = $1`;
                 values = [id];
             } else {
                 query = `SELECT * FROM ${this.tableName}`;
@@ -54,7 +54,7 @@ class CRUDRelationship {
     async update(id, data) {
         try {
             // Verificar se o relacionamento existe e obter os valores atuais
-            const currentQuery = `SELECT driverId, riderId, amount FROM ${this.tableName} WHERE idRelationship = $1`;
+            const currentQuery = `SELECT driverid, riderid, amount FROM ${this.tableName} WHERE idrelationship = $1`;
             const currentRes = await this.pool.query(currentQuery, [id]);
             if (currentRes.rows.length === 0) {
                 throw new Error('Relacionamento não encontrado');
@@ -73,7 +73,7 @@ class CRUDRelationship {
             const query = `
                 UPDATE ${this.tableName} 
                 SET amount = $1 
-                WHERE idRelationship = $2 
+                WHERE idrelationship = $2 
                 RETURNING *`;
             const values = [
                 newAmount,
@@ -89,7 +89,7 @@ class CRUDRelationship {
     // Método para deletar um relacionamento
     async delete(id) {
         try {
-            const query = `DELETE FROM ${this.tableName} WHERE idRelationship = $1 RETURNING *`;
+            const query = `DELETE FROM ${this.tableName} WHERE idrelationship = $1 RETURNING *`;
             const values = [id];
             const res = await this.pool.query(query, values);
             return res.rows[0];
@@ -101,7 +101,7 @@ class CRUDRelationship {
     // Método para listar relacionamentos de um usuário específico
     async listByUser(userId) {
         try {
-            const query = `SELECT * FROM ${this.tableName} WHERE driverId = $1 OR riderId = $1`;
+            const query = `SELECT * FROM ${this.tableName} WHERE driverid = $1 OR riderid = $1`;
             const values = [userId];
             const res = await this.pool.query(query, values);
             return res.rows;
@@ -114,22 +114,22 @@ class CRUDRelationship {
         try {
             const query = `
                 SELECT 
-                    relationship.idRelationship,
-                    driver.idUser AS driverId,
+                    relationship.idrelationship,
+                    driver.iduser AS driverid,
                     driver.name AS driverName,
                     driver.surname AS driverSurname,
-                    rider.idUser AS riderId,
+                    rider.iduser AS riderid,
                     rider.name AS riderName,
                     rider.surname AS riderSurname,
                     relationship.amount
                 FROM 
                     ${this.tableName} 
                 JOIN 
-                    users driver ON relationship.driverId = driver.idUser
+                    users driver ON relationship.driverid = driver.iduser
                 JOIN 
-                    users rider ON relationship.riderId = rider.idUser
+                    users rider ON relationship.riderid = rider.iduser
                 WHERE 
-                    driver.idUser = $1 OR rider.idUser = $1;
+                    driver.iduser = $1 OR rider.iduser = $1;
             `;
             const values = [userId];
 
@@ -145,7 +145,7 @@ class CRUDRelationship {
             let values = [];
 
             if (id) {
-                query = `SELECT * FROM ${this.tableName} WHERE driverId = $1`;
+                query = `SELECT * FROM ${this.tableName} WHERE driverid = $1`;
                 values = [id];
             } else {
                 query = `SELECT * FROM ${this.tableName}`;
@@ -169,10 +169,10 @@ class CRUDRelationship {
             let values = [];
 
             if (id) {
-                query = `SELECT idRelationship FROM ${this.tableName} WHERE riderId = $1`;
+                query = `SELECT idrelationship FROM ${this.tableName} WHERE riderid = $1`;
                 values = [id];
             } else {
-                query = `SELECT idRelationship FROM ${this.tableName}`;
+                query = `SELECT idrelationship FROM ${this.tableName}`;
             }
 
             const res = await this.pool.query(query, values);

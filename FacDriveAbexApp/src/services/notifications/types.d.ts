@@ -1,4 +1,4 @@
 export type notificationProp = {
     title: string,
-    message: string
+    text: string
 }

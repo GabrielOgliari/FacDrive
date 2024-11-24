@@ -24,9 +24,9 @@ export const LoginScreen = () => {
     const { setUser } = useUser();
 
     const { mutateAsync: getUserData } = useMutation({
-        mutationFn: (userId?: number) => userService.getData(userId),
-        onSuccess: ({ id, isDriver, name }) => {
-            setUser({ id, isDriver, name });
+        mutationFn: async (userId?: number) => await userService.getData(userId),
+        onSuccess: (response) => {
+            setUser(response);
             navigate('bottom-tabs');
         },
     });

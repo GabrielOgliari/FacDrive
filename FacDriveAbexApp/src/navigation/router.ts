@@ -13,7 +13,7 @@ import { UserTypeScreen } from '../screens/sign-up/user-type';
 import { VehicleScreen } from '../screens/sign-up/vehicle';
 
 export const BottomRoutes = {
-    initialRoute: 'BottomTabs',
+    initialRoute: 'dashboard',
     routes: [
         { path: 'dashboard', icon: 'car-alt', component: DashboardScreen },
         { path: 'route', icon: 'map-marked-alt', component: RoutesScreen },

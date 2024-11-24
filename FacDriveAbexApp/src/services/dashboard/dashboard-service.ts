@@ -82,8 +82,6 @@ class DashboardService implements IDashboardService {
     async updateCarpoolDays({ id, days }: CarpoolDaysParams) {
         const endpoint = '/classdays';
 
-        console.log(days);
-
         await axios<GetCarpoolDaysInput>({
             method: 'put',
             url: this.apiNodeUrl + endpoint + '/' + id,

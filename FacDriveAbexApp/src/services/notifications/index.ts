@@ -17,7 +17,7 @@ export class NotificationManager {
             _ => {}
         );
 
-        this.socket = io("http://192.168.15.4:3000", {
+        this.socket = io("https://facdrive-socket.glitch.me", {
             transports: ['websocket'],
             query: { userId }
         });
@@ -40,7 +40,7 @@ export class NotificationManager {
         PushNotification.localNotification({
             channelId: "routing-notify",
             title: data.title,
-            message: data.message
+            message: data.text
         });
     }
 
