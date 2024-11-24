@@ -44,7 +44,7 @@ export const DriverOptions = () => {
             <S.Title>Seus caroneiros</S.Title>
 
             {ridersData.length ? ridersData.map((item, index) => (
-                <Riders key={index} userimage={item.userimage} name={item.name} surname={item.surname} />
+                <Riders key={index} phone={item.phone} userimage={item.userimage} name={item.name} surname={item.surname} />
             )) : <S.Title>No momento você não tem nenhum caroneiro. Quando alguem selecionar uma rota sua aparecerá aqui!</S.Title>}
         </S.Body>
     );

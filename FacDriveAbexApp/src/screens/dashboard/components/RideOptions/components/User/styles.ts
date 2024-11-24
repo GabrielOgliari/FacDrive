@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import Icon from "react-native-vector-icons/FontAwesome";
 
 export const User = styled.View`
     flex-direction: row;
@@ -26,10 +27,9 @@ export const InfoView = styled.View`
 export const ButtonsView = styled.View`
     flex-direction: row;
     justify-content: space-between;
+    gap: 8px;
 
     margin-right: 15px;
-
-    width: 60px;
 `;
 export const Username = styled.Text`
     color: rgba(0, 0, 0, 0.6);
@@ -43,3 +43,16 @@ export const CommunDays = styled.Text`
 `;
 
 export const Button = styled.TouchableOpacity``;
+
+
+export const WhatsAppIcon = styled(Icon)`
+    color: green;
+    font-size: 26px;
+`
+
+export const ButtonWhatsApp = styled.TouchableOpacity`
+    height: 100%;
+    width: 40px;
+    align-items: center;
+    justify-content: center;
+`
