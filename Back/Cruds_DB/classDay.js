@@ -78,6 +78,7 @@ class CRUDClassDay {
                         u.idUser,
                         u.name,
                         u.surname,
+                        u.phone,
                         (CASE WHEN cd.monday THEN 1 ELSE 0 END +
                          CASE WHEN cd.tuesday THEN 1 ELSE 0 END +
                          CASE WHEN cd.wednesday THEN 1 ELSE 0 END +
@@ -102,6 +103,7 @@ class CRUDClassDay {
                     ud.surname,
                     ud.days_count,
                     ud.common_days_count,
+                    ud.phone,
                     (6 - ud.common_days_count) AS difference  -- Diferença total de dias menos os dias comuns
                 FROM UserDays ud
                 ORDER BY ud.common_days_count DESC,  -- Ordenar pelos dias comuns (descendente)
@@ -123,7 +125,7 @@ class CRUDClassDay {
       throw error;
     }
   }
- 
+
   async update(userId, data) {
     try {
         const query = `
