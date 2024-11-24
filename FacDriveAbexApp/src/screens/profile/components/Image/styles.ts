@@ -17,8 +17,8 @@ export const Warper = styled.View`
     align-items: center;
     justify-content: center;
 
-    width: ${(width * 0.6)+10}px;
-    height: ${(height * 0.3)+10}px;
+    width: ${width * 0.6 + 10}px;
+    height: ${height * 0.3 + 10}px;
 
     border-color: #0082c8;
     border-width: 2px;

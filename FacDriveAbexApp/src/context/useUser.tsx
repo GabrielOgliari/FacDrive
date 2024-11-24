@@ -1,39 +1,57 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useState, useEffect } from 'react';
+import StorageService from '../services/storage-service/storage-service.ts';
+import UserService from "../services/user/user-service.ts";
 
 type User = {
-  id?: number;
-  name?: string;
-  isDriver?: boolean;
+    id?: number;
+    name?: string;
+    isDriver?: boolean;
 };
 
 type UserContextProps = {
-  user: User;
-  setUser: (props: User) => void;
-  resetUser: () => void;
+    user: User;
+    setUser: (user: User) => void
+    loading: boolean;
+    resetUser: () => void;
 };
 
 const UserContext = createContext({} as UserContextProps);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [object, setObject] = useState<User>({});
+    const [user, setUserState] = useState<User>({});
+    const [loading, setLoading] = useState(true);
 
-  const setUser = (props: User) => {
-    setObject(props);
-  };
+    const resetUser = () => {
+        setUserState({});
+        StorageService.remove('userProps');
+    };
 
-  const resetUser = () => {
-    setObject({});
-  };
+    const setUser = (user: User) => {
+        StorageService.set('userProps', user);
+        setUserState(user)
+    }
 
-  return (
-    <UserContext.Provider value={{ user: object, setUser, resetUser }}>
-      {children}
-    </UserContext.Provider>
-  );
+    useEffect(() => {
+        const loadUser = async () => {
+            const storedUser = await StorageService.get('userProps');
+            if (storedUser) {
+                const userService = await UserService.getData(storedUser.id)
+                setUserState(userService);
+            }
+            setLoading(false);
+        };
+        loadUser();
+    }, []);
+
+    return (
+        <UserContext.Provider value={{ user, loading, setUser, resetUser }}>
+            {children}
+        </UserContext.Provider>
+    );
 };
 
 export const useUser = () => {
-  const context = useContext(UserContext);
-  if (!context) throw new Error('useUser must be used within a UserProvider');
-  return context;
+    const context = useContext(UserContext);
+    if (!context) throw new Error('useUser must be used within a UserProvider');
+    return context;
 };

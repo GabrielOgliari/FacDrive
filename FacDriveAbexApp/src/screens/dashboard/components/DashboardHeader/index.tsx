@@ -11,7 +11,11 @@ export const DashboardHeader = () => {
                 <AppTitle />
 
                 <S.Flex>
-                    <ChargeButton onCharge={() => {navigate('relations')}} />
+                    <ChargeButton
+                        onCharge={() => {
+                            navigate('relations');
+                        }}
+                    />
                 </S.Flex>
             </S.DashboardHeader>
         </>

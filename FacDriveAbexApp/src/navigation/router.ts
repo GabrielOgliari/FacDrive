@@ -13,26 +13,26 @@ import { UserTypeScreen } from '../screens/sign-up/user-type';
 import { VehicleScreen } from '../screens/sign-up/vehicle';
 
 export const BottomRoutes = {
-  initialRoute: 'BottomTabs',
-  routes: [
-    { path: 'dashboard', icon: 'car-alt', component: DashboardScreen },
-    { path: 'route', icon: 'map-marked-alt', component: RoutesScreen },
-    { path: 'payment', icon: 'credit-card', component: PaymentScreen },
-    { path: 'profile', icon: 'user-graduate', component: ProfileScreen },
-  ],
+    initialRoute: 'dashboard',
+    routes: [
+        { path: 'dashboard', icon: 'car-alt', component: DashboardScreen },
+        { path: 'route', icon: 'map-marked-alt', component: RoutesScreen },
+        { path: 'payment', icon: 'credit-card', component: PaymentScreen },
+        { path: 'profile', icon: 'user-graduate', component: ProfileScreen },
+    ],
 };
 
 export const StackRouter = {
-  initialRoute: 'presentation',
-  routes: [
-    { path: 'presentation', component: PresentationScreen },
-    { path: 'access-data', component: AccessDataScreen },
-    { path: 'user-type', component: UserTypeScreen },
-    { path: 'student-id', component: StudentIdScreen },
-    { path: 'personal-details', component: PersonalDetailsScreen },
-    { path: 'address', component: AddressScreen },
-    { path: 'vehicle', component: VehicleScreen },
-    { path: 'login', component: LoginScreen },
-    { path: 'relations', component: Relations},
-  ],
+    initialRoute: 'presentation',
+    routes: [
+        { path: 'presentation', component: PresentationScreen },
+        { path: 'access-data', component: AccessDataScreen },
+        { path: 'user-type', component: UserTypeScreen },
+        { path: 'student-id', component: StudentIdScreen },
+        { path: 'personal-details', component: PersonalDetailsScreen },
+        { path: 'address', component: AddressScreen },
+        { path: 'vehicle', component: VehicleScreen },
+        { path: 'login', component: LoginScreen },
+        { path: 'relations', component: Relations },
+    ],
 };

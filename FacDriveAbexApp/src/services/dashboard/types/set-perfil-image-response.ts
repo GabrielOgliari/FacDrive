@@ -1,3 +1,3 @@
 export type SetPerfilImageResponse = {
-  success: boolean;
+    success: boolean;
 };

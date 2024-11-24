@@ -3,32 +3,17 @@ import { Card } from './components/Card';
 import { ProfileImage } from './components/Image';
 import { Item } from './components/Item';
 import { Header } from './components/Header';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { launchImageLibrary } from 'react-native-image-picker';
 import axios from 'axios';
 import { Separator } from '../../components/UI/atoms/Separator';
 import { useNavigation } from '@react-navigation/native';
-
-const setPerfilImage = async (id: number, image: string, endpoint: string) => {
-    const apiNodeUrl = process.env.API_NODE_URL;
-
-    const { data } = await axios({
-        method: 'post',
-        url: apiNodeUrl + endpoint,
-        data: {
-            idUser: id,
-            userImage: image,
-        },
-    });
-
-    return {
-        success: data.success,
-    };
-};
+import StorageService from '../../services/storage-service/storage-service.ts';
+import { Loader } from '../../components/UI/atoms/Loader';
 
 export const ProfileScreen = () => {
-    const { navigate } = useNavigation();
-
+    const navigation = useNavigation();
+    const [userID, setUSerID] = useState(0);
     const [imageData, setImageData] = useState(null);
     const [userRole, setUserRole] = useState('');
     const [userUniversity, setUserUniversity] = useState('');
@@ -36,12 +21,47 @@ export const ProfileScreen = () => {
     const [userBirth, setUserBirth] = useState('');
     const [userCar, setUserCar] = useState('');
     const [userName, setUserName] = useState('');
-
-    const userId = 79;
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const getData = async () => {
+            const resp = await StorageService.get('userProps');
+            if (!resp?.id) {
+                navigation.navigate('login');
+                return;
+            }
+            setUSerID(resp.id);
+
+            const userData = await fetchUserData('user', resp.id);
+
+            const role = userData.usuario.isdriver ? 'Motorista' : 'Caroneiro';
+            const car = userData.veiculo?.brand ?? '' + userData.veiculo?.model ?? '';
+            const birthDate = userData.usuario?.birthdate.slice(0, 10);
+            const completeName = `${userData.usuario.name} ${userData.usuario.surname}`;
+
+            setUserName(completeName);
+            setUserAddress(userData.endereco.street);
+            setUserUniversity('Unochapecó');
+            setUserBirth(birthDate);
+            setUserRole(role);
+            setUserCar(car);
+            setImageData(userData.usuario.userimage);
+            setLoading(false);
+        };
+
         getData();
-    });
+    }, [navigation]);
+
+    const setPerfilImage = async (image, endpoint) => {
+        const apiNodeUrl = process.env.API_NODE_URL;
+
+        const { data } = await axios.post(apiNodeUrl + '/' + endpoint, {
+            idUser: userID,
+            userImage: image,
+        });
+
+        return { success: data.success };
+    };
 
     const changeImage = () => {
         const options = {
@@ -51,47 +71,30 @@ export const ProfileScreen = () => {
 
         launchImageLibrary(options, response => {
             if (response.didCancel) {
-                console.log('User cancelled image picker');
+                console.log('Riders cancelled image picker');
             } else if (response.errorCode) {
-                console.log('Image Picker Error: ', response.errorMessage);
+                console.log('Image Picker Error:', response.errorMessage);
             } else {
                 setImageData(response.assets[0].base64);
-                setPerfilImage(userId, response.assets[0].base64, 'image');
+                setPerfilImage(response.assets[0].base64, 'image');
             }
         });
     };
 
-    async function fetchUserData(endpoint: string, userId: number) {
+    const fetchUserData = async (endpoint, userId) => {
         const apiNodeUrl = process.env.API_NODE_URL;
-        const response = await axios({
-            method: 'get',
-            url: apiNodeUrl + '/' + endpoint + '/' + userId,
-        });
-
+        const response = await axios.get(`${apiNodeUrl}/${endpoint}/${userId}`);
         return response.data;
+    };
+
+    const logout = async () => {
+        await StorageService.remove('userProps')
+        navigation.navigate('login');
+    };
+
+    if (loading) {
+        return <Loader loading={true} />;
     }
-
-    const getData = async () => {
-        const userData = await fetchUserData('user', userId);
-
-        const role: any = userData.usuario.isdriver ? 'Motorista' : 'Caroneiro';
-        const car = userData.veiculo.brand + userData.veiculo.model;
-        const birthDate: string = userData.usuario.birthdate.slice(0, 10);
-        const completeName: string =
-            userData.usuario.name + ' ' + userData.usuario.surname;
-
-        setUserName(completeName);
-        setUserAddress(userData.endereco.street);
-        setUserUniversity('Unochapecó');
-        setUserBirth(birthDate);
-        setUserRole(role);
-        setUserCar(car);
-        setImageData(userData.usuario.userimage);
-    };
-
-    const logout = () => {
-        navigate('login');
-    };
 
     return (
         <S.Body>
@@ -103,14 +106,8 @@ export const ProfileScreen = () => {
 
             <Item title="Endereço" content={userAddress} icon="map-sharp" />
             <Item title="Universidade" content={userUniversity} icon="book" />
-            <Item
-                title="Data de Nascimento"
-                content={userBirth}
-                icon="calendar-number"
-            />
-            {userRole === 'Motorista' && (
-                <Item title="Carro" content={userCar} icon="car" />
-            )}
+            <Item title="Data de Nascimento" content={userBirth} icon="calendar-number" />
+            {userRole === 'Motorista' && <Item title="Carro" content={userCar} icon="car" />}
 
             <S.LogoutView>
                 <S.Logout onPress={logout}>
